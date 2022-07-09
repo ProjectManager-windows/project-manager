@@ -1,0 +1,32 @@
+.Footer {
+	display    : grid;
+	width      : 100vw;
+	padding    : 0;
+	margin     : 0;
+	position   : fixed;
+	max-height : 20px;
+	height     : 20px;
+	bottom     : 0;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr;
+	gap: 0px 0px;
+	grid-template-areas:
+    ". .";
+	.left, .right {
+		display : flex;
+		flex-wrap       : nowrap;
+		align-content   : center;
+		align-items: center;
+
+	}
+
+	.left {
+		flex-direction: row;
+		justify-content: flex-start;
+	}
+
+	.right {
+		flex-direction  : row-reverse;
+		justify-content : flex-start;
+	}
+}

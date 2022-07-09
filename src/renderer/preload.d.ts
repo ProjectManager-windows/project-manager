@@ -1,18 +1,11 @@
-import { Channels } from 'main/preload';
+import { bridge } from 'main/preload';
 
 declare global {
-  interface Window {
-    electron: {
-      ipcRenderer: {
-        sendMessage(channel: Channels, args: unknown[]): void;
-        on(
-          channel: string,
-          func: (...args: unknown[]) => void
-        ): (() => void) | undefined;
-        once(channel: string, func: (...args: unknown[]) => void): void;
-      };
-    };
-  }
+	interface Window {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		electron: typeof bridge;
+	}
 }
 
 export {};
