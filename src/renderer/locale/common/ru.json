@@ -1,5 +1,6 @@
 {
+	"error"        :"ошибка",
 	"notification" :"уведомление",
-	"notifications":"уведомления",
+	"notifications":"уведомлениея",
 	"ok"           :"ок"
 }

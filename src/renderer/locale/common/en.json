@@ -1,5 +1,6 @@
 {
-	"notification" :"notification",
+	"error"       :"error",
+	"notification":"notification",
 	"notifications":"notifications",
-	"ok"           :"ok"
+	"ok"          :"ok"
 }

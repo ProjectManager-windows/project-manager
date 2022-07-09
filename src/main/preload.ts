@@ -1,5 +1,4 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import ProgressBars                                     from './components/ProgressBar/renderer/ProgressBars';
 
 export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'test';
 export const bridge = {
@@ -30,6 +29,5 @@ export const bridge = {
 		}
 		// Other method you want to add like has(), reset(), etc.
 	},
-	ProgressBars
 };
 contextBridge.exposeInMainWorld('electron', bridge);

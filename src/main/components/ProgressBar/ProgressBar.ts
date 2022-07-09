@@ -1,6 +1,6 @@
 import ProgressUnit    from './ProgressUnit';
 // eslint-disable-next-line import/no-cycle
-import sendRenderEvent from '../../../main';
+import sendRenderEvent from '../../main';
 
 export class ProgressBar {
 	private current: number = 0;
