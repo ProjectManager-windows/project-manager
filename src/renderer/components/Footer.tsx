@@ -1,8 +1,10 @@
 import '../styles/Footer.scss';
 import { useTranslation } from 'react-i18next';
+import Notifications      from './Notifications';
 
 function Footer() {
 	const { t } = useTranslation();
+
 	return (
 		<div className={'Footer'}>
 			<div className='left'>
@@ -11,7 +13,7 @@ function Footer() {
 			</div>
 			<div className='right'>
 				{/* TODO */}
-				<i className='iBtn pi pi-bell' title={t('notifications')} />
+				<Notifications />
 			</div>
 		</div>
 	);

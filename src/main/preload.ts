@@ -1,13 +1,13 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import ProgressBars                                     from './components/ProgressBar/renderer/ProgressBars';
 
-export type Channels = 'ipc-example' | 'test';
+export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'test';
 export const bridge = {
 	ipcRenderer: {
 		sendMessage(channel: Channels, args: unknown[]) {
 			ipcRenderer.send(channel, args);
 		},
-		on(channel: Channels, func: (...args: unknown[]) => void) {
+		on(channel: Channels, func: (...args: any[]) => void) {
 			const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
 				func(...args);
 			ipcRenderer.on(channel, subscription);

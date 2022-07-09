@@ -6,7 +6,7 @@ import 'primereact/resources/primereact.min.css';
 import './styles/reset.scss';
 import './styles/App.scss';
 import './styles/Hello.scss';
-import Footer                                    from './chunks/Footer';
+import Footer        from './components/Footer';
 
 const Hello = () => {
 	return (
@@ -47,11 +47,13 @@ const Hello = () => {
 
 export default function App() {
 	return (
-		<Router>
-			<Routes>
-				<Route path='/' element={<Hello />} />
-			</Routes>
+		<div>
+			<Router>
+				<Routes>
+					<Route path='/' element={<Hello />} />
+				</Routes>
+			</Router>
 			<Footer />
-		</Router>
+		</div>
 	);
 }
