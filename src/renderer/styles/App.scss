@@ -1,6 +1,17 @@
-.iBtn{
-	&:hover{
-		opacity: 0.7;
-		cursor: pointer;
+.iBtn {
+	&:hover {
+		opacity : 0.7;
+		cursor  : pointer;
 	}
+}
+
+html, body, #root, .App {
+	height     : calc(100vh - 20px);
+	max-height : calc(100vh - 20px);
+	overflow   : auto;
+}
+:root{
+	--ui-color: #292a2d;
+	--bg-color: #121212;
+	--text-color: #ffffff;
 }

@@ -7,9 +7,10 @@
 	max-height : 20px;
 	height     : 20px;
 	bottom     : 0;
+	background-color: var(--ui-color);
 	grid-template-columns: 1fr 1fr;
 	grid-template-rows: 1fr;
-	gap: 0px 0px;
+	gap: 0;
 	grid-template-areas:
     ". .";
 	.left, .right {
