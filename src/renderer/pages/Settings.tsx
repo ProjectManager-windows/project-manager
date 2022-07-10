@@ -1,9 +1,13 @@
-import '../../styles/settings.scss';
-import SettingInput from '../ui/SettingInput';
+import '../styles/settings.scss';
+import SettingInput    from '../components/ui/SettingInput';
+import { useNavigate } from 'react-router-dom';
 
 const Settings = () => {
+	let navigate = useNavigate();
+
 	return (
 		<div className='settings'>
+			<i onClick={() => navigate(-1)} className='back-link iBtn pi pi-arrow-left'></i>
 			<div className='flex'>
 				<SettingInput settingKey={'fs.blacklist'} type={'longText'} />
 				<SettingInput settingKey={'test1'} type={'int'} />
