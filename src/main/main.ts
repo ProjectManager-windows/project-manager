@@ -132,7 +132,7 @@ app
 	})
 	.catch(console.log);
 
-function sendRenderEvent(channel: string, ...args: any[]) {
+export function sendRenderEvent(channel: string, ...args: any[]) {
 	if (mainWindow) {
 		return mainWindow.webContents.send(channel, ...args);
 	}

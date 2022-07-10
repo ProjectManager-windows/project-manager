@@ -1,7 +1,7 @@
 import * as fs from 'node:fs/promises';
 import path    from 'node:path';
+import Store   from 'electron-store';
 
-type ProgressCallback = (path: string, founded: boolean) => any
 
 class FileSystem {
 	blacklist = [
@@ -9,46 +9,78 @@ class FileSystem {
 		'$WinREAgent',
 		'System Volume Information',
 		'Windows',
-		'root'
+		'root',
+		'node_modules',
+		'vendor'
 	];
 
-	async getDirectories(source: string) {
-		const dirs: string[] = [];
-		return fs.readdir(source, { withFileTypes: true }).then(async (items) => {
-			for (const p of items) {
-				try {
-					if (p.isDirectory()) {
-						const PathName = path.join(source, p.name);
-						dirs.push(PathName);
-						dirs.push(...await this.getDirectories(PathName));
+	constructor() {
+		const store = new Store();
+		const a     = store.get('settings.fs.blacklist') as any;
+		if (typeof a === 'string') {
+			this.blacklist = a.split('\uE000');
+		}
+	}
+
+
+	async getDirectories(src: string, dirs: string[] = []): Promise<string[]> {
+		return fs
+			.readdir(src, { withFileTypes: true })
+			.then(async (items) => {
+				const promises = [];
+				for (let x = 0; x < items.length; x++) {
+					const item = items[x];
+					if (this.blacklist.includes(item.name)) {
+						continue;
 					}
-
-					// eslint-disable-next-line no-empty
-				} catch (e) {
-
+					try {
+						if (item.isDirectory()) {
+							const PathName = path.join(src, item.name);
+							dirs.push(PathName);
+							if (!item.name.startsWith('.')) {
+								promises.push(this.getDirectories(PathName, dirs));
+							}
+						}
+					} catch (e) {
+					}
 				}
-
-			}
-			return dirs;
-		});
-
-
+				await Promise.all(promises);
+				return dirs;
+			})
+			.catch(() => []);
 	}
 
-	async findProjects(startPath = '', progress: ProgressCallback = () => {
-	}) {
-		const projects: string[] = [];
-		const dirs               = await this.getDirectories(startPath);
-		dirs.map(async (elem) => {
-			let founded = false;
-			if (await this.isProject(elem)) {
-				projects.push(elem);
-				founded = true;
-			}
-			progress.call('findProjects', elem, founded);
-		});
-		return projects;
+
+	async findProjects(src: string, projects: string[] = []): Promise<string[]> {
+		return fs
+			.readdir(src, { withFileTypes: true })
+			.then(async (items) => {
+				const promises = [];
+				for (let x = 0; x < items.length; x++) {
+					const item = items[x];
+					if (this.blacklist.includes(item.name)) {
+						continue;
+					}
+					try {
+						if (item.isDirectory()) {
+							const PathName = path.join(src, item.name);
+							if (!item.name.startsWith('.')) {
+								if (await this.isProject(PathName)) {
+									projects.push(PathName);
+								} else {
+									promises.push(this.findProjects(PathName, projects));
+								}
+							}
+						}
+					} catch (e) {
+					}
+				}
+				await Promise.all(promises);
+				return projects;
+			})
+			.catch(() => []);
 	}
+
 
 	async isProject(item: string) {
 		const stat = await fs.stat(item);
@@ -58,7 +90,7 @@ class FileSystem {
 		return fs.readdir(item).then((items) => {
 			for (const p of items) {
 				const name = path.basename(p);
-				if (['.git', '.idea', '.vscode'].indexOf(name) >= 0) {
+				if (['.git', '.idea', '.vscode'].includes(name)) {
 					return true;
 				}
 			}

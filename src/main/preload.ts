@@ -28,6 +28,6 @@ export const bridge = {
 			ipcRenderer.send('electron-store-del', property);
 		}
 		// Other method you want to add like has(), reset(), etc.
-	},
+	}
 };
 contextBridge.exposeInMainWorld('electron', bridge);

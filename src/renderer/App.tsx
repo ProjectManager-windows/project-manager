@@ -15,7 +15,7 @@ export default function App() {
 				<Routes>
 					<Route path='/' element={<Settings />} />
 					<Route path='/' element={<Project />} />
-					<Route path='/settings' element={<Project />} />
+					<Route path='/settings' element={<Settings />} />
 				</Routes>
 			</Router>
 			<Footer />

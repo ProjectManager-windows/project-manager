@@ -2,6 +2,9 @@
 	height           : 100%;
 	max-height       : 100%;
 	background-color : var(--ui-color);
+	padding-left     : 50px;
+	padding-right    : 50px;
+	padding-top      : 50px;
 
 	.flex {
 		height          : 100%;
@@ -14,7 +17,20 @@
 		justify-content : flex-start;
 
 		.SettingInput {
-			margin-bottom : 10px;
+			width                 : 100%;
+			margin-bottom         : 10px;
+			display               : grid;
+			grid-template-columns : 100px 1fr;
+			grid-template-rows    : 1fr;
+			gap                   : 10px;
+			grid-template-areas   : ". .";
+
+			.SettingInput-longText {
+				.p-inputtextarea {
+					width  : 100% !important;
+					resize : none;
+				}
+			}
 		}
 	}
 }
