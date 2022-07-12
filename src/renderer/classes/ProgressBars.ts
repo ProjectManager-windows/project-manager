@@ -33,7 +33,7 @@ export class ProgressBar implements NotificationItemInterface {
 	}
 
 	public getBody() {
-		return '';
+		return this.message;
 	}
 
 	public setTotal(val: number) {
