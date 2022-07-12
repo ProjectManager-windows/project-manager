@@ -1,6 +1,10 @@
 {
+	"add project"  :"добавить проект",
 	"error"        :"ошибка",
+	"file"         :"файл",
 	"notification" :"уведомление",
 	"notifications":"уведомления",
-	"ok"           :"ок"
+	"ok"           :"ок",
+	"scan"         :"cканировать",
+	"select folder":"выбрать папку"
 }

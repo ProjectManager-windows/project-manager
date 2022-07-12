@@ -16,6 +16,7 @@ import MenuBuilder                            from './menu';
 import { resolveHtmlPath }                    from './util';
 import events                                 from './ipcMain';
 import progressTest                           from './core/progressTest';
+import { Projects }                           from './core/Projects';
 
 /**
  * Add event listeners...
@@ -119,6 +120,7 @@ const createWindow = async () => {
 };
 
 events.run();
+Projects.getInstance()
 
 app
 	.whenReady()

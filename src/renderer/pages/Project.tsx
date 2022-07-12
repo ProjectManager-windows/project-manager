@@ -1,9 +1,13 @@
 import '../styles/project.scss';
+import Menu from '../components/project/menu';
 
 const Project = () => {
 	return (
 		<div className='project'>
 			<div className='grid'>
+				<div className='tools'>
+					<Menu/>
+				</div>
 				<div className='projects'>
 					test
 				</div>

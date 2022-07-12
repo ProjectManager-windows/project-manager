@@ -9,31 +9,37 @@
 		overflow              : auto;
 		display               : grid;
 		grid-template-columns : 0.3fr 0.3fr 2fr;
-		grid-template-rows    : 1fr;
+		grid-template-rows    : 64px 1fr;
 		gap                   : 2px;
 		grid-auto-flow        : row;
 		grid-template-areas   :
-    "projects technologies view";
+		"tools tools tools"
+    	"projects technologies view";
 
+		.tools {
+			padding    : 5px;
+			grid-area  : tools;
+
+		}
 
 		.projects {
-			padding: 5px;
+			padding          : 5px;
 			grid-area        : projects;
-			background-color :  var(--bg-color);;
+			background-color : var(--bg-color);
 
 		}
 
 		.technologies {
-			padding: 5px;
+			padding          : 5px;
 			grid-area        : technologies;
-			background-color :  var(--bg-color);;
+			background-color : var(--bg-color);
 
 		}
 
 		.view {
-			padding: 5px;
+			padding          : 5px;
 			grid-area        : view;
-			background-color :  var(--bg-color);;
+			background-color : var(--bg-color);
 
 		}
 	}

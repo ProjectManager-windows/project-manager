@@ -1,6 +1,10 @@
 {
-	"error"       :"error",
-	"notification":"notification",
+	"add project"  :"add project",
+	"error"        :"error",
+	"file"         :"file",
+	"notification" :"notification",
 	"notifications":"notifications",
-	"ok"          :"ok"
+	"ok"           :"ok",
+	"scan"         :"scan",
+	"select folder":"select folder"
 }

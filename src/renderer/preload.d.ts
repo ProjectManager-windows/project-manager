@@ -10,6 +10,10 @@ declare global {
 		i18n: typeof i18n;
 		Notifications: typeof Notifications;
 	}
+
+	interface String {
+		ucfirst: () => string;
+	}
 }
 
 export {};

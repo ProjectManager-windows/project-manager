@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'test';
+
 export const bridge = {
 	ipcRenderer: {
 		sendMessage(channel: Channels, args: unknown[]) {
@@ -26,6 +27,21 @@ export const bridge = {
 		},
 		del(property: string) {
 			ipcRenderer.send('electron-store-del', property);
+		}
+		// Other method you want to add like has(), reset(), etc.
+	},
+	projects   : {
+		getAll(property: string) {
+			return ipcRenderer.sendSync('electron-project-getAll', property);
+		},
+		getProject(id: number) {
+			ipcRenderer.send('electron-project-getProject', id);
+		},
+		scan() {
+			ipcRenderer.send('electron-project-scan');
+		},
+		add(property: string) {
+			ipcRenderer.send('electron-project-add', property);
 		}
 		// Other method you want to add like has(), reset(), etc.
 	}
