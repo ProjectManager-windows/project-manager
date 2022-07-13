@@ -5,6 +5,9 @@ import Store       from 'electron-store';
 export default {
 	run() {
 		const store = new Store();
+		if (!store.get('projects')) {
+			store.set('settings', {});
+		}
 		ipcMain.on('electron-store-get', async (event, val) => {
 			event.returnValue = store.get(val);
 		});

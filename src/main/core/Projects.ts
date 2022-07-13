@@ -4,10 +4,9 @@ import { dialog, ipcMain } from 'electron';
 import FileSystem          from './FileSystem';
 import ProgressBar         from '../components/ProgressBar/ProgressBar';
 import path                from 'path';
-import { Project }         from './Elements';
-import project             from '../../renderer/pages/Project';
+import { Project }         from './Project';
 
-type ProjectsShema = {
+type ProjectsScheme = {
 	id: string
 	name: string
 	path: string
@@ -30,19 +29,30 @@ export class Projects {
 		return this.instance;
 	}
 
+	init() {
+		if (!this.store.get('projects')) {
+			this.store.set('projects', {});
+		}
+	}
+
 	private constructor() {
 		this.store = new Store();
+		this.init();
 		ipcMain.on('electron-project-getAll', async (event) => {
+			this.init();
 			event.returnValue = this.store.get('projects');
 		});
 		ipcMain.on('electron-project-getProject', async (event, id) => {
-			event.returnValue = this.store.get<any, ProjectsShema>(`projects.${id}`);
+			this.init();
+			event.returnValue = this.store.get<any, ProjectsScheme>(`projects.${id}`);
 		});
 		ipcMain.on('electron-project-scan', async (event) => {
+			this.init();
 			await this.scan();
 			event.returnValue = 'ok';
 		});
 		ipcMain.on('electron-project-add', async (event) => {
+			this.init();
 			await this.addFolder();
 			event.returnValue = 'ok';
 		});
@@ -86,7 +96,7 @@ export class Projects {
 	}
 
 	getAll() {
-		return this.store.get<any, { [key: string]: ProjectsShema }>('projects');
+		return this.store.get<any, { [key: string]: ProjectsScheme }>('projects');
 	}
 
 	getLastId(): number {
