@@ -5,6 +5,7 @@ export interface IDEType {
 	name: string;
 	path: string;
 	execute: (Project: ProjectType) => void;
+	toArray: () => IDEType;
 }
 
 export interface TechnologyType {
@@ -13,10 +14,12 @@ export interface TechnologyType {
 	element: string; // jsx element
 	data: any;
 	root: string;
+	toArray: () => TechnologyType;
 }
 
 export interface PublisherType extends TechnologyType {
 	publish: (Project: ProjectType) => void;
+	toArray: () => PublisherType;
 }
 
 export interface ProjectType {
@@ -28,4 +31,5 @@ export interface ProjectType {
 	version: Version; // TODO v1
 	publisher: PublisherType; // prod-deployment //TODO v1
 	deployment: PublisherType; // dev-deployment //TODO v2
+	toArray: () => ProjectType;
 }
