@@ -24,9 +24,9 @@ export interface ProjectType {
 	id: number;
 	name: string;
 	path: string; // unique identifier
-	IDE: IDEType;
-	technologies: TechnologyType[]; // TODO v0
-	version: Version; // TODO v1
-	publisher: PublisherType; // prod-deployment //TODO v1
-	deployment: PublisherType; // dev-deployment //TODO v2
+	IDE?: IDEType;
+	technologies?: TechnologyType[]; // TODO v0
+	version?: Version; // TODO v1
+	publisher?: PublisherType; // prod-deployment //TODO v1
+	deployment?: PublisherType; // dev-deployment //TODO v2
 }

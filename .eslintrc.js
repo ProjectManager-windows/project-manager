@@ -19,6 +19,7 @@ module.exports = {
 		'max-classes-per-file'                          : 0,
 		'import/prefer-default-export'                  : 0,
 		'@typescript-eslint/lines-between-class-members': 0,
+		'@typescript-eslint/no-shadow': 0,
 		'import/no-named-as-default'                    : 0
 	},
 	parserOptions: {
