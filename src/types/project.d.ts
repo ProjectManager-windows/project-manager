@@ -1,13 +1,13 @@
 import Version from './Version';
 
-interface IDEType {
+export interface IDEType {
 	id: number;
 	name: string;
 	path: string;
 	execute: (Project: ProjectType) => void;
 }
 
-interface TechnologyType {
+export interface TechnologyType {
 	id: number;
 	name: string;
 	element: string; // jsx element
@@ -15,11 +15,11 @@ interface TechnologyType {
 	root: string;
 }
 
-interface PublisherType extends TechnologyType {
+export interface PublisherType extends TechnologyType {
 	publish: (Project: ProjectType) => void;
 }
 
-interface ProjectType {
+export interface ProjectType {
 	id: number;
 	name: string;
 	path: string; // unique identifier
