@@ -3,16 +3,16 @@ import { IDEType, ProjectType, PublisherType, TechnologyType } from '../../types
 import Version                                                 from '../../types/Version';
 
 export class Project implements ProjectType {
+	public id: number;
 	public IDE: IDEType;
 	public deployment: PublisherType;
-	public id: number;
 	public name: string;
 	public path: string;
 	public publisher: PublisherType;
 	public technologies: TechnologyType[];
 	public version: Version;
 
-	constructor(data: any) {
+	constructor(data: ProjectType) {
 		this.IDE          = data.IDE;
 		this.deployment   = data.deployment;
 		this.id           = data.id;
@@ -22,17 +22,4 @@ export class Project implements ProjectType {
 		this.technologies = data.technologies;
 		this.version      = data.version;
 	}
-
-	public toArray() {
-		return {
-			IDE         : this.IDE.toArray(),
-			deployment  : this.deployment,
-			id          : this.id,
-			name        : this.name,
-			path        : this.path,
-			publisher   : this.publisher.toArray(),
-			version     : this.version
-		};
-	}
 }
-

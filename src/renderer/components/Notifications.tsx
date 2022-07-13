@@ -33,6 +33,6 @@ function Notifications() {
 			<i className='iBtn pi pi-bell' title={t('notifications')} onClick={() => setVisibleRight(true)} />
 		</div>
 	);
-};
+}
 
 export default Notifications;

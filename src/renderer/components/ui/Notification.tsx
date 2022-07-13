@@ -3,7 +3,7 @@ import { ProgressBar }                                 from 'primereact/progress
 import { ProgressBar as pb }                           from '../../classes/ProgressBars';
 import { NotificationItem, NotificationItemInterface } from '../../classes/Notifications';
 import { Panel }                                       from 'primereact/panel';
-import  './../../styles/notification.scss';
+import './../../styles/notification.scss';
 
 function Notification(props: { item: NotificationItemInterface }) {
 	const { t }    = useTranslation();
@@ -11,9 +11,11 @@ function Notification(props: { item: NotificationItemInterface }) {
 	const header   = item.getName();
 	const body     = item.getBody();
 	if (item instanceof pb) {
-		const val = item.getPercent();
+		const val     = item.getPercent();
+		const total   = item.getTotal();
+		const current = item.getCurrent();
 
-		if (val === 0) {
+		if (!val || total === 0 || current === 0) {
 			return (
 				<div className='notification'>
 					<Panel header={header}>

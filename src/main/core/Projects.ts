@@ -5,6 +5,9 @@ import FileSystem          from './FileSystem';
 import ProgressBar         from '../components/ProgressBar/ProgressBar';
 
 export class Projects {
+
+	static scan_index = 0;
+
 	private static instance: Projects;
 	private store: ElectronStore;
 
@@ -21,7 +24,7 @@ export class Projects {
 			event.returnValue = this.store.get('projects');
 		});
 		ipcMain.on('electron-project-getProject', async (event, id) => {
-			event.returnValue = this.store.get('projects.' + id);
+			event.returnValue = this.store.get(`projects.${id}`);
 		});
 		ipcMain.on('electron-project-scan', async (event) => {
 			await this.scan();
@@ -34,15 +37,16 @@ export class Projects {
 	}
 
 	async scan() {
+		Projects.scan_index++;
 		const folder = await dialog.showOpenDialog({ properties: ['openDirectory'] });
 		if (!folder.canceled) {
-			const bar      = new ProgressBar('scan', 'scan');
+			const bar = new ProgressBar(`scan${Projects.scan_index}`, 'scan');
 			const myFs     = new FileSystem();
 			const projects = await myFs.findProjects(folder.filePaths[0]);
 			bar.update({
 						   total  : 1,
 						   current: 1,
-						   message: `Найдено ` + projects.length + ' проэктов'
+						   message: `Найдено ${projects.length} проектов`
 					   });
 		}
 		console.log();

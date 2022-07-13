@@ -4,14 +4,11 @@ import { ProjectType } from '../../../types/project';
 
 export class GitPlugin extends PluginType {
 
+	static PluginName: string = 'git';
+
 	static async isProject(path: string) {
 		const dirs = await readdir(path);
-		for (let i = 0; i < dirs.length; i++) {
-			if (dirs[i].includes('.git')) {
-				return true;
-			}
-		}
-		return false;
+		return dirs.includes('.git');
 	}
 
 	static isTechnologies(path: string) {

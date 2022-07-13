@@ -1,6 +1,7 @@
 import * as fs from 'node:fs/promises';
 import path    from 'node:path';
 import Store   from 'electron-store';
+import plugins from '../components/plugins';
 
 
 class FileSystem {
@@ -87,17 +88,17 @@ class FileSystem {
 		if (stat.isFile()) {
 			return false;
 		}
-		return fs.readdir(item).then((items) => {
-			for (const p of items) {
-				const name = path.basename(p);
-				if (['.git', '.idea', '.vscode'].includes(name)) {
+		// eslint-disable-next-line guard-for-in
+		for (const plugin in plugins) {
+			try {
+				if (await plugins[plugin].isProject(item)) {
 					return true;
 				}
+			} catch (e) {
+
 			}
-			return false;
-		}).catch(() => {
-			return false;
-		});
+		}
+		return false;
 	}
 }
 
