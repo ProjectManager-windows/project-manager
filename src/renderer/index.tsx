@@ -3,6 +3,7 @@ import App            from './App';
 import i18n           from './classes/i18n';
 import Notifications  from './classes/Notifications';
 import ucfirst        from '../utills/ucfirst';
+import "./styles/firaCode.scss";
 
 String.prototype.ucfirst = function() {
 	// @ts-ignore

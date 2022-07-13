@@ -1,15 +1,16 @@
 import '../styles/project.scss';
-import Menu from '../components/project/menu';
+import Menu     from '../components/project/menu';
+import ProjectList from '../components/ProjectList';
 
 const Project = () => {
 	return (
 		<div className='project'>
 			<div className='grid'>
 				<div className='tools'>
-					<Menu/>
+					<Menu />
 				</div>
 				<div className='projects'>
-					test
+					<ProjectList />
 				</div>
 				<div className='technologies'>
 					test2

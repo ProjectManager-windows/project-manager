@@ -14,12 +14,22 @@ html, body, #root, .App {
 }
 
 :root {
-	--ui-color : var(--text-secondary-color);
-	--bg-color : var(--primary-color-text);
+	--primary-color-text   : #36393F;
+	--primary-color        : #202225;
+	--text-secondary-color : #292B2F;
+	--font-family          : "Fira Code";
+}
+
+.p-sidebar {
+	background : var(--primary-color);
 }
 
 * {
-
 	box-shadow : none !important;
 	outline    : unset !important;
+}
+
+#root {
+	font-family : var(--font-family);
+
 }

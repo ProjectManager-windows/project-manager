@@ -40,7 +40,7 @@ export class Projects {
 		this.init();
 		ipcMain.on('electron-project-getAll', async (event) => {
 			this.init();
-			event.returnValue = this.store.get('projects');
+			event.returnValue = this.getAll();
 		});
 		ipcMain.on('electron-project-getProject', async (event, id) => {
 			this.init();

@@ -31,7 +31,12 @@ export class Project implements ProjectType {
 				path: folder,
 				id  : String(id)
 			}
-		);
+		).analyzeFolder();
+	}
+
+	analyzeFolder(){
+
+		return this
 	}
 
 	static toObject(project: Project) {

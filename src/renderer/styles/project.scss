@@ -1,14 +1,13 @@
 .project {
 	height           : 100%;
 	max-height       : 100%;
-	background-color : var(--ui-color);
+	background-color : var(--text-secondary-color);
 
 	.grid {
-		height                : 100%;
-		max-height            : 100%;
+		height                : calc(100vh - 20px);
 		overflow              : auto;
 		display               : grid;
-		grid-template-columns : 0.3fr 0.3fr 2fr;
+		grid-template-columns : 0.5fr 0.3fr 2fr;
 		grid-template-rows    : 64px 1fr;
 		gap                   : 2px;
 		grid-auto-flow        : row;
@@ -16,30 +15,68 @@
 		"tools tools tools"
     	"projects technologies view";
 
-		.tools {
-			padding    : 5px;
-			grid-area  : tools;
+		::-webkit-scrollbar {
+			width: 2px;
+			height: 2px;
+		}
+		::-webkit-scrollbar-button {
+			width: 0;
+			height: 0;
+		}
+		::-webkit-scrollbar-thumb {
+			background: var(--text-secondary-color);
+			border: 0 none #ffffff;
+			border-radius: 50px;
+		}
+		::-webkit-scrollbar-thumb:hover {
+			background: var(--text-secondary-color);
+		}
+		::-webkit-scrollbar-thumb:active {
+			background:var(--text-secondary-color);
+		}
+		::-webkit-scrollbar-track {
+			background: var(--primary-color-text);
+			border: 0 none #ffffff;
+			border-radius: 50px;
+		}
+		::-webkit-scrollbar-track:hover {
+			background: var(--primary-color-text);
+		}
+		::-webkit-scrollbar-track:active {
+			background: var(--primary-color-text);
+		}
+		::-webkit-scrollbar-corner {
+			background: transparent;
+		}
 
+		.tools {
+			grid-area : tools;
 		}
 
 		.projects {
+			height           : calc(100vh - 86px);
+			overflow         : auto;
 			padding          : 5px;
 			grid-area        : projects;
-			background-color : var(--bg-color);
+			background-color : var(--primary-color);
 
 		}
 
 		.technologies {
+			height           : calc(100vh - 86px);
+			overflow         : auto;
 			padding          : 5px;
 			grid-area        : technologies;
-			background-color : var(--bg-color);
+			background-color : var(--primary-color-text);
 
 		}
 
 		.view {
+			height           : calc(100vh - 86px);
+			overflow         : auto;
 			padding          : 5px;
 			grid-area        : view;
-			background-color : var(--bg-color);
+			background-color : var(--primary-color-text);
 
 		}
 	}

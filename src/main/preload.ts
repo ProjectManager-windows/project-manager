@@ -31,8 +31,8 @@ export const bridge = {
 		// Other method you want to add like has(), reset(), etc.
 	},
 	projects   : {
-		getAll(property: string) {
-			return ipcRenderer.sendSync('electron-project-getAll', property);
+		getAll() {
+			return ipcRenderer.sendSync('electron-project-getAll');
 		},
 		getProject(id: number) {
 			ipcRenderer.send('electron-project-getProject', id);
