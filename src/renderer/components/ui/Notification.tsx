@@ -1,9 +1,9 @@
 import { useTranslation }                              from 'react-i18next';
 import { ProgressBar }                                 from 'primereact/progressbar';
+import { Panel }                                       from 'primereact/panel';
 import { ProgressBar as pb }                           from '../../classes/ProgressBars';
 import { NotificationItem, NotificationItemInterface } from '../../classes/Notifications';
-import { Panel }                                       from 'primereact/panel';
-import './../../styles/notification.scss';
+import "../../styles/notification.scss";
 
 function Notification(props: { item: NotificationItemInterface }) {
 	const { t }    = useTranslation();
@@ -36,11 +36,10 @@ function Notification(props: { item: NotificationItemInterface }) {
 
 	}
 	if (item instanceof NotificationItem) {
-		const body = item.getBody();
 		return (
 			<div className='notification'>
 				<Panel header={header}>
-					{body}
+					{item.getBody()}
 				</Panel>
 			</div>
 		);
