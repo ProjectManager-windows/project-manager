@@ -91,6 +91,7 @@ export class Projects {
 	async addFromFolder(folder: string) {
 		if (!this.getIdByPath(folder)) {
 			const p = Project.createFromFolder(folder, this.getLastId());
+			await p.analyzeFolder()
 			this.writeProject(p);
 		}
 	}
