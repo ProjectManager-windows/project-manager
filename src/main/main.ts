@@ -12,6 +12,7 @@ import path                                   from 'path';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import { autoUpdater }                        from 'electron-updater';
 import log                                    from 'electron-log';
+import Store                                  from 'electron-store';
 import MenuBuilder                            from './menu';
 import { resolveHtmlPath }                    from './util';
 import events                                 from './ipcMain';
@@ -117,19 +118,29 @@ const createWindow = async () => {
 	// Remove this if your app does not use auto updates
 	// eslint-disable-next-line
 	new AppUpdater();
+	return true;
 };
 
 events.run();
-Projects.getInstance()
+Projects.getInstance();
 
 app
 	.whenReady()
 	.then(() => {
-		createWindow();
+		const store = new Store();
+
+		if (!store.get('settings.locale')) {
+			store.set('settings.locale', app.getLocale());
+		}
+		// eslint-disable-next-line promise/no-nesting
+		createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
 		app.on('activate', () => {
 			// On macOS it's common to re-create a window in the app when the
 			// dock icon is clicked and there are no other windows open.
-			if (mainWindow === null) createWindow();
+			if (mainWindow === null) {
+				// eslint-disable-next-line promise/no-nesting
+				createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
+			}
 		});
 	})
 	.catch(console.log);
@@ -142,6 +153,6 @@ export function sendRenderEvent(channel: string, ...args: any[]) {
 }
 
 setTimeout(() => {
-	progressTest.run()
+	progressTest.run();
 }, 5000);
 export default sendRenderEvent;

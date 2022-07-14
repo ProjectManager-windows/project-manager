@@ -15,7 +15,7 @@ const ProjectList = () => {
 		return a.name.localeCompare(b.name)
 	});
 	for (const project of forSort) {
-		list.push(<ProjectItem key={projects.id} project={project} />);
+		list.push(<ProjectItem key={project.id} project={project} />);
 	}
 	return (
 		<div className='projectList'>

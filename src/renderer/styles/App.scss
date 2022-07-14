@@ -12,14 +12,6 @@ html, body, #root, .App {
 	max-height : calc(100vh - 20px);
 	overflow   : auto;
 }
-
-:root {
-	--primary-color-text   : #36393F;
-	--primary-color        : #202225;
-	--text-secondary-color : #292B2F;
-	--font-family          : "Fira Code";
-}
-
 .p-sidebar {
 	background : var(--primary-color);
 }

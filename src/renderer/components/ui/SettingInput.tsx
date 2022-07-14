@@ -6,27 +6,30 @@ import { InputNumber }                  from 'primereact/inputnumber';
 import { InputText }                    from 'primereact/inputtext';
 
 function guidGenerator() {
-	const S4 = function() {
+	function S4() {
+		// eslint-disable-next-line no-bitwise
 		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-	};
-	return ('a' + S4() + S4());
+	}
+
+	return (`a${S4()}${S4()}`);
 }
 
-export type settingType = 'text' | 'longText' | 'int' | 'float' | 'switch' | 'select';
+export type settingType = 'text' | 'longText' | 'int' | 'float' | 'switch';
 
 const SettingInput = (props: { settingKey: string, type: settingType }) => {
 	const { t }                     = useTranslation();
 	const { settingKey, type }      = props;
-	const [oldValue, setOldValue]   = useState(window.electron.store.get('settings.' + settingKey));
+	const [oldValue, setOldValue]   = useState(window.electron.settings.get(settingKey));
 	const [newValue, setNewValue]   = useState(oldValue);
-	const [className, setClassName] = useState('SettingInput' + ' SettingInput-' + type + ' noChanged');
+	// eslint-disable-next-line no-useless-concat
+	const [className, setClassName] = useState(`SettingInput SettingInput-${type} noChanged`);
 	useEffect(() => {
-		setOldValue(window.electron.store.get('settings.' + settingKey));
-	}, []);
-	const id     = useMemo(() => guidGenerator(), [settingKey, type]);
+		setOldValue(window.electron.settings.get(settingKey));
+	}, [settingKey]);
+	const id     = useMemo(() => guidGenerator(), []);
 	const commit = (Val: any) => {
 		const write = (v: any) => {
-			window.electron.store.set('settings.' + settingKey, v);
+			window.electron.settings.set(settingKey, v);
 			setNewValue(v);
 			setOldValue(v);
 		};
@@ -36,8 +39,8 @@ const SettingInput = (props: { settingKey: string, type: settingType }) => {
 			newVal     = newVal.replaceAll(',', '.');
 			newVal     = newVal.replaceAll(/[^\d.+-]/g, '');
 			if (type === 'int') {
-				const numberVal = parseInt(newVal);
-				window.electron.store.set('settings.' + settingKey, numberVal);
+				const numberVal = parseInt(newVal, 10);
+				window.electron.settings.set(settingKey, numberVal);
 				return write(numberVal);
 			}
 			if (type === 'float') {
@@ -47,45 +50,32 @@ const SettingInput = (props: { settingKey: string, type: settingType }) => {
 		}
 
 		if (type === 'switch') {
-			if (typeof Val != 'boolean') {
-				if (typeof Val == 'string') {
-					Val = Val.toLowerCase() === 'true';
+			let boolVal: boolean = Val;
+			if (typeof Val !== 'boolean') {
+				if (typeof Val === 'string') {
+					boolVal = Val.toLowerCase() === 'true';
 				}
-				if (typeof Val == 'number') {
-					Val = !!Val;
+				if (typeof Val === 'number') {
+					boolVal = !!Val;
 				}
 			}
-			return write(Val);
+			return write(boolVal);
 		}
 		return write(Val);
 	};
 	useEffect(() => {
 		const isChanged = oldValue !== newValue;
-		setClassName('SettingInput' + ' SettingInput-' + type + ' ' + (isChanged ? 'changed' : 'noChanged'));
-	}, [oldValue, newValue]);
+		setClassName(`SettingInput SettingInput-${type} ${isChanged ? 'changed' : 'noChanged'}`);
+	}, [oldValue, newValue, type]);
 	switch (type) {
-		case 'text':
-			return (
-				<div className={className}>
-					<label htmlFor={id}> {t(settingKey)} </label>
-					{/* @ts-ignore */}
-					<InputText
-						id={id} value={newValue} onChange={e => {
-						setNewValue(e.target.value);
-						commit(e.target.value);
-					}}
-					/>
-				</div>
-			);
+
 		case 'longText':
 			return (
 				<div className={className}>
 					<label htmlFor={id}> {t(settingKey)} </label>
-					{/* @ts-ignore */}
 					<InputTextarea
-						autoResize={true} id={id} value={newValue}
+						autoResize id={id} value={newValue}
 						onChange={e => {
-							setNewValue(e.target.value);
 							commit(e.target.value);
 						}}
 					/>
@@ -95,11 +85,9 @@ const SettingInput = (props: { settingKey: string, type: settingType }) => {
 			return (
 				<div className={className}>
 					<label htmlFor={id}> {t(settingKey)} </label>
-					{/* @ts-ignore */}
 					<InputNumber
 						showButtons id={id} value={newValue}
 						onChange={e => {
-							setNewValue(e.value);
 							commit(e.value);
 						}}
 					/>
@@ -109,11 +97,9 @@ const SettingInput = (props: { settingKey: string, type: settingType }) => {
 			return (
 				<div className={className}>
 					<label htmlFor={id}> {t(settingKey)} </label>
-					{/* @ts-ignore */}
 					<InputNumber
 						showButtons id={id} value={newValue} mode='decimal' minFractionDigits={0} maxFractionDigits={5}
 						onChange={e => {
-							setNewValue(e.value);
 							commit(e.value);
 						}}
 					/>
@@ -123,32 +109,24 @@ const SettingInput = (props: { settingKey: string, type: settingType }) => {
 			return (
 				<div className={className}>
 					<label htmlFor={id}> {t(settingKey)} </label>
-					{/* @ts-ignore */}
 					<InputSwitch
 						type='checkbox' id={id} checked={!!newValue}
 						onChange={e => {
-							setNewValue(e.value);
 							commit(e.value);
 						}}
 					/>
 				</div>
 			);
-		case 'select':
-			return (
-				<div className={className}>
-					<label htmlFor={id}> {t(settingKey)} </label>
-					{/* @ts-ignore */}
-					<select id={id} value={newValue} onInput={e => setNewValue(e.target.value)} onChange={e => commit(e.target.value)}>
-						<option></option>
-					</select>
-				</div>
-			);
+		case 'text':
 		default:
 			return (
 				<div className={className}>
 					<label htmlFor={id}> {t(settingKey)} </label>
-					{/* @ts-ignore */}
-					<input id={id} value={newValue} onInput={e => setNewValue(e.target.value)} />
+					<InputText
+						id={id} value={newValue} onChange={e => {
+						commit(e.target.value);
+					}}
+					/>
 				</div>
 			);
 	}

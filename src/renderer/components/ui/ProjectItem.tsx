@@ -26,7 +26,7 @@ const ProjectItem = (props: { project: ProjectType }) => {
 
 
 	return (
-		<div className='projectItem'>
+		<div className='projectItem' id={`project-item-${project.id}`}>
 			<li className='item' key={project.id}>
 				<div>
 					<img className='log' alt='logo' src={image} height='40' width='40' />

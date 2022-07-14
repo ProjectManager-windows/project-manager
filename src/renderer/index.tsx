@@ -1,11 +1,21 @@
-import { createRoot } from 'react-dom/client';
-import App            from './App';
-import i18n           from './classes/i18n';
-import Notifications  from './classes/Notifications';
-import ucfirst        from '../utills/ucfirst';
-import "./styles/firaCode.scss";
+import { createRoot }         from 'react-dom/client';
+import PrimeReact, { locale } from 'primereact/api';
+import App                    from './App';
+import i18n                   from './classes/i18n';
+import Notifications          from './classes/Notifications';
+import ucfirst                from '../utills/ucfirst';
+import './styles/firaCode.scss';
+import 'primeicons/primeicons.css';
+import 'primereact/resources/themes/bootstrap4-dark-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import './styles/reset.scss';
 
+PrimeReact.ripple     = true;
+PrimeReact.inputStyle = 'filled';
+locale(window.electron.settings.get('locale'));
+// eslint-disable-next-line no-extend-native,func-names
 String.prototype.ucfirst = function() {
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	return ucfirst(this);
 };

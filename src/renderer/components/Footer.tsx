@@ -1,7 +1,7 @@
 import '../styles/Footer.scss';
 import { useTranslation } from 'react-i18next';
-import Notifications      from './Notifications';
 import { Link }           from 'react-router-dom';
+import Notifications      from './Notifications';
 
 function Footer() {
 	const { t } = useTranslation();
@@ -14,9 +14,8 @@ function Footer() {
 			</div>
 			<div className='right'>
 				{/* TODO */}
-				<Notifications />
-				<Link to={'/settings'} ><i className='iBtn pi pi-sliders-h'/></Link>
-
+				<Notifications className='footer-right-item' />
+				<Link to="/settings" className='footer-right-item'><i className='iBtn pi pi-sliders-h'/></Link>
 			</div>
 		</div>
 	);

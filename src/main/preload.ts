@@ -30,6 +30,18 @@ export const bridge = {
 		}
 		// Other method you want to add like has(), reset(), etc.
 	},
+	settings   : {
+		get(property: string) {
+			return ipcRenderer.sendSync('electron-store-get', `settings.${property}`);
+		},
+		set(property: string, val: any) {
+			ipcRenderer.send('electron-store-set', `settings.${property}`, val);
+		},
+		del(property: string) {
+			ipcRenderer.send('electron-store-del', `settings.${property}`);
+		}
+		// Other method you want to add like has(), reset(), etc.
+	},
 	projects   : {
 		getAll() {
 			return ipcRenderer.sendSync('electron-project-getAll');
