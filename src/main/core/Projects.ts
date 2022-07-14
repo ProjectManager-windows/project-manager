@@ -95,6 +95,13 @@ export class Projects {
 		}
 	}
 
+	async addFolder() {
+		const folder = await dialog.showOpenDialog({ properties: ['openDirectory'] });
+		if (!folder.canceled) {
+			await this.addFromFolder(folder.filePaths[0]);
+		}
+	}
+
 	getAll() {
 		return this.store.get<any, { [key: string]: ProjectsScheme }>('projects');
 	}
@@ -118,13 +125,6 @@ export class Projects {
 			}
 		}
 		return false;
-	}
-
-	async addFolder() {
-		const folder = await dialog.showOpenDialog({ properties: ['openDirectory'] });
-		if (!folder.canceled) {
-			await this.addFromFolder(folder.filePaths[0]);
-		}
 	}
 }
 

@@ -5,7 +5,7 @@ export interface IDEType {
 	name: string;
 	path: string;
 	execute: (Project: ProjectType) => void;
-	cmd:string
+	cmd: string;
 }
 
 export interface TechnologyType {
@@ -21,6 +21,7 @@ export interface PublisherType extends TechnologyType {
 }
 
 export interface ProjectType {
+	logo?: string;
 	id: number;
 	name: string;
 	path: string; // unique identifier

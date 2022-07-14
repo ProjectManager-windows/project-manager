@@ -1,0 +1,32 @@
+.projectItem {
+	background-color : var(--primary-color-text);
+	border-radius    : 15px;
+
+	&:hover {
+		border-radius : 20px;
+	}
+
+	.item {
+		> div {
+			display         : flex;
+			height          : 40px;
+			flex-wrap       : nowrap;
+			align-content   : center;
+			align-items     : center;
+			justify-content : flex-start;
+			flex-direction  : row;
+
+			.logo {
+				width : 40px;
+			}
+
+			.name {
+				overflow      : hidden;
+				white-space   : nowrap;
+				text-overflow : clip;
+				line-height   : 1.3em;
+				width         : calc(100% - 15px);
+			}
+		}
+	}
+}
