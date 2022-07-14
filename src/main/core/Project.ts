@@ -2,6 +2,7 @@
 import path                                                    from 'path';
 import { IDEType, ProjectType, PublisherType, TechnologyType } from '../../types/project';
 import Version                                                 from '../../types/Version';
+import { glob }                                                from 'glob';
 
 export class Project implements ProjectType {
 	public id: number;
@@ -34,9 +35,17 @@ export class Project implements ProjectType {
 		).analyzeFolder();
 	}
 
-	analyzeFolder(){
-
-		return this
+	analyzeFolder() {
+		glob('**/@(favicon.ico|favicon.jpg|favicon.png|icon.png|icon.jpg|icon.ico|logo.ico|logo.jpg|logo.png)', {
+			cwd     : this.path,
+			silent  : true,
+			nodir   : true,
+			realpath: true
+		}, function(er, files) {
+			console.error(er);
+			console.log(files);
+		});
+		return this;
 	}
 
 	static toObject(project: Project) {

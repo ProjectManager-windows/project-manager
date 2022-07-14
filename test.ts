@@ -1,12 +1,14 @@
-import FileSystem from './src/main/core/FileSystem';
+import { glob }   from 'glob';
 
 (async () => {
-	const time = process.hrtime();
-	const $fs  = new FileSystem();
-	const a    = await $fs.findProjects('/');
-	const end  = process.hrtime(time);
-	console.log(`${(end[0] + end[1] / 1e9).toFixed(9)} seconds`);
-	console.log(a);
+	glob("**/@(favicon.ico|favicon.jpg|favicon.png|icon.png|icon.jpg|icon.ico|logo.ico|logo.jpg|logo.png)", {
+		cwd:"C:\\projects\\gertudaV2",
+		silent :true,
+		nodir :true
+	}, function (er, files) {
+		console.error(er)
+		console.log(files)
+	})
 })();
 
 
