@@ -5,6 +5,8 @@ import FileSystem          from './FileSystem';
 import ProgressBar         from '../components/ProgressBar/ProgressBar';
 import path                from 'path';
 import { Project }         from './Project';
+import sendRenderEvent     from '../main';
+import { t }               from './i18n';
 
 type ProjectsScheme = {
 	id: string
@@ -60,6 +62,7 @@ export class Projects {
 
 	writeProject(_project: Project) {
 		this.store.set(`projects.${_project.id}`, Project.toObject(_project));
+		sendRenderEvent('electron-project-update');
 	}
 
 	async scan() {
@@ -72,17 +75,25 @@ export class Projects {
 			bar.update({
 						   total  : 1,
 						   current: 1,
-						   message: `Найдено ${projects.length} проектов`
+						   message: `${t('founded')}: ${projects.length} ${t('projects')}`
 					   });
 
 			for (let i = 0; i < projects.length; i++) {
-				await this.addFromFolder(projects[i]);
-				bar.update({
-							   total  : projects.length - 1,
-							   current: i,
-							   message: `Добавляю ${path.basename(projects[i])}`
-						   });
+				if (await this.addFromFolder(projects[i])) {
+					bar.update({
+								   total  : projects.length - 1,
+								   current: i,
+								   message: `${t('add')}: ${path.basename(projects[i])}`
+							   });
+				} else {
+					bar.update({
+								   total  : projects.length - 1,
+								   current: i,
+								   message: `${path.basename(projects[i])}`
+							   });
+				}
 			}
+
 			return true;
 		}
 		return false;
@@ -91,9 +102,11 @@ export class Projects {
 	async addFromFolder(folder: string) {
 		if (!this.getIdByPath(folder)) {
 			const p = Project.createFromFolder(folder, this.getLastId());
-			await p.analyzeFolder()
+			await p.analyzeFolder();
 			this.writeProject(p);
+			return true;
 		}
+		return false;
 	}
 
 	async addFolder() {

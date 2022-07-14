@@ -4,6 +4,7 @@ import { glob }                                                from 'glob';
 import fs                                                      from 'fs/promises';
 import { IDEType, ProjectType, PublisherType, TechnologyType } from '../../types/project';
 import Version                                                 from '../../types/Version';
+import FileSystem                                              from './FileSystem';
 
 export class Project implements ProjectType {
 	public id: number;
@@ -15,6 +16,7 @@ export class Project implements ProjectType {
 	public technologies: TechnologyType[] | undefined;
 	public version: Version | undefined;
 	public logo: string | undefined;
+	public stats?: { [p: string]: number };
 
 	constructor(data: ProjectType) {
 		this.IDE          = data.IDE;
@@ -38,6 +40,27 @@ export class Project implements ProjectType {
 	}
 
 	async analyzeFolder() {
+		const promises = [];
+		promises.push(this.analyzeIcon());
+		promises.push(this.dominantTechnologies());
+		await Promise.all(promises);
+		return this;
+	}
+
+	private async dominantTechnologies() {
+		const files                            = await (new FileSystem).getFiles(this.path);
+		const stats: { [key: string]: number } = {};
+		for (let i = 0; i < files.length; i++) {
+			const file = files[i];
+			if (!stats.hasOwnProperty(file.ext)) {
+				stats[file.ext] = 0;
+			}
+			stats[file.ext] += file.size;
+		}
+		this.stats = stats;
+	}
+
+	private async analyzeIcon() {
 		const icons: string[] = await new Promise((resolve, reject) => {
 			glob('**/@(favicon.ico|favicon.jpg|favicon.png|favicon.svg|icon.png|icon.svg|icon.jpg|icon.ico|logo.ico|logo.jpg|logo.png|logo.svg)', {
 				cwd     : this.path,
@@ -90,29 +113,29 @@ export class Project implements ProjectType {
 			return (Math.log(a.size) * scoreA > Math.log(b.size) * scoreB) ? 1 : -1;
 		});
 		this.logo = await Project.logoToBase64(newIcons.pop());
-		return this;
 	}
 
 	static toObject(project: Project) {
 		return {
-			name: project.name,
-			path: project.path,
-			id  : project.id,
-			logo: project.logo
+			name : project.name,
+			path : project.path,
+			id   : project.id,
+			stats: project.stats,
+			logo : project.logo
 		};
 	}
 
 	static fromObject(data: any) {
 		return new Project(
 			{
-				name: data.name,
-				path: data.path,
-				logo: data.logo,
-				id  : parseInt(data.id, 10)
+				name : data.name,
+				path : data.path,
+				logo : data.logo,
+				stats: data.stats,
+				id   : parseInt(data.id, 10)
 			}
 		);
 	}
-
 
 	private static async logoToBase64(logo?: {
 		path: string

@@ -24,6 +24,7 @@ export interface ProjectType {
 	logo?: string;
 	id: number;
 	name: string;
+	stats?: { [key: string]: number };
 	path: string; // unique identifier
 	IDE?: IDEType;
 	technologies?: TechnologyType[]; // TODO v0

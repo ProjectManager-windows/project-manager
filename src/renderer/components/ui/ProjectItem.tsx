@@ -3,6 +3,7 @@ import rng                   from 'seedrandom';
 import { ProjectType }       from '../../../types/project';
 import '../../styles/projectItem.scss';
 import { Ripple }            from 'primereact/ripple';
+import LanguagesBar          from './LanguagesBar';
 
 const ProjectItem = (props: { project: ProjectType }) => {
 	const pixel             = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
@@ -37,11 +38,14 @@ const ProjectItem = (props: { project: ProjectType }) => {
 	}, [project.logo, project.name]);
 	return (
 		<div className='projectItem ' id={`project-item-${project.id}`}>
-			<li className='item p-ripple' key={project.id} >
+			<li className='item p-ripple' key={project.id}>
 				<Ripple />
 				<div>
 					<img className='logo' alt='logo' src={pixel} style={image} height='40' width='40' />
-					<div className='name'>{project.name}</div>
+					<div className='info' >
+						<div className='name'>{project.name}</div>
+						<LanguagesBar className='languageBar' stats={project.stats} />
+					</div>
 				</div>
 			</li>
 		</div>

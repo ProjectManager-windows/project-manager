@@ -1,8 +1,15 @@
 import '../styles/project.scss';
-import Menu     from '../components/project/menu';
-import ProjectList from '../components/ProjectList';
+import Menu                    from '../components/project/menu';
+import ProjectList             from '../components/ProjectList';
+import { useEffect, useState } from 'react';
 
 const Project = () => {
+	const [projects, setProjects] = useState(window.electron.projects.getAll());
+	useEffect(() => {
+		return window.electron.projects.onUpdate(() => {
+			setProjects(window.electron.projects.getAll());
+		});
+	}, []);
 	return (
 		<div className='project'>
 			<div className='grid'>
@@ -10,7 +17,7 @@ const Project = () => {
 					<Menu />
 				</div>
 				<div className='projects'>
-					<ProjectList />
+					<ProjectList projects={projects} />
 				</div>
 				<div className='technologies'>
 					test2

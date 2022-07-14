@@ -49,13 +49,16 @@ export const bridge = {
 		getProject(id: number) {
 			ipcRenderer.send('electron-project-getProject', id);
 		},
+		onUpdate(callback: () => void): () => void {
+			ipcRenderer.on('electron-project-update', callback);
+			return () => ipcRenderer.removeListener('electron-project-update', callback);
+		},
 		scan() {
 			ipcRenderer.send('electron-project-scan');
 		},
 		add(property: string) {
 			ipcRenderer.send('electron-project-add', property);
 		}
-		// Other method you want to add like has(), reset(), etc.
 	}
 };
 contextBridge.exposeInMainWorld('electron', bridge);

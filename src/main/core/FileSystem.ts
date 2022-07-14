@@ -3,6 +3,12 @@ import path    from 'node:path';
 import Store   from 'electron-store';
 import plugins from '../components/plugins';
 
+export type file = {
+	path: string,
+	name: string,
+	size: number,
+	ext: string,
+}
 
 class FileSystem {
 	blacklist = [
@@ -51,6 +57,44 @@ class FileSystem {
 			.catch(() => []);
 	}
 
+	async getFiles(src: string, files: file[] = []): Promise<file[]> {
+		return fs
+			.readdir(src, { withFileTypes: true })
+			.then(async (items) => {
+				const promises = [];
+				for (let x = 0; x < items.length; x++) {
+					const item = items[x];
+					if (this.blacklist.includes(item.name)) {
+						continue;
+					}
+					try {
+						const PathName = path.join(src, item.name);
+						if (item.isDirectory()) {
+							if (!item.name.startsWith('.')) {
+								promises.push(this.getFiles(PathName, files));
+							}
+						} else if (item.isFile()) {
+							promises.push((async () => {
+								const data = await fs.stat(PathName);
+								files.push({
+											   'path': PathName,
+											   'name': item.name,
+											   'size': data.size,
+											   'ext' : path.extname(PathName)
+										   });
+							})());
+						}
+					} catch (e) {
+					}
+				}
+				await Promise.all(promises);
+				return files;
+			})
+			.catch((e) => {
+				console.error(e);
+				return [];
+			});
+	}
 
 	async findProjects(src: string, projects: string[] = []): Promise<string[]> {
 		return fs

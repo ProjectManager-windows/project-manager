@@ -128,10 +128,10 @@ app
 	.whenReady()
 	.then(() => {
 		const store = new Store();
-
 		if (!store.get('settings.locale')) {
 			store.set('settings.locale', app.getLocale());
 		}
+		store.get('settings.locale')
 		// eslint-disable-next-line promise/no-nesting
 		createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
 		app.on('activate', () => {
