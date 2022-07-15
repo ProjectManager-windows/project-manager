@@ -1,8 +1,9 @@
 import { shell }                from 'electron';
 import { exec }                 from 'child_process';
 import { IDEType, ProjectType } from '../../../types/project';
+import os                       from 'os';
 
-export class vsCode implements IDEType {
+export class phpStorm implements IDEType {
 	public cmd: string;
 	public id: number;
 	public name: string;
@@ -10,7 +11,8 @@ export class vsCode implements IDEType {
 
 	async isInstalled() {
 		return (new Promise((resolve) => {
-			exec('where code', (error) => {
+			os.type()
+			exec('where phpstorm', (error) => {
 				if (error) {
 					resolve(false);
 					return;

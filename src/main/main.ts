@@ -16,7 +16,7 @@ import Store                                  from 'electron-store';
 import MenuBuilder                            from './menu';
 import { resolveHtmlPath }                    from './util';
 import events                                 from './ipcMain';
-import progressTest                           from './core/progressTest';
+// import progressTest                           from './core/progressTest';
 import { Projects }                           from './core/Projects';
 
 /**
@@ -153,6 +153,6 @@ export function sendRenderEvent(channel: string, ...args: any[]) {
 }
 
 setTimeout(() => {
-	progressTest.run();
+	// progressTest.run();
 }, 5000);
 export default sendRenderEvent;
