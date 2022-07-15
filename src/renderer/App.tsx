@@ -8,8 +8,8 @@ import './styles/App.scss';
 export default function App() {
 	return (
 		<div className='App'>
-			<Tooltip target='.tp' mouseTrack mouseTrackLeft={10} position='top' />
 			<Router>
+				<Tooltip target='.tp' position='top' />
 				<Routes>
 					<Route path='/' element={<Project />} />
 					<Route path='/settings' element={<Settings />} />
