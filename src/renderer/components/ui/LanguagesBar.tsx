@@ -26,7 +26,7 @@ const LanguagesBar = (props: { stats?: { [key: string]: number }, className?: st
 		let other = 0;
 		for (const analKey in anal) {
 			const { name, size } = anal[analKey];
-			const percent        = Math.round(size / total * 100);
+			const percent        = Math.ceil(size / total * 100);
 			const color          = window.languagesColors[name.toLowerCase()] || '#FFFFFF';
 			if (percent < 5) {
 				continue;
