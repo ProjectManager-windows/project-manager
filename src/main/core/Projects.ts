@@ -7,6 +7,7 @@ import ProgressBar         from '../components/ProgressBar/ProgressBar';
 import { Project }         from './Project';
 import sendRenderEvent     from '../main';
 import { t }               from './i18n';
+import Stored              from './Stored';
 
 export type ProjectsScheme = {
 	id: string
@@ -19,7 +20,7 @@ export type ProjectsScheme = {
 	stats: { [key: string]: number }
 }
 
-export class Projects {
+export class Projects{
 
 	static scan_index = 0;
 
@@ -63,7 +64,7 @@ export class Projects {
 	}
 
 	writeProject(_project: Project) {
-		this.store.set(`projects.${_project.id}`, Project.toObject(_project));
+		this.store.set(`projects.${_project.id}`, Stored.toObject(_project));
 		sendRenderEvent('electron-project-update');
 	}
 
@@ -108,7 +109,7 @@ export class Projects {
 			this.writeProject(p);
 			return true;
 		}
-		const p = Project.fromObject(this.getProjectById(this.getIdByPath(folder)));
+		const p = Stored.fromObject<Project,any>(Project,this.getProjectById(this.getIdByPath(folder)));
 		await p.analyzeFolder();
 		this.writeProject(p);
 
