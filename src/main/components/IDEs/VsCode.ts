@@ -3,7 +3,7 @@ import { exec }                 from 'child_process';
 import os                       from 'os';
 import { IDEType, ProjectType } from '../../../types/project';
 
-export class vsCode implements IDEType {
+export class VsCode implements IDEType {
 	public cmd: string;
 	public id: number;
 	public name: string;
@@ -46,11 +46,11 @@ export class vsCode implements IDEType {
 		return shell.openPath(`vscode://file/${project.path}`);
 	}
 
-	constructor(data: IDEType) {
-		this.id   = data.id;
-		this.name = data.name;
-		this.path = data.path;
-		this.cmd  = data.cmd;
+	constructor() {
+		this.id   = 1;
+		this.name = 'vscode';
+		this.path = '';
+		this.cmd  = '';
 	}
 
 }

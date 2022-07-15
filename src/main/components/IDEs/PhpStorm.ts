@@ -3,16 +3,16 @@ import { exec }                 from 'child_process';
 import os                       from 'os';
 import { IDEType, ProjectType } from '../../../types/project';
 
-export class phpStorm implements IDEType {
+export class PhpStorm implements IDEType {
 	public cmd: string;
 	public id: number;
 	public name: string;
 	public path: string;
 
 	async isInstalled() {
-		const command = "phpstorm";
+		const command = 'phpstorm';
 		return (new Promise((resolve) => {
-			if (os.type().toLowerCase().includes("windows")) {
+			if (os.type().toLowerCase().includes('windows')) {
 				exec(`where ${command}`, (error) => {
 					if (error) {
 						resolve(false);
@@ -21,7 +21,7 @@ export class phpStorm implements IDEType {
 					resolve(true);
 				});
 			}
-			if (os.type().toLowerCase().includes("linux")) {
+			if (os.type().toLowerCase().includes('linux')) {
 				exec(`which  ${command}`, (error) => {
 					if (error) {
 						resolve(false);
@@ -30,7 +30,7 @@ export class phpStorm implements IDEType {
 					resolve(true);
 				});
 			}
-			if (os.type().toLowerCase().includes("darwin")) {
+			if (os.type().toLowerCase().includes('darwin')) {
 				exec(`which  ${command}`, (error) => {
 					if (error) {
 						resolve(false);
@@ -43,14 +43,13 @@ export class phpStorm implements IDEType {
 	}
 
 	async execute(project: ProjectType) {
-		return shell.openPath(`vscode://file/${project.path}`);
+		return shell.openPath(`phpstorm://file/${project.path}`);
 	}
 
-	constructor(data: IDEType) {
-		this.id   = data.id;
-		this.name = data.name;
-		this.path = data.path;
-		this.cmd  = data.cmd;
+	constructor() {
+		this.id   = 2;
+		this.name = 'phpstorm';
+		this.path = '';
+		this.cmd  = '';
 	}
-
 }

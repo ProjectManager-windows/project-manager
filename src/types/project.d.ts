@@ -5,7 +5,7 @@ export interface IDEType {
 	name: string;
 	path: string;
 	execute: (Project: ProjectType) => void;
-	isInstalled: () => boolean|Promise<boolean>;
+	isInstalled: () => Promise<boolean>;
 	cmd: string;
 }
 

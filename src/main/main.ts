@@ -18,6 +18,7 @@ import { resolveHtmlPath }                    from './util';
 import events                                 from './ipcMain';
 // import progressTest                           from './core/progressTest';
 import { Projects }                           from './core/Projects';
+import { IDEs }                               from './core/IDEs';
 
 /**
  * Add event listeners...
@@ -123,6 +124,7 @@ const createWindow = async () => {
 
 events.run();
 Projects.getInstance();
+IDEs.getInstance();
 
 app
 	.whenReady()
