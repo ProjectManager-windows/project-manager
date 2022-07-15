@@ -1,3 +1,4 @@
+import { Tooltip }                               from 'primereact/tooltip';
 import { MemoryRouter as Router, Route, Routes } from 'react-router-dom';
 import Footer                                    from './components/Footer';
 import Project                                   from './pages/Project';
@@ -7,6 +8,7 @@ import './styles/App.scss';
 export default function App() {
 	return (
 		<div className='App'>
+			<Tooltip target='.tp' mouseTrack mouseTrackLeft={10} position='top' />
 			<Router>
 				<Routes>
 					<Route path='/' element={<Project />} />

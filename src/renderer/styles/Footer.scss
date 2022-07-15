@@ -1,29 +1,31 @@
 .Footer {
-	display    : grid;
-	width      : 100vw;
-	padding    : 0;
-	margin     : 0;
-	position   : fixed;
-	max-height : 20px;
-	height     : 20px;
-	bottom     : 0;
-	background-color: var(--text-secondary-color);
-	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 1fr;
-	gap: 0;
-	grid-template-areas:
+	z-index               : 1100;
+	display               : grid;
+	width                 : 100vw;
+	padding               : 0;
+	margin                : 0;
+	position              : fixed;
+	max-height            : 20px;
+	height                : 20px;
+	bottom                : 0;
+	background-color      : var(--text-secondary-color);
+	grid-template-columns : 1fr 1fr;
+	grid-template-rows    : 1fr;
+	gap                   : 0;
+	grid-template-areas   :
     ". .";
+
 	.left, .right {
-		display : flex;
-		flex-wrap       : nowrap;
-		align-content   : center;
-		align-items: center;
+		display       : flex;
+		flex-wrap     : nowrap;
+		align-content : center;
+		align-items   : center;
 
 	}
 
 	.left {
-		flex-direction: row;
-		justify-content: flex-start;
+		flex-direction  : row;
+		justify-content : flex-start;
 	}
 
 	.right {
@@ -31,10 +33,11 @@
 		justify-content : flex-start;
 	}
 
-	.footer-right-item{
-		margin-left: 5px;
+	.footer-right-item {
+		margin-left : 5px;
 	}
-	.footer-left-item{
-		margin-right: 5px;
+
+	.footer-left-item {
+		margin-right : 5px;
 	}
 }

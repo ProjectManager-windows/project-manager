@@ -1,7 +1,7 @@
 import '../styles/project.scss';
+import { useEffect, useState } from 'react';
 import Menu                    from '../components/project/menu';
 import ProjectList             from '../components/ProjectList';
-import { useEffect, useState } from 'react';
 
 const Project = () => {
 	const [projects, setProjects] = useState(window.electron.projects.getAll());

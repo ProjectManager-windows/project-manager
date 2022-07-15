@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
 import rng                   from 'seedrandom';
-import { ProjectType }       from '../../../types/project';
-import '../../styles/projectItem.scss';
 import { Ripple }            from 'primereact/ripple';
+import { ProjectType }       from '../../../types/project';
 import LanguagesBar          from './LanguagesBar';
+import '../../styles/projectItem.scss';
+
 
 const ProjectItem = (props: { project: ProjectType }) => {
 	const pixel             = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
@@ -41,9 +42,9 @@ const ProjectItem = (props: { project: ProjectType }) => {
 			<li className='item p-ripple' key={project.id}>
 				<Ripple />
 				<div>
-					<img className='logo' alt='logo' src={pixel} style={image} height='40' width='40' />
-					<div className='info' >
-						<div className='name'>{project.name}</div>
+					<img className={`logo project-logo-${project.id}`} alt='logo' src={pixel} style={image} height='40' width='40' />
+					<div className='info'>
+						<div className='tp name' data-pr-tooltip={project.name}>{project.name}</div>
 						<LanguagesBar className='languageBar' stats={project.stats} />
 					</div>
 				</div>
