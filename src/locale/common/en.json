@@ -1,7 +1,9 @@
 {
+	"add"          :"added",
 	"add project"  :"add project",
 	"error"        :"error",
 	"file"         :"file",
+	"founded"      :"founded",
 	"notification" :"notification",
 	"notifications":"notifications",
 	"ok"           :"ok",

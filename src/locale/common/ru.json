@@ -1,12 +1,12 @@
 {
+	"add"          :"Добавлен",
 	"add project"  :"добавить проект",
 	"error"        :"ошибка",
 	"file"         :"файл",
+	"founded"      :"Найдено",
 	"notification" :"уведомление",
 	"notifications":"уведомления",
 	"ok"           :"ок",
 	"scan"         :"cканировать",
-	"founded"      :"Найдено",
-	"add"          :"Добавлен",
 	"select folder":"выбрать папку"
 }

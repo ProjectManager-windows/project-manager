@@ -1,20 +1,22 @@
 import Store               from 'electron-store';
 import ElectronStore       from 'electron-store';
 import { dialog, ipcMain } from 'electron';
+import path                from 'path';
 import FileSystem          from './FileSystem';
 import ProgressBar         from '../components/ProgressBar/ProgressBar';
-import path                from 'path';
 import { Project }         from './Project';
 import sendRenderEvent     from '../main';
 import { t }               from './i18n';
 
-type ProjectsScheme = {
+export type ProjectsScheme = {
 	id: string
 	name: string
 	path: string
 	IDE: string
 	technologies: string
 	version: string
+	logo: string
+	stats: { [key: string]: number }
 }
 
 export class Projects {
@@ -106,7 +108,11 @@ export class Projects {
 			this.writeProject(p);
 			return true;
 		}
-		return false;
+		const p = Project.fromObject(this.getProjectById(this.getIdByPath(folder)));
+		await p.analyzeFolder();
+		this.writeProject(p);
+
+		return true;
 	}
 
 	async addFolder() {
@@ -129,16 +135,20 @@ export class Projects {
 		return 1;
 	}
 
-	getIdByPath(_path: string) {
+	getIdByPath(_path: string): number {
 		const projects = this.getAll();
 		// eslint-disable-next-line guard-for-in
 		for (const id in projects) {
 			const project = projects[id];
 			if (_path === project.path) {
-				return project;
+				return parseInt(id, 10);
 			}
 		}
-		return false;
+		return 0;
+	}
+
+	getProjectById(id: number): ProjectsScheme {
+		return this.store.get<any, ProjectsScheme>(`projects.${id}`);
 	}
 }
 

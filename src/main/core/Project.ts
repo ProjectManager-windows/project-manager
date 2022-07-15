@@ -52,6 +52,7 @@ export class Project implements ProjectType {
 		const stats: { [key: string]: number } = {};
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
+			// eslint-disable-next-line no-prototype-builtins
 			if (!stats.hasOwnProperty(file.ext)) {
 				stats[file.ext] = 0;
 			}
