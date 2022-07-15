@@ -1,13 +1,12 @@
-import Store               from 'electron-store';
-import ElectronStore       from 'electron-store';
-import { dialog, ipcMain } from 'electron';
-import path                from 'path';
-import FileSystem          from './FileSystem';
-import ProgressBar         from '../components/ProgressBar/ProgressBar';
+import Collection          from '../Storage/Collection';
 import { Project }         from './Project';
-import sendRenderEvent     from '../main';
-import { t }               from './i18n';
-import Stored              from './Stored';
+import PM_Storage          from '../Storage/PM_Storage';
+import { ItemType }        from '../Storage/Item';
+import { dialog, ipcMain } from 'electron';
+import ProgressBar         from '../../components/ProgressBar/ProgressBar';
+import path                from 'path';
+import PM_FileSystem       from '../Utils/PM_FileSystem';
+import { t }               from '../Utils/i18n';
 
 export type ProjectsScheme = {
 	id: string
@@ -20,12 +19,13 @@ export type ProjectsScheme = {
 	stats: { [key: string]: number }
 }
 
-export class Projects{
-
-	static scan_index = 0;
+export class Projects implements Collection {
+	item  = Project;
+	table = 'projects';
 
 	private static instance: Projects;
-	private store: ElectronStore;
+	items: { [p: string]: Project } = {};
+	private static scan_index: number;
 
 	static getInstance() {
 		if (!this.instance) {
@@ -34,22 +34,15 @@ export class Projects{
 		return this.instance;
 	}
 
-	init() {
-		if (!this.store.get('projects')) {
-			this.store.set('projects', {});
-		}
-	}
-
 	private constructor() {
-		this.store = new Store();
 		this.init();
 		ipcMain.on('electron-project-getAll', async (event) => {
 			this.init();
-			event.returnValue = this.getAll();
+			event.returnValue = this.getAllRaw();
 		});
 		ipcMain.on('electron-project-getProject', async (event, id) => {
 			this.init();
-			event.returnValue = this.store.get<any, ProjectsScheme>(`projects.${id}`);
+			event.returnValue = this.getById(id);
 		});
 		ipcMain.on('electron-project-scan', async (event) => {
 			this.init();
@@ -63,9 +56,27 @@ export class Projects{
 		});
 	}
 
-	writeProject(_project: Project) {
-		this.store.set(`projects.${_project.id}`, Stored.toObject(_project));
-		sendRenderEvent('electron-project-update');
+
+	getAll(): { [p: string]: Project } {
+		this.items  = {};
+		const table = PM_Storage.getAll<ItemType>(this.table);
+		for (const tableKey in table) {
+			this.items[tableKey] = new Project(table[tableKey]);
+		}
+		return this.items;
+	}
+
+	getAllRaw(): { [p: string]: any } {
+		const items: any = {};
+		const data       = PM_Storage.getAll<ItemType>(this.table);
+		for (const tableKey in data) {
+			items[tableKey] = data[tableKey];
+		}
+		return items;
+	}
+
+	getById(id: number): Project {
+		return new Project(PM_Storage.getById<ItemType>(this.table, id));
 	}
 
 	async scan() {
@@ -73,7 +84,7 @@ export class Projects{
 		const folder = await dialog.showOpenDialog({ properties: ['openDirectory'] });
 		if (!folder.canceled) {
 			const bar      = new ProgressBar(`scan${Projects.scan_index}`, 'scan');
-			const myFs     = new FileSystem();
+			const myFs     = new PM_FileSystem();
 			const projects = await myFs.findProjects(folder.filePaths[0]);
 			bar.update({
 						   total  : 1,
@@ -103,16 +114,20 @@ export class Projects{
 	}
 
 	async addFromFolder(folder: string) {
-		if (!this.getIdByPath(folder)) {
-			const p = Project.createFromFolder(folder, this.getLastId());
+		const id = this.getIdByPath(folder);
+		if (!id) {
+			const p = new Project({
+									  id  : 0,
+									  path: folder,
+									  name: path.basename(folder)
+								  });
 			await p.analyzeFolder();
-			this.writeProject(p);
+			p.save();
 			return true;
 		}
-		const p = Stored.fromObject<Project,any>(Project,this.getProjectById(this.getIdByPath(folder)));
+		const p = this.getById(id);
 		await p.analyzeFolder();
-		this.writeProject(p);
-
+		p.save();
 		return true;
 	}
 
@@ -123,34 +138,22 @@ export class Projects{
 		}
 	}
 
-	getAll() {
-		return this.store.get<any, { [key: string]: ProjectsScheme }>('projects');
-	}
-
-	getLastId(): number {
-		const projects = this.getAll();
-		const ids      = Object.keys(projects).map((val) => parseInt(val, 10));
-		if (ids.length > 0) {
-			return Math.max(...ids) + 1;
-		}
-		return 1;
-	}
-
 	getIdByPath(_path: string): number {
 		const projects = this.getAll();
 		// eslint-disable-next-line guard-for-in
 		for (const id in projects) {
 			const project = projects[id];
-			if (_path === project.path) {
+			if (_path === project.getVal('path')) {
 				return parseInt(id, 10);
 			}
 		}
 		return 0;
 	}
 
-	getProjectById(id: number): ProjectsScheme {
-		return this.store.get<any, ProjectsScheme>(`projects.${id}`);
+	private init() {
+		PM_Storage.init(this.table);
 	}
 }
 
 export default Projects.getInstance();
+

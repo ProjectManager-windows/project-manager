@@ -1348,8 +1348,8 @@
 		]
 	},
 	{
-		"name"      :"JSX",
-		"type"      :"programming",
+		"name"      :"jsx-react",
+		"type"      :"markup",
 		"extensions":[
 			".jsx"
 		]
@@ -2966,7 +2966,13 @@
 		"name"      :"TypeScript",
 		"type"      :"programming",
 		"extensions":[
-			".ts",
+			".ts"
+		]
+	},
+	{
+		"name"      :"tsx-react",
+		"type"      :"markup",
+		"extensions":[
 			".tsx"
 		]
 	},

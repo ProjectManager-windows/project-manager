@@ -1,37 +1,6 @@
-import * as os  from 'os';
-import { exec } from 'child_process';
-
-(async () => {
-	console.log(await new Promise((resolve) => {
-		if (os.type().toLowerCase().includes("windows")) {
-			exec('where phpstorm', (error) => {
-				if (error) {
-					resolve(false);
-					return;
-				}
-				resolve(true);
-			});
-		}
-		if (os.type().toLowerCase().includes("linux")) {
-			exec('which phpstorm', (error) => {
-				if (error) {
-					resolve(false);
-					return;
-				}
-				resolve(true);
-			});
-		}
-		if (os.type().toLowerCase().includes("darwin")) {
-			exec('which phpstorm', (error) => {
-				if (error) {
-					resolve(false);
-					return;
-				}
-				resolve(true);
-			});
-		}
-	}));
-})();
-
-
+import { dialog }  from 'electron';
+import ProgressBar from './src/main/components/ProgressBar/ProgressBar';
+import path        from 'path';
+import { Project } from './src/main/core/Projects/Project';
+import Stored      from './src/main/core/Stored';
 

@@ -9,7 +9,7 @@ export default function App() {
 	return (
 		<div className='App'>
 			<Router>
-				<Tooltip target='.tp' position='top' />
+				<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
 				<Routes>
 					<Route path='/' element={<Project />} />
 					<Route path='/settings' element={<Settings />} />

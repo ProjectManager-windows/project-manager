@@ -7,6 +7,7 @@
 	"notification" :"notification",
 	"notifications":"notifications",
 	"ok"           :"ok",
+	"projects"     :"projects",
 	"scan"         :"scan",
 	"select folder":"select folder"
 }

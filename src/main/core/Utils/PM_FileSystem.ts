@@ -1,7 +1,7 @@
 import * as fs from 'node:fs/promises';
 import path    from 'node:path';
 import Store   from 'electron-store';
-import plugins from '../components/plugins';
+import plugins from '../../components/plugins';
 
 export type file = {
 	path: string,
@@ -10,7 +10,7 @@ export type file = {
 	ext: string,
 }
 
-class FileSystem {
+class PM_FileSystem {
 	blacklist = [
 		'$Recycle.Bin',
 		'$WinREAgent',
@@ -146,4 +146,4 @@ class FileSystem {
 	}
 }
 
-export default FileSystem;
+export default PM_FileSystem;

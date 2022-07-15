@@ -10,7 +10,7 @@ const LanguagesBar = (props: { stats?: { [key: string]: number }, className?: st
 		let total                                  = 0;
 		for (const statsKey in stats) {
 			for (const availableExtKey of window.LanguagesExtensions) {
-				if (availableExtKey?.extensions?.includes(statsKey) && availableExtKey.type !== 'data') {
+				if (availableExtKey?.extensions?.includes(statsKey) && !['data', 'prose'].includes(availableExtKey.type)) {
 					anal.push({ name: availableExtKey.name, size: Math.sqrt(stats[statsKey]) });
 					total += Math.sqrt(stats[statsKey]);
 					break;
@@ -26,7 +26,7 @@ const LanguagesBar = (props: { stats?: { [key: string]: number }, className?: st
 		let other = 0;
 		for (const analKey in anal) {
 			const { name, size } = anal[analKey];
-			const percent        = Math.ceil(size / total * 100);
+			const percent        = Math.floor(size / total * 100);
 			const color          = window.languagesColors[name.toLowerCase()] || '#FFFFFF';
 			if (percent < 5) {
 				continue;
@@ -35,7 +35,7 @@ const LanguagesBar = (props: { stats?: { [key: string]: number }, className?: st
 			}
 			progress.push(
 				<div
-					key={name}
+					key={`${name}-${percent}`}
 					className={`tp progress-bar lang-${name}`} style={{ width: `${percent}%`, background: color, borderRight: '1px solid transparent' }} data-pr-tooltip={`${name} - ${percent}%`}
 				/>
 			);

@@ -17,8 +17,7 @@ import MenuBuilder                            from './menu';
 import { resolveHtmlPath }                    from './util';
 import events                                 from './ipcMain';
 // import progressTest                           from './core/progressTest';
-import { Projects }                           from './core/Projects';
-import { IDEs }                               from './core/IDEs';
+import { Projects }                           from './core/Projects/Projects';
 
 /**
  * Add event listeners...
@@ -124,8 +123,8 @@ const createWindow = async () => {
 
 events.run();
 Projects.getInstance();
-IDEs.getInstance();
-
+// IDEs.getInstance();
+(new Store).clear()
 app
 	.whenReady()
 	.then(() => {
@@ -133,7 +132,7 @@ app
 		if (!store.get('settings.locale')) {
 			store.set('settings.locale', app.getLocale());
 		}
-		store.get('settings.locale')
+		store.get('settings.locale');
 		// eslint-disable-next-line promise/no-nesting
 		createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
 		app.on('activate', () => {
