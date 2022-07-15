@@ -1,5 +1,6 @@
 import { shell }                from 'electron';
 import { exec }                 from 'child_process';
+import os                       from 'os';
 import { IDEType, ProjectType } from '../../../types/project';
 
 export class vsCode implements IDEType {
@@ -9,14 +10,35 @@ export class vsCode implements IDEType {
 	public path: string;
 
 	async isInstalled() {
+		const command = 'code';
 		return (new Promise((resolve) => {
-			exec('where code', (error) => {
-				if (error) {
-					resolve(false);
-					return;
-				}
-				resolve(true);
-			});
+			if (os.type().toLowerCase().includes('windows')) {
+				exec(`where ${command}`, (error) => {
+					if (error) {
+						resolve(false);
+						return;
+					}
+					resolve(true);
+				});
+			}
+			if (os.type().toLowerCase().includes('linux')) {
+				exec(`which  ${command}`, (error) => {
+					if (error) {
+						resolve(false);
+						return;
+					}
+					resolve(true);
+				});
+			}
+			if (os.type().toLowerCase().includes('darwin')) {
+				exec(`which  ${command}`, (error) => {
+					if (error) {
+						resolve(false);
+						return;
+					}
+					resolve(true);
+				});
+			}
 		})) as Promise<boolean>;
 	}
 

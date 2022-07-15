@@ -1,7 +1,7 @@
 import { shell }                from 'electron';
 import { exec }                 from 'child_process';
-import { IDEType, ProjectType } from '../../../types/project';
 import os                       from 'os';
+import { IDEType, ProjectType } from '../../../types/project';
 
 export class phpStorm implements IDEType {
 	public cmd: string;
@@ -10,15 +10,35 @@ export class phpStorm implements IDEType {
 	public path: string;
 
 	async isInstalled() {
+		const command = "phpstorm";
 		return (new Promise((resolve) => {
-			os.type()
-			exec('where phpstorm', (error) => {
-				if (error) {
-					resolve(false);
-					return;
-				}
-				resolve(true);
-			});
+			if (os.type().toLowerCase().includes("windows")) {
+				exec(`where ${command}`, (error) => {
+					if (error) {
+						resolve(false);
+						return;
+					}
+					resolve(true);
+				});
+			}
+			if (os.type().toLowerCase().includes("linux")) {
+				exec(`which  ${command}`, (error) => {
+					if (error) {
+						resolve(false);
+						return;
+					}
+					resolve(true);
+				});
+			}
+			if (os.type().toLowerCase().includes("darwin")) {
+				exec(`which  ${command}`, (error) => {
+					if (error) {
+						resolve(false);
+						return;
+					}
+					resolve(true);
+				});
+			}
 		})) as Promise<boolean>;
 	}
 
