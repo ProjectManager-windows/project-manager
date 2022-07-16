@@ -44,10 +44,6 @@ export class ProgressBar {
 		this.sendUpdate();
 	}
 
-	private sendUpdate() {
-		APP.sendRenderEvent('electron-progressbar-update', this.toArray());
-	}
-
 	toArray() {
 		return {
 			total  : this.total,
@@ -56,6 +52,10 @@ export class ProgressBar {
 			name   : this.name,
 			message: this.message
 		};
+	}
+
+	private sendUpdate() {
+		APP.sendRenderEvent('electron-progressbar-update', this.toArray());
 	}
 }
 

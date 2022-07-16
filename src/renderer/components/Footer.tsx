@@ -15,7 +15,7 @@ function Footer() {
 			<div className='right'>
 				{/* TODO */}
 				<Notifications data-pr-tooltip={t('notifications')} className='tp footer-right-item' />
-				<Link data-pr-tooltip={t('settings')}  to="/settings" className='tp footer-right-item'><i className='iBtn pi pi-sliders-h'/></Link>
+				<Link data-pr-tooltip={t('settings')} to='/settings' className='tp footer-right-item'><i className='iBtn pi pi-sliders-h' /></Link>
 			</div>
 		</div>
 	);

@@ -31,7 +31,7 @@ function Notifications(props: JSX.IntrinsicAttributes & ClassAttributes<HTMLDivE
 			</Sidebar>
 			{/* eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/click-events-have-key-events */}
 			<i className='iBtn pi pi-bell p-overlay-badge' style={{ marginRight: '5px' }} title={t('notifications')} onClick={() => setVisibleRight(true)}>
-				{notificationList.length > 0 ? <Badge severity='warn' size='normal'/>
+				{notificationList.length > 0 ? <Badge severity='warn' size='normal' />
 											 : ''
 				}
 

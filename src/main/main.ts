@@ -10,17 +10,9 @@ import events                        from './ipcMain';
 
 export class PM_App {
 	private static instance: PM_App;
-	private readonly isDebug: boolean;
-	private isRunning: boolean = false;
-
-	static getInstance() {
-		if (!this.instance) {
-			this.instance = new PM_App();
-		}
-		return this.instance;
-	}
-
 	mainWindow: BrowserWindow | null = null;
+	private readonly isDebug: boolean;
+	private isRunning: boolean       = false;
 
 	private constructor() {
 		this.isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
@@ -29,6 +21,13 @@ export class PM_App {
 			sourceMapSupport.install();
 		}
 
+	}
+
+	static getInstance() {
+		if (!this.instance) {
+			this.instance = new PM_App();
+		}
+		return this.instance;
 	}
 
 	run() {
@@ -53,6 +52,42 @@ export class PM_App {
 				});
 			})
 			.catch(console.log);
+	}
+
+	afterRun() {
+
+	}
+
+	beforeRun() {
+		events.run();
+		Projects.getInstance();
+	}
+
+	async sendRenderEvent(channel: string, ...args: any[]) {
+		return new Promise((resolve, reject) => {
+							   const send = (channel: string, ...args: any[]) => {
+								   if (this.mainWindow) {
+									   this.mainWindow.webContents.send(channel, ...args);
+									   resolve(true);
+								   }
+							   };
+
+							   if (this.mainWindow && this.isRunning) {
+								   send(channel, ...args);
+							   } else {
+								   let trys       = 0;
+								   const interval = setInterval(() => {
+									   trys++;
+									   if (trys < 10) {
+										   send(channel, ...args);
+									   } else {
+										   reject(false);
+										   clearInterval(interval);
+									   }
+								   }, 200);
+							   }
+						   }
+		);
 	}
 
 	private async createWindow() {
@@ -131,42 +166,6 @@ export class PM_App {
 		log.transports.file.level = 'info';
 		autoUpdater.logger        = log;
 		return autoUpdater.checkForUpdatesAndNotify();
-	}
-
-	afterRun() {
-
-	}
-
-	beforeRun() {
-		events.run();
-		Projects.getInstance();
-	}
-
-	async sendRenderEvent(channel: string, ...args: any[]) {
-		return new Promise((resolve, reject) => {
-							   const send = (channel: string, ...args: any[]) => {
-								   if (this.mainWindow) {
-									   this.mainWindow.webContents.send(channel, ...args);
-									   resolve(true);
-								   }
-							   };
-
-							   if (this.mainWindow && this.isRunning) {
-								   send(channel, ...args);
-							   } else {
-								   let trys       = 0;
-								   const interval = setInterval(() => {
-									   trys++;
-									   if (trys < 10) {
-										   send(channel, ...args);
-									   } else {
-										   reject(false);
-										   clearInterval(interval);
-									   }
-								   }, 200);
-							   }
-						   }
-		);
 	}
 }
 

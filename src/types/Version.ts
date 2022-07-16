@@ -1,7 +1,7 @@
-export class Version extends String{
+export class Version extends String {
 	isValid(): boolean {
-		return true
+		return true;
 	}
 }
 
-export default Version
+export default Version;

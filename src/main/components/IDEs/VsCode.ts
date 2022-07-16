@@ -9,6 +9,13 @@ export class VsCode implements IDEType {
 	public name: string;
 	public path: string;
 
+	constructor() {
+		this.id   = 1;
+		this.name = 'vscode';
+		this.path = '';
+		this.cmd  = '';
+	}
+
 	async isInstalled() {
 		const command = 'code';
 		return (new Promise((resolve) => {
@@ -44,13 +51,6 @@ export class VsCode implements IDEType {
 
 	async execute(project: ProjectType) {
 		return shell.openPath(`vscode://file/${project.path}`);
-	}
-
-	constructor() {
-		this.id   = 1;
-		this.name = 'vscode';
-		this.path = '';
-		this.cmd  = '';
 	}
 
 }

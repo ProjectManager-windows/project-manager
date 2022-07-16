@@ -3,7 +3,7 @@ import { ProgressBar }                                 from 'primereact/progress
 import { Panel }                                       from 'primereact/panel';
 import { ProgressBar as pb }                           from '../../classes/ProgressBars';
 import { NotificationItem, NotificationItemInterface } from '../../classes/Notifications';
-import "../../styles/notification.scss";
+import '../../styles/notification.scss';
 
 function Notification(props: { item: NotificationItemInterface }) {
 	const { t }    = useTranslation();

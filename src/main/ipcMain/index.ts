@@ -19,7 +19,7 @@ export const main: Main = {
 		}
 	},
 	events: {
-		ipcStore,
+		ipcStore
 	}
 };
 export default main;

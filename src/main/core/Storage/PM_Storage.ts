@@ -4,15 +4,15 @@ export class PM_Storage {
 	private static instance: PM_Storage;
 	private store: Store;
 
+	private constructor() {
+		this.store = new Store();
+	}
+
 	static getInstance() {
 		if (!this.instance) {
 			this.instance = new PM_Storage();
 		}
 		return this.instance;
-	}
-
-	private constructor() {
-		this.store = new Store();
 	}
 
 	commit<T = number | string | { [p: string]: any }>(table: string, id: number, data: T): void {

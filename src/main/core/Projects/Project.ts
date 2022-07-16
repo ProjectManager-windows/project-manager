@@ -1,13 +1,36 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
-import { Item }        from '../Storage/Item';
-import { glob }        from 'glob';
-import fs              from 'fs/promises';
-import path            from 'path';
-import PM_FileSystem   from '../Utils/PM_FileSystem';
-import APP from '../../main';
+import { Item }      from '../Storage/Item';
+import { glob }      from 'glob';
+import fs            from 'fs/promises';
+import path          from 'path';
+import PM_FileSystem from '../Utils/PM_FileSystem';
+import APP           from '../../main';
 
 export class Project extends Item {
 	public table: string = 'projects';
+
+	private static async logoToBase64(logo?: {
+		path: string
+		size: number
+		ext: string
+	}) {
+		if (!logo) {
+			return '';
+		}
+		const data = await fs.readFile(logo.path);
+		switch (logo.ext) {
+			case '.svg':
+				return `data:image/svg+xml;base64,${data.toString('base64')}`;
+			case '.jpg':
+				return `data:image/jpg;base64,${data.toString('base64')}`;
+			case '.png':
+				return `data:image/png;base64,${data.toString('base64')}`;
+			case '.ico':
+				return `data:image/ico;base64,${data.toString('base64')}`;
+			default:
+				return '';
+		}
+	}
 
 	init() {
 		this.setVal('logo', '');
@@ -21,6 +44,13 @@ export class Project extends Item {
 		promises.push(this.statTechnologies());
 		await Promise.all(promises);
 		return this;
+	}
+
+	save(): number {
+		const id = super.save();
+		APP.sendRenderEvent('electron-project-update');
+		return id;
+
 	}
 
 	private async statTechnologies() {
@@ -102,36 +132,6 @@ export class Project extends Item {
 			return (Math.log(a.size) * (scoreA + score2A) > Math.log(b.size) * (scoreB + score2B)) ? 1 : -1;
 		});
 		this.setVal('logo', await Project.logoToBase64(newIcons.pop()));
-	}
-
-	private static async logoToBase64(logo?: {
-		path: string
-		size: number
-		ext: string
-	}) {
-		if (!logo) {
-			return '';
-		}
-		const data = await fs.readFile(logo.path);
-		switch (logo.ext) {
-			case '.svg':
-				return `data:image/svg+xml;base64,${data.toString('base64')}`;
-			case '.jpg':
-				return `data:image/jpg;base64,${data.toString('base64')}`;
-			case '.png':
-				return `data:image/png;base64,${data.toString('base64')}`;
-			case '.ico':
-				return `data:image/ico;base64,${data.toString('base64')}`;
-			default:
-				return '';
-		}
-	}
-
-	save(): number {
-		const id = super.save();
-		APP.sendRenderEvent('electron-project-update');
-		return id;
-
 	}
 
 }

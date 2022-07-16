@@ -2,6 +2,7 @@ import { PathLike }    from 'fs';
 import { ProjectType } from '../../../types/project';
 
 export abstract class PluginType {
+	static ispChanel = '';
 	public Project: ProjectType;
 
 	protected constructor(Project: ProjectType) {
@@ -17,8 +18,6 @@ export abstract class PluginType {
 	static async isTechnologies(_path: PathLike) {
 		return false;
 	}
-
-	static ispChanel = '';
 
 
 }

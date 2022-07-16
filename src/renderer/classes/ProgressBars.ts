@@ -72,13 +72,6 @@ export class ProgressBars extends EventEmitter {
 
 	public bars: { [k: string]: ProgressBar } = {};
 
-	static getInstance() {
-		if (!this.instance) {
-			this.instance = new ProgressBars();
-		}
-		return this.instance;
-	}
-
 	private constructor() {
 		super();
 		window.electron.ipcRenderer.on('electron-progressbar-update', (message: ProgressBarType) => {
@@ -91,6 +84,13 @@ export class ProgressBars extends EventEmitter {
 			this.bars[message.key].setMessage(message.message);
 			this.emit('progressbar-update', message.key, this.bars[message.key]);
 		});
+	}
+
+	static getInstance() {
+		if (!this.instance) {
+			this.instance = new ProgressBars();
+		}
+		return this.instance;
 	}
 
 }

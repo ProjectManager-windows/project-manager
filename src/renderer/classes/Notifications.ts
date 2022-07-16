@@ -47,13 +47,6 @@ export class Notifications extends EventEmitter {
 
 	public Notifications: { [k: string]: NotificationItem } = {};
 
-	static getInstance() {
-		if (!this.instance) {
-			this.instance = new Notifications();
-		}
-		return this.instance;
-	}
-
 	private constructor() {
 		super();
 		this.ProgressBars = ProgressBars;
@@ -61,6 +54,13 @@ export class Notifications extends EventEmitter {
 			this.Notifications[key] = bar;
 			this.emit('update', this.Notifications);
 		});
+	}
+
+	static getInstance() {
+		if (!this.instance) {
+			this.instance = new Notifications();
+		}
+		return this.instance;
 	}
 }
 

@@ -9,6 +9,13 @@ export class PhpStorm implements IDEType {
 	public name: string;
 	public path: string;
 
+	constructor() {
+		this.id   = 2;
+		this.name = 'phpstorm';
+		this.path = '';
+		this.cmd  = '';
+	}
+
 	async isInstalled() {
 		const command = 'phpstorm';
 		return (new Promise((resolve) => {
@@ -44,12 +51,5 @@ export class PhpStorm implements IDEType {
 
 	async execute(project: ProjectType) {
 		return shell.openPath(`phpstorm://file/${project.path}`);
-	}
-
-	constructor() {
-		this.id   = 2;
-		this.name = 'phpstorm';
-		this.path = '';
-		this.cmd  = '';
 	}
 }

@@ -20,19 +20,11 @@ export type ProjectsScheme = {
 }
 
 export class Projects implements Collection {
+	private static instance: Projects;
+	private static scan_index: number;
 	item  = Project;
 	table = 'projects';
-
-	private static instance: Projects;
 	items: { [p: string]: Project } = {};
-	private static scan_index: number;
-
-	static getInstance() {
-		if (!this.instance) {
-			this.instance = new Projects();
-		}
-		return this.instance;
-	}
 
 	private constructor() {
 		this.init();
@@ -56,6 +48,12 @@ export class Projects implements Collection {
 		});
 	}
 
+	static getInstance() {
+		if (!this.instance) {
+			this.instance = new Projects();
+		}
+		return this.instance;
+	}
 
 	getAll(): { [p: string]: Project } {
 		this.items  = {};

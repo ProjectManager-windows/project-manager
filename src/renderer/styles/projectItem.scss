@@ -24,13 +24,14 @@
 			}
 
 			.info {
-				width : calc(80% - 15px);
-				display: flex;
-				align-content: flex-start;
-				flex-wrap: nowrap;
-				flex-direction: column;
-				align-items: stretch;
-				justify-content: center;
+				width           : calc(80% - 15px);
+				display         : flex;
+				align-content   : flex-start;
+				flex-wrap       : nowrap;
+				flex-direction  : column;
+				align-items     : stretch;
+				justify-content : center;
+
 				.name {
 					overflow      : hidden;
 					white-space   : nowrap;
