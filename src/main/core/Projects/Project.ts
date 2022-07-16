@@ -4,7 +4,7 @@ import { glob }        from 'glob';
 import fs              from 'fs/promises';
 import path            from 'path';
 import PM_FileSystem   from '../Utils/PM_FileSystem';
-import sendRenderEvent from '../../main';
+import APP from '../../main';
 
 export class Project extends Item {
 	public table: string = 'projects';
@@ -129,7 +129,7 @@ export class Project extends Item {
 
 	save(): number {
 		const id = super.save();
-		sendRenderEvent('electron-project-update');
+		APP.sendRenderEvent('electron-project-update');
 		return id;
 
 	}
