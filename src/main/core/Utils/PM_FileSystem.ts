@@ -144,6 +144,29 @@ class PM_FileSystem {
 		}
 		return false;
 	}
+
+	static async logoToBase64(logo?: {
+		path: string
+		size: number
+		ext: string
+	}) {
+		if (!logo) {
+			return '';
+		}
+		const data = await fs.readFile(logo.path);
+		switch (logo.ext) {
+			case '.svg':
+				return `data:image/svg+xml;base64,${data.toString('base64')}`;
+			case '.jpg':
+				return `data:image/jpg;base64,${data.toString('base64')}`;
+			case '.png':
+				return `data:image/png;base64,${data.toString('base64')}`;
+			case '.ico':
+				return `data:image/ico;base64,${data.toString('base64')}`;
+			default:
+				return '';
+		}
+	}
 }
 
 export default PM_FileSystem;

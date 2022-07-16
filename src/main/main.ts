@@ -5,8 +5,9 @@ import MenuBuilder                   from './menu';
 import { resolveHtmlPath }           from './util';
 import log                           from 'electron-log';
 import { autoUpdater }               from 'electron-updater';
-import { Projects }                  from './core/Projects/Projects';
+import Projects                      from './core/Projects/Projects';
 import events                        from './ipcMain';
+import IDEs                          from './core/IDEs/IDEs';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -59,8 +60,10 @@ export class PM_App {
 	}
 
 	beforeRun() {
+		// (new Store).clear();
 		events.run();
-		Projects.getInstance();
+		Projects.init();
+		IDEs.init();
 	}
 
 	async sendRenderEvent(channel: string, ...args: any[]) {

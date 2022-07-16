@@ -19,7 +19,7 @@ export type ProjectsScheme = {
 	stats: { [key: string]: number }
 }
 
-export class Projects implements Collection {
+class Projects implements Collection {
 	private static instance: Projects;
 	private static scan_index: number;
 	item  = Project;
@@ -27,7 +27,6 @@ export class Projects implements Collection {
 	items: { [p: string]: Project } = {};
 
 	private constructor() {
-		this.init();
 		ipcMain.on('electron-project-getAll', async (event) => {
 			this.init();
 			event.returnValue = this.getAllRaw();
@@ -148,7 +147,7 @@ export class Projects implements Collection {
 		return 0;
 	}
 
-	private init() {
+	public init() {
 		PM_Storage.init(this.table);
 	}
 }

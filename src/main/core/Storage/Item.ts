@@ -12,9 +12,12 @@ export abstract class Item {
 	public constructor(data: ItemType) {
 		this.init(data);
 		this.data = data;
+		this.afterInit(data);
 	}
 
 	abstract init(data: ItemType): void
+
+	afterInit(_data: ItemType): void{}
 
 	setVal<T = any>(key: string, value: T) {
 		this.data[key] = value;

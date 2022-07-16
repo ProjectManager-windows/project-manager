@@ -1,21 +1,23 @@
-import { shell }   from 'electron';
-import { exec }    from 'child_process';
+/* eslint-disable @typescript-eslint/lines-between-class-members */
+import { Item }    from '../Storage/Item';
 import os          from 'os';
-import { IDE }     from '../../core/IDEs/IDE';
-import { Project } from '../../core/Projects/Project';
+import { exec }    from 'child_process';
+import { shell }   from 'electron';
+import { Project } from '../Projects/Project';
 
-export class PhpStorm extends IDE {
+export class IDE extends Item {
+	public table: string = 'IDEs';
 
-	afterInit() {
+	init() {
 		this.setVal('logo', '');
-		this.setVal('name', 'PhpStorm');
+		this.setVal('name', '');
 	}
 
 	async isInstalled() {
 		const command = 'phpstorm';
 		return (new Promise((resolve) => {
 			if (os.type().toLowerCase().includes('windows')) {
-				exec(`where ${command}`, (error) => {
+				exec(`where ${command}`, (error: any) => {
 					if (error) {
 						resolve(false);
 						return;
@@ -24,7 +26,7 @@ export class PhpStorm extends IDE {
 				});
 			}
 			if (os.type().toLowerCase().includes('linux')) {
-				exec(`which  ${command}`, (error) => {
+				exec(`which  ${command}`, (error: any) => {
 					if (error) {
 						resolve(false);
 						return;

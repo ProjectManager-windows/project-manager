@@ -9,32 +9,8 @@ import APP           from '../../main';
 export class Project extends Item {
 	public table: string = 'projects';
 
-	private static async logoToBase64(logo?: {
-		path: string
-		size: number
-		ext: string
-	}) {
-		if (!logo) {
-			return '';
-		}
-		const data = await fs.readFile(logo.path);
-		switch (logo.ext) {
-			case '.svg':
-				return `data:image/svg+xml;base64,${data.toString('base64')}`;
-			case '.jpg':
-				return `data:image/jpg;base64,${data.toString('base64')}`;
-			case '.png':
-				return `data:image/png;base64,${data.toString('base64')}`;
-			case '.ico':
-				return `data:image/ico;base64,${data.toString('base64')}`;
-			default:
-				return '';
-		}
-	}
-
 	init() {
 		this.setVal('logo', '');
-		this.setVal('name', '');
 		this.setVal('name', '');
 	}
 
@@ -131,7 +107,7 @@ export class Project extends Item {
 			if (a.size === b.size) return scoreA;
 			return (Math.log(a.size) * (scoreA + score2A) > Math.log(b.size) * (scoreB + score2B)) ? 1 : -1;
 		});
-		this.setVal('logo', await Project.logoToBase64(newIcons.pop()));
+		this.setVal('logo', await PM_FileSystem.logoToBase64(newIcons.pop()));
 	}
 
 }

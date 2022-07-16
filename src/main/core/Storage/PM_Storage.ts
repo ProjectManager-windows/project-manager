@@ -1,6 +1,6 @@
 import Store from 'electron-store';
 
-export class PM_Storage {
+class PM_Storage {
 	private static instance: PM_Storage;
 	private store: Store;
 
@@ -15,7 +15,7 @@ export class PM_Storage {
 		return this.instance;
 	}
 
-	commit<T = number | string | { [p: string]: any }>(table: string, id: number, data: T): void {
+	commit<T = number | string | { [p: string]: any }>(table: string, id: number | string, data: T): void {
 		this.store.set(`${table}.${id}`, data);
 	}
 
@@ -30,7 +30,7 @@ export class PM_Storage {
 		}
 	}
 
-	getById<T = number | string | { [p: string]: any }>(table: string, id: number): T {
+	getById<T = number | string | { [p: string]: any }>(table: string, id: number | string): T {
 		return this.store.get(`${table}.${id}`) as T;
 	}
 
@@ -38,7 +38,7 @@ export class PM_Storage {
 		this.store.delete(`${table}`);
 	}
 
-	delById(table: string, id: number): void {
+	delById(table: string, id: number | string): void {
 		this.store.delete(`${table}.${id}`);
 	}
 
