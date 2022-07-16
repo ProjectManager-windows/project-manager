@@ -2,6 +2,7 @@ import '../../styles/TechnologiesList.scss';
 import { ProjectType }         from 'types/project';
 import { useEffect, useState } from 'react';
 import TechnologyItem          from './TechnologyItem';
+import gear                    from '../../../../assets/icons/svg/gear.svg';
 
 const TechnologiesList = (props: { selectedProject?: ProjectType, onSelect: (element: JSX.Element) => void }) => {
 	const { selectedProject, onSelect } = props;
@@ -25,7 +26,7 @@ const TechnologiesList = (props: { selectedProject?: ProjectType, onSelect: (ele
 	return (
 		<div className='TechnologiesList'>
 			<ul className='list'>
-				<TechnologyItem onSelect={select} name={'test2'}></TechnologyItem>
+				<TechnologyItem onSelect={select} name={'test2'} icon={gear} color="#ffffff"></TechnologyItem>
 			</ul>
 		</div>
 	)

@@ -3,11 +3,11 @@ import { useMemo, useState } from 'react';
 import rng                   from 'seedrandom';
 import { Ripple }            from 'primereact/ripple';
 
-const TechnologyItem = (props: { onSelect: (name: string) => void, name: string, icon?: string }) => {
+const TechnologyItem = (props: { onSelect: (name: string) => void, name: string, icon?: string, color?: string }) => {
 	const pixel = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
-	const { icon, name, onSelect } = props;
-	const [image, setImage]        = useState({});
+	let { color, icon, name, onSelect } = props;
+	const [image, setImage]             = useState({});
 
 	useMemo(() => {
 		const backgroundColors = [
@@ -18,7 +18,9 @@ const TechnologyItem = (props: { onSelect: (name: string) => void, name: string,
 			'#FFEB3B', '#FFC107', '#FF9800',
 			'#FF5722', '#795548', '#607D8B'
 		];
-		const color            = backgroundColors[Math.floor(rng(name)() * (backgroundColors.length - 1))];
+		if (!color) {
+			color = backgroundColors[Math.floor(rng(name)() * (backgroundColors.length - 1))];
+		}
 
 		if (icon) {
 			setImage({ background: `${color} url(${icon}) no-repeat scroll 50% 50%`, backgroundSize: '90% auto' });
@@ -34,7 +36,7 @@ const TechnologyItem = (props: { onSelect: (name: string) => void, name: string,
 	</g>
 </svg>
 		`.trim())}`;
-		setImage({ background: `${color} url(${img}) no-repeat scroll 50% 50%` });
+		setImage({ background: `${color} url(${img}) no-repeat scroll 50% 50%`, backgroundSize: '90% auto'  });
 	}, [icon, name]);
 
 	return (
