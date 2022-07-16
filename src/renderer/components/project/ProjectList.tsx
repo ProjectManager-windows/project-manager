@@ -1,5 +1,5 @@
-import '../styles/projectList.scss';
-import ProjectItem from './ui/ProjectItem';
+import '../../styles/projectList.scss';
+import ProjectItem from './ProjectItem';
 
 const ProjectList = (props: { projects: { [key: string]: any } }) => {
 	const { projects } = props;

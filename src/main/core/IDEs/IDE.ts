@@ -14,39 +14,45 @@ export class IDE extends Item {
 	}
 
 	async isInstalled() {
-		const command = 'phpstorm';
-		return (new Promise((resolve) => {
-			if (os.type().toLowerCase().includes('windows')) {
-				exec(`where ${command}`, (error: any) => {
-					if (error) {
-						resolve(false);
-						return;
-					}
-					resolve(true);
-				});
-			}
-			if (os.type().toLowerCase().includes('linux')) {
-				exec(`which  ${command}`, (error: any) => {
-					if (error) {
-						resolve(false);
-						return;
-					}
-					resolve(true);
-				});
-			}
-			if (os.type().toLowerCase().includes('darwin')) {
-				exec(`which  ${command}`, (error) => {
-					if (error) {
-						resolve(false);
-						return;
-					}
-					resolve(true);
-				});
-			}
-		})) as Promise<boolean>;
+		const command = this.getVal('command');
+		if (command) {
+			return (new Promise((resolve) => {
+				if (os.type().toLowerCase().includes('windows')) {
+					exec(`where ${command}`, (error, path) => {
+						if (error) {
+							resolve(false);
+							return;
+						}
+						this.setVal('path', path);
+						resolve(true);
+					});
+				}
+				if (os.type().toLowerCase().includes('linux')) {
+					exec(`which  ${command}`, (error, path) => {
+						if (error) {
+							resolve(false);
+							return;
+						}
+						this.setVal('path', path);
+						resolve(true);
+					});
+				}
+				if (os.type().toLowerCase().includes('darwin')) {
+					exec(`which  ${command}`, (error, path) => {
+						if (error) {
+							resolve(false);
+							return;
+						}
+						this.setVal('path', path);
+						resolve(true);
+					});
+				}
+			})) as Promise<boolean>;
+		}
+		return true;
 	}
 
-	async execute(project: Project) {
-		return shell.openPath(`phpstorm://file/${project.getVal('path')}`);
+	async execute(project: Project): Promise<void> {
+		await shell.openPath(`phpstorm://file/${project.getVal('path')}`);
 	}
 }

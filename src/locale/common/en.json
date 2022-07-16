@@ -1,13 +1,14 @@
 {
-	"add"          :"added",
-	"add project"  :"add project",
-	"error"        :"error",
-	"file"         :"file",
-	"founded"      :"founded",
-	"notification" :"notification",
-	"notifications":"notifications",
-	"ok"           :"ok",
-	"projects"     :"projects",
-	"scan"         :"scan",
-	"select folder":"select folder"
+	"add"           :"added",
+	"add project"   :"add project",
+	"error"         :"error",
+	"file"          :"file",
+	"founded"       :"founded",
+	"notification"  :"notification",
+	"notifications" :"notifications",
+	"ok"            :"ok",
+	"projects"      :"projects",
+	"scan"          :"scan",
+	"select folder" :"select folder",
+	"set as default":"set as default"
 }

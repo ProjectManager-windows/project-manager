@@ -1,8 +1,10 @@
 import Version from './Version';
 
 export interface IDEType {
+	color: string;
 	id: number;
 	name: string;
+	logo: string;
 	path: string;
 	execute: (Project: ProjectType) => void;
 	isInstalled: () => Promise<boolean>;

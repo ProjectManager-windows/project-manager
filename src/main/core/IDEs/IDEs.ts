@@ -23,9 +23,14 @@ class IDEs implements Collection {
 			event.returnValue = this.getById(id);
 		});
 		ipcMain.on('electron-ide-execute', async (_event, projectId) => {
-			const defaultIde   = Settings.get('defaultIde');
-			const project      = Projects.getById(projectId);
-			const ideId        = project.getVal('ide') || defaultIde;
+			const defaultIde = Number(Settings.get('defaultIde'));
+			const project    = Projects.getById(projectId);
+			let ideId: number;
+			if (project.getVal('ide')) {
+				ideId = this.getIdByName(project.getVal('ide')) || defaultIde || 1;
+			} else {
+				ideId = defaultIde || 1;
+			}
 			const ide          = this.getById(ideId);
 			_event.returnValue = await ide.execute(project);
 		});
@@ -57,7 +62,13 @@ class IDEs implements Collection {
 	}
 
 	getById(id: number): IDE {
-		return new IDE(PM_Storage.getById<ItemType>(this.table, id));
+		const data = PM_Storage.getById<ItemType>(this.table, id);
+		// @ts-ignore
+		if (data.name && editors[data.name] !== undefined) {
+			// @ts-ignore
+			return new editors[data.name](data) as IDE;
+		}
+		return new IDE(data);
 	}
 
 	getIdByName(_name: string): number {

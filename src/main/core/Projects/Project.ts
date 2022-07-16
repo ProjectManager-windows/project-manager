@@ -2,12 +2,17 @@
 import { Item }      from '../Storage/Item';
 import { glob }      from 'glob';
 import fs            from 'fs/promises';
+import * as fsSync   from 'fs';
 import path          from 'path';
 import PM_FileSystem from '../Utils/PM_FileSystem';
 import APP           from '../../main';
 
 export class Project extends Item {
 	public table: string = 'projects';
+
+	public externalProps = [
+		'ide'//sting
+	];
 
 	init() {
 		this.setVal('logo', '');
@@ -20,6 +25,26 @@ export class Project extends Item {
 		promises.push(this.statTechnologies());
 		await Promise.all(promises);
 		return this;
+	}
+
+	setVal<T = any>(key: string, value: T) {
+		if (this.externalProps?.includes(key)) {
+			const confPath = path.join(this.getVal('path'), '.project-manager', 'config.json');
+			let config     = JSON.parse(fsSync.readFileSync(confPath).toString()) || {};
+			config[key]    = value;
+			fsSync.writeFileSync(confPath, JSON.stringify(config));
+		} else {
+			super.setVal(key, value);
+		}
+	}
+
+	getVal<T = any>(key: string): T {
+		if (this.externalProps?.includes(key)) {
+			let config: { [p: string]: T } = JSON.parse(fsSync.readFileSync(path.join(this.getVal('path'), '.project-manager', 'config.json')).toString()) || {};
+			return config[key];
+		} else {
+			return super.getVal(key);
+		}
 	}
 
 	save(): number {

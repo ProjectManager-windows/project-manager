@@ -8,11 +8,10 @@
 		overflow              : auto;
 		display               : grid;
 		grid-template-columns : minmax(60px, 0.5fr) minmax(60px, 0.3fr) 2fr;
-		grid-template-rows    : 64px 1fr;
+		grid-template-rows    : 1fr;
 		gap                   : 2px;
 		grid-auto-flow        : row;
 		grid-template-areas   :
-		"tools tools tools"
     	"projects technologies view";
 
 		& {

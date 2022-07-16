@@ -1,7 +1,7 @@
 import '../styles/project.scss';
 import { useEffect, useState } from 'react';
-import Menu                    from '../components/project/menu';
-import ProjectList             from '../components/ProjectList';
+import ProjectList             from '../components/project/ProjectList';
+import { Tooltip }             from 'primereact/tooltip';
 
 const Project = () => {
 	const [projects, setProjects] = useState(window.electron.projects.getAll());
@@ -12,10 +12,8 @@ const Project = () => {
 	}, []);
 	return (
 		<div className='project'>
+			<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
 			<div className='grid'>
-				<div className='tools'>
-					<Menu />
-				</div>
 				<div className='projects'>
 					<ProjectList projects={projects} />
 				</div>

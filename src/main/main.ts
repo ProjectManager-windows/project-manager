@@ -74,7 +74,6 @@ export class PM_App {
 									   resolve(true);
 								   }
 							   };
-
 							   if (this.mainWindow && this.isRunning) {
 								   send(channel, ...args);
 							   } else {

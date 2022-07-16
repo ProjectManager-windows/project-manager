@@ -7,6 +7,7 @@ import ProgressBar         from '../ProgressBar/ProgressBar';
 import path                from 'path';
 import PM_FileSystem       from '../Utils/PM_FileSystem';
 import { t }               from '../Utils/i18n';
+import fs                  from 'fs/promises';
 
 export type ProjectsScheme = {
 	id: string
@@ -22,8 +23,8 @@ export type ProjectsScheme = {
 class Projects implements Collection {
 	private static instance: Projects;
 	private static scan_index: number;
-	item  = Project;
-	table = 'projects';
+	item                            = Project;
+	table                           = 'projects';
 	items: { [p: string]: Project } = {};
 
 	private constructor() {
@@ -124,6 +125,7 @@ class Projects implements Collection {
 		}
 		const p = this.getById(id);
 		await p.analyzeFolder();
+		await this.generateConfigFolder(folder);
 		p.save();
 		return true;
 	}
@@ -149,6 +151,21 @@ class Projects implements Collection {
 
 	public init() {
 		PM_Storage.init(this.table);
+	}
+
+	async generateConfigFolder(folder: string) {
+		const configFolder = path.join(folder, '.project-manager');
+		try {
+			await fs.stat(configFolder);
+		} catch (e) {
+			await fs.mkdir(configFolder, { recursive: true, mode: 0o777 });
+		}
+		const configFile = path.join(folder, '.project-manager', 'config.json');
+		try {
+			await fs.stat(configFile);
+		} catch (e) {
+			await fs.writeFile(configFile, '{}', { encoding: 'utf8', mode: 0o777 });
+		}
 	}
 }
 

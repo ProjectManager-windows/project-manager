@@ -58,6 +58,21 @@ export const bridge = {
 		},
 		add(property: string) {
 			ipcRenderer.send('electron-project-add', property);
+		},
+		open(id: number) {
+			ipcRenderer.send('electron-ide-execute', id);
+		}
+	},
+	ides       : {
+		getAll() {
+			return ipcRenderer.sendSync('electron-ide-getAll');
+		},
+		onUpdate(callback: () => void): () => void {
+			ipcRenderer.on('electron-ide-update', callback);
+			return () => ipcRenderer.removeListener('electron-ides-update', callback);
+		},
+		add(property: string) {
+			ipcRenderer.send('electron-ide-add', property);
 		}
 	}
 };

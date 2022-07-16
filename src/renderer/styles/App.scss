@@ -8,9 +8,12 @@
 }
 
 html, body, #root, .App {
-	height     : calc(100vh - 20px);
-	max-height : calc(100vh - 20px);
-	overflow   : auto;
+	background : var(--primary-color-text);
+}
+
+.wrapper {
+	height   : calc(100vh - 20px);
+	overflow : auto;
 }
 
 .p-sidebar {
