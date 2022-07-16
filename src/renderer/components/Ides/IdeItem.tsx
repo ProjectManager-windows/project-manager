@@ -5,9 +5,9 @@ import '../../styles/IdeItem.scss';
 import { IDEType }                  from '../../../types/project';
 
 
-const IdeItem = (props: { Ide: IDEType, onClick: (e: React.MouseEvent<HTMLDivElement>, Ide: IDEType) => void }) => {
+const IdeItem = (props: { Ide: IDEType, onSelect: (e: React.MouseEvent<HTMLDivElement>, Ide: IDEType) => void }) => {
 	const pixel             = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
-	const { Ide, onClick }  = props;
+	const { Ide, onSelect }  = props;
 	const [image, setImage] = useState({});
 	useMemo(() => {
 		const backgroundColors = [
@@ -42,7 +42,7 @@ const IdeItem = (props: { Ide: IDEType, onClick: (e: React.MouseEvent<HTMLDivEle
 		setImage({ background: `${color} url(${img}) no-repeat scroll 50% 50%` });
 	}, [Ide.logo, Ide.name]);
 	return (
-		<div className='IdeItem ' id={`Ide-item-${Ide.id}`} onClick={e => onClick(e, Ide)}>
+		<div className='IdeItem ' id={`Ide-item-${Ide.id}`} onClick={e => onSelect(e, Ide)}>
 			<li className='item p-ripple' key={Ide.id}>
 				<Ripple />
 				<div>

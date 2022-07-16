@@ -15,12 +15,10 @@ const Ides = () => {
 			setIdes(window.electron.ides.getAll());
 		});
 	}, []);
-
 	const select = (e: React.MouseEvent<HTMLDivElement>, ide: IDEType) => {
 		e.preventDefault();
 		selectIde(ide);
 	};
-	console.log(selectedIde);
 	return (
 		<div className='Ides'>
 			<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />

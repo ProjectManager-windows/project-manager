@@ -17,7 +17,7 @@ const IdeList = (props: { Ides: { [key: string]: any }, onSelect: (e: React.Mous
 		return a.name.localeCompare(b.name);
 	});
 	for (const Ide of forSort) {
-		list.push(<IdeItem onClick={(e, ide) => onSelect(e, ide)} key={Ide.id} Ide={Ide} />);
+		list.push(<IdeItem onSelect={(e, ide) => onSelect(e, ide)} key={Ide.id} Ide={Ide} />);
 	}
 	return (
 		<div className='IdeList'>

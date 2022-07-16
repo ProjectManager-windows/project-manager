@@ -1,15 +1,15 @@
-import { MouseEvent, useMemo, useState } from 'react';
-import rng                               from 'seedrandom';
-import { Ripple }                        from 'primereact/ripple';
-import { ProjectType }                   from '../../../types/project';
-import LanguagesBar                      from './LanguagesBar';
+import React, { MouseEvent, useMemo, useState } from 'react';
+import rng                                      from 'seedrandom';
+import { Ripple }                               from 'primereact/ripple';
+import { ProjectType }                          from '../../../types/project';
+import LanguagesBar                             from './LanguagesBar';
 import '../../styles/projectItem.scss';
 
 
-const ProjectItem = (props: { project: ProjectType }) => {
-	const pixel             = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
-	const { project }       = props;
-	const [image, setImage] = useState({});
+const ProjectItem = (props: { project: ProjectType, onSelect: (e: React.MouseEvent<HTMLDivElement>, project: ProjectType) => void }) => {
+	const pixel                 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+	const { project, onSelect } = props;
+	const [image, setImage]     = useState({});
 	useMemo(() => {
 		const backgroundColors = [
 			'#F44336', '#E91E63', '#9C27B0',
@@ -39,11 +39,11 @@ const ProjectItem = (props: { project: ProjectType }) => {
 	}, [project.logo, project.name]);
 
 	const defaultAction = (_e: MouseEvent) => {
-		window.electron.projects.open(project.id)
-	}
+		window.electron.projects.open(project.id);
+	};
 
 	return (
-		<div className='projectItem ' id={`project-item-${project.id}`} onDoubleClick={e=>defaultAction(e)}>
+		<div className='projectItem ' id={`project-item-${project.id}`} onDoubleClick={e => defaultAction(e)} onClick={e => onSelect(e, project)}>
 			<li className='item p-ripple' key={project.id}>
 				<Ripple />
 				<div>

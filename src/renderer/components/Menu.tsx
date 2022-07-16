@@ -1,12 +1,12 @@
-import '../../styles/menu.scss';
-import { Menubar }                                                                                from 'primereact/menubar';
-import { InputText }                                                                              from 'primereact/inputtext';
-import logo                                                                                       from '/assets/icon.svg';
-import React                                                                                      from 'react';
-import { useTranslation }                                                                         from 'react-i18next';
-import { FontAwesomeIcon }                                                                        from '@fortawesome/react-fontawesome';
-import { faArrowUpRightFromSquare, faFile, faFolder, faGear, faMagnifyingGlass, faPlus, faTrash,faMicrochip } from '@fortawesome/free-solid-svg-icons';
-import { useLocation, useNavigate }                                                                           from 'react-router-dom';
+import '../styles/menu.scss';
+import { Menubar }                                                                                             from 'primereact/menubar';
+import { InputText }                                                                                           from 'primereact/inputtext';
+import logo                                                                                                    from '/assets/icon.svg';
+import React                                                                                                   from 'react';
+import { useTranslation }                                                                                      from 'react-i18next';
+import { FontAwesomeIcon }                                                                                     from '@fortawesome/react-fontawesome';
+import { faArrowUpRightFromSquare, faFile, faFolder, faGear, faMagnifyingGlass, faMicrochip, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useLocation, useNavigate }                                                                            from 'react-router-dom';
 
 const Menu = () => {
 	const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Menu = () => {
 					label  : t('settings').ucfirst(),
 					icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faGear} />,
 					command: () => {
-						if(location.pathname != '/settings') navigate('/settings');
+						if (location.pathname != '/settings') navigate('/settings');
 					}
 				}
 			]
@@ -79,10 +79,10 @@ const Menu = () => {
 			]
 		},
 		{
-			label:  t('IDEs').ucfirst(),
-			icon : <FontAwesomeIcon className='p-menuitem-icon' icon={faMicrochip} />,
+			label  : t('IDEs').ucfirst(),
+			icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faMicrochip} />,
 			command: () => {
-				if(location.pathname != '/ides') navigate('/ides');
+				if (location.pathname != '/ides') navigate('/ides');
 			}
 		},
 		{

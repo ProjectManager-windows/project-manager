@@ -4,7 +4,7 @@ import Project                                   from './pages/Project';
 import Settings                                  from './pages/Settings';
 import './styles/App.scss';
 import Ides                                      from './pages/Ides';
-import Menu                                      from './components/project/menu';
+import Menu                                      from './components/menu';
 
 export default function App() {
 	return (
