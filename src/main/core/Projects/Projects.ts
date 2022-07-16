@@ -3,7 +3,7 @@ import { Project }         from './Project';
 import PM_Storage          from '../Storage/PM_Storage';
 import { ItemType }        from '../Storage/Item';
 import { dialog, ipcMain } from 'electron';
-import ProgressBar         from '../../components/ProgressBar/ProgressBar';
+import ProgressBar         from '../ProgressBar/ProgressBar';
 import path                from 'path';
 import PM_FileSystem       from '../Utils/PM_FileSystem';
 import { t }               from '../Utils/i18n';

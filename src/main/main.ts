@@ -22,7 +22,6 @@ export class PM_App {
 
 	mainWindow: BrowserWindow | null = null;
 
-
 	private constructor() {
 		this.isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 		if (process.env.NODE_ENV === 'production') {
@@ -33,7 +32,7 @@ export class PM_App {
 	}
 
 	run() {
-		this.beforeRun()
+		this.beforeRun();
 		app
 			.whenReady()
 			.then(() => {
@@ -138,10 +137,11 @@ export class PM_App {
 
 	}
 
-	beforeRun(){
+	beforeRun() {
 		events.run();
 		Projects.getInstance();
 	}
+
 	async sendRenderEvent(channel: string, ...args: any[]) {
 		return new Promise((resolve, reject) => {
 							   const send = (channel: string, ...args: any[]) => {
