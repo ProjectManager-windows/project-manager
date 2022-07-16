@@ -3,7 +3,7 @@ import os          from 'os';
 import { IDE }     from '../../core/IDEs/IDE';
 import { Project } from '../../core/Projects/Project';
 import * as Path   from 'path';
-import Logo  from '../../../../assets/icons/b64/phpstorm.b64';
+import Logo        from '../../../../assets/icons/b64/phpstorm';
 
 export class PhpStorm extends IDE {
 
