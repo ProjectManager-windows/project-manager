@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
-import { Item }      from '../Storage/Item';
 import { glob }      from 'glob';
 import fs            from 'fs/promises';
 import * as fsSync   from 'fs';
 import path          from 'path';
-import PM_FileSystem from '../Utils/PM_FileSystem';
-import APP           from '../../main';
 import rng           from 'seedrandom';
 import JSON5         from 'json5';
+import { Item }      from '../Storage/Item';
+import PM_FileSystem from '../Utils/PM_FileSystem';
+import APP           from '../../main';
 
 export class Project extends Item {
 	public table: string = 'projects';
 
 	public static externalProps = [
-		'ide',//string
-		'name',//string
-		'logo',//string
-		'color'//string
+		'ide',// string
+		'name',// string
+		'logo',// string
+		'color'// string
 	];
 
 	init() {
@@ -47,7 +47,7 @@ export class Project extends Item {
 		return this;
 	}
 
-	setVal<T = any>(key: string, value: T, init: boolean = false) {
+	setVal<T = any>(key: string, value: T, init = false) {
 		if (init) {
 			super.setVal(key, value);
 			return;
@@ -55,7 +55,7 @@ export class Project extends Item {
 		if (Project.externalProps?.includes(key)) {
 			try {
 				const confPath = path.join(this.getVal('path'), '.project-manager', 'config.json');
-				let config     = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
+				const config     = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
 				config[key]    = value;
 				fsSync.writeFileSync(confPath, JSON.stringify(config));
 			} catch (e) {
@@ -72,7 +72,7 @@ export class Project extends Item {
 		if (Project.externalProps?.includes(key)) {
 			try {
 				const confPath                 = path.join(super.getVal('path'), '.project-manager', 'config.json');
-				let config: { [p: string]: T } = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
+				const config: { [p: string]: T } = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
 				return config[key] || this.data[key];
 			} catch (e) {
 				return super.getVal(key);
