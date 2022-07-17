@@ -11,7 +11,7 @@ const SelectIde = (props: { id: any, value?: number, setVal?: (value: any) => vo
 	}, [value, id]);
 	const data         = window.electron.ides.getAll();
 	const IDEs         = Object.values(data);
-	const defaultIdeId = window.electron.settings.get('defaultIde');
+	const defaultIdeId = window.electron.settings.get('defaultIde')
 
 	if (defaultIdeId) {
 		IDEs.unshift({
@@ -19,6 +19,13 @@ const SelectIde = (props: { id: any, value?: number, setVal?: (value: any) => vo
 						 name : `${data[defaultIdeId].name} (default)`,
 						 logo : data[defaultIdeId].logo,
 						 color: data[defaultIdeId].color
+					 });
+	}else{
+		IDEs.unshift({
+						 id   : 0,
+						 name : `(default)`,
+						 logo : window.pixel,
+						 color: 'transparent'
 					 });
 	}
 	const selectedCountryTemplate = (option: any) => {
@@ -35,26 +42,35 @@ const SelectIde = (props: { id: any, value?: number, setVal?: (value: any) => vo
 					<div>{option.name}</div>
 				</div>
 			);
-		} else if (defaultIdeId) {
+		}
+		if (defaultIdeId) {
 			const logo = useLogo({
 									 type : 'ide',
-									 name : data[defaultIdeId].name,
+									 name : `${data[defaultIdeId].name} (default)`,
 									 logo : data[defaultIdeId].logo,
 									 color: data[defaultIdeId].color
 								 });
 			return (
 				<div className='ide-item ide-item-value'>
 					{logo}
-					<div>{data[defaultIdeId].name} (default)</div>
+					<div>{`${data[defaultIdeId].name} (default)`}</div>
+				</div>
+			);
+		}else{
+			const logo = useLogo({
+									 type : 'ide',
+									 name : "default",
+									 logo : window.pixel,
+									 color: "transparent"
+								 });
+			return (
+				<div className='ide-item ide-item-value'>
+					{logo}
+					<div>(default)</div>
 				</div>
 			);
 		}
-		return (
-			<div className='ide-item ide-item-value'>
-				<img className='logo' src={window.pixel} alt='' />
-				<div>no selected</div>
-			</div>
-		);
+
 	};
 	const countryOptionTemplate   = (option: any) => {
 		const logo = useLogo({
