@@ -117,7 +117,7 @@ class Projects implements Collection {
 					bar.update({
 								   total  : projects.length - 1,
 								   current: i,
-								   message: `${path.basename(projects[i])}`
+								   message: `${t('update')}: ${path.basename(projects[i])}`
 							   });
 				}
 			}
@@ -144,7 +144,7 @@ class Projects implements Collection {
 		const p = this.getById(id);
 		await p.analyzeFolder();
 		p.save();
-		return true;
+		return false;
 	}
 
 	async addFolder() {
