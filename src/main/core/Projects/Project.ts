@@ -7,6 +7,7 @@ import path          from 'path';
 import PM_FileSystem from '../Utils/PM_FileSystem';
 import APP           from '../../main';
 import rng           from 'seedrandom';
+import JSON5         from 'json5';
 
 export class Project extends Item {
 	public table: string = 'projects';
@@ -54,9 +55,9 @@ export class Project extends Item {
 		if (Project.externalProps?.includes(key)) {
 			try {
 				const confPath = path.join(this.getVal('path'), '.project-manager', 'config.json');
-				let config     = JSON.parse(fsSync.readFileSync(confPath).toString()) || {};
+				let config     = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
 				config[key]    = value;
-				fsSync.writeFileSync(confPath, JSON.stringify(config));
+				fsSync.writeFileSync(confPath, JSON5.stringify(config));
 			} catch (e) {
 			} finally {
 				super.setVal(key, value);
@@ -71,7 +72,7 @@ export class Project extends Item {
 		if (Project.externalProps?.includes(key)) {
 			try {
 				const confPath                 = path.join(super.getVal('path'), '.project-manager', 'config.json');
-				let config: { [p: string]: T } = JSON.parse(fsSync.readFileSync(confPath).toString()) || {};
+				let config: { [p: string]: T } = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
 				return config[key] || this.data[key];
 			} catch (e) {
 				return super.getVal(key);
