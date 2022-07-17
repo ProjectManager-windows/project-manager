@@ -1,13 +1,13 @@
+import { dialog, ipcMain } from 'electron';
+import path                from 'path';
+import fs                  from 'fs/promises';
 import Collection          from '../Storage/Collection';
 import { Project }         from './Project';
 import PM_Storage          from '../Storage/PM_Storage';
 import { ItemType }        from '../Storage/Item';
-import { dialog, ipcMain } from 'electron';
 import ProgressBar         from '../ProgressBar/ProgressBar';
-import path                from 'path';
 import PM_FileSystem       from '../Utils/PM_FileSystem';
 import { t }               from '../Utils/i18n';
-import fs                  from 'fs/promises';
 
 export type ProjectsScheme = {
 	id: string

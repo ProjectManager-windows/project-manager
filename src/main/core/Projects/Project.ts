@@ -5,8 +5,9 @@ import * as fsSync   from 'fs';
 import path          from 'path';
 import rng           from 'seedrandom';
 import JSON5         from 'json5';
+import ignore from 'ignore';
 import { Item }      from '../Storage/Item';
-import PM_FileSystem from '../Utils/PM_FileSystem';
+import PM_FileSystem, { file } from '../Utils/PM_FileSystem';
 import APP           from '../../main';
 
 export class Project extends Item {
@@ -42,7 +43,7 @@ export class Project extends Item {
 	async analyzeFolder() {
 		const promises = [];
 		promises.push(this.analyzeIcon());
-		promises.push(this.statTechnologies());
+		promises.push(this.statLanguages());
 		await Promise.all(promises);
 		return this;
 	}
@@ -98,18 +99,33 @@ export class Project extends Item {
 	}
 
 
-	private async statTechnologies() {
-		const files                            = await (new PM_FileSystem).getFiles(this.getVal('path'));
+	private async statLanguages() {
+		const localPath = this.getVal<string>('path');
+		const gitignoreWait = PM_FileSystem.fileExists(path.join(localPath, '.gitignore'));
+		const files = await new PM_FileSystem([]).getFiles(localPath);
+		const gitignore = await gitignoreWait;
+		const finalFiles: file[] = [];
+		if (gitignore) {
+			const ignorer = ignore().add((await fs.readFile(path.join(localPath, '.gitignore'))).toString());
+			files.forEach((file) => {
+				if (!ignorer.ignores(path.relative(localPath, file.path))) {
+					finalFiles.push(file);
+				}
+			}
+			);
+		} else {
+			finalFiles.push(...files);
+		}
 		const stats: { [key: string]: number } = {};
-		for (let i = 0; i < files.length; i++) {
-			const file = files[i];
-			// eslint-disable-next-line no-prototype-builtins
-			if (!stats.hasOwnProperty(file.ext)) {
+		for (let i = 0; i < finalFiles.length; i++) {
+			const file = finalFiles[i];
+			if (typeof file.ext !== "number") {
 				stats[file.ext] = 0;
 			}
 			stats[file.ext] += file.size;
 		}
 		this.setVal('stats', stats);
+
 	}
 
 	private async analyzeIcon() {

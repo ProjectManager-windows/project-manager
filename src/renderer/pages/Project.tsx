@@ -1,7 +1,7 @@
 import '../styles/project.scss';
 import React, { useEffect, useState } from 'react';
-import ProjectList                    from '../components/project/ProjectList';
 import { Tooltip }                    from 'primereact/tooltip';
+import ProjectList                    from '../components/project/ProjectList';
 import { ProjectType }                from '../../types/project';
 import TechnologiesList               from '../components/technologies/TechnologiesList';
 
