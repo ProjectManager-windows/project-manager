@@ -16,7 +16,7 @@ const Project = () => {
 
 	const [selectedProject, selectProject] = useState<ProjectType>();
 
-	const projectSelect      = (e: React.MouseEvent<HTMLDivElement>, project: ProjectType) => {
+	const projectSelect      = (e: React.MouseEvent<HTMLElement>, project: ProjectType) => {
 		e.preventDefault();
 		selectProject(project);
 	};

@@ -1,25 +1,30 @@
-import React, { MouseEvent } from 'react';
-import { Ripple }            from 'primereact/ripple';
-import { ProjectType }       from '../../../types/project';
-import LanguagesBar          from './LanguagesBar';
+import React           from 'react';
+import { Ripple }      from 'primereact/ripple';
+import { ProjectType } from '../../../types/project';
+import LanguagesBar    from './LanguagesBar';
+import useLogo         from '../hooks/useLogo';
 import '../../styles/projectItem.scss';
-import useLogo               from '../hooks/useLogo';
 
-
-const ProjectItem = (props: { project: ProjectType, onSelect: (e: React.MouseEvent<HTMLDivElement>, project: ProjectType) => void }) => {
-	const { project, onSelect } = props;
-	const defaultAction         = (_e: MouseEvent) => {
-		window.electron.projects.open(project.id);
-	};
-	const logo                  = useLogo({
-											  type : 'project',
-											  name : project.name,
-											  color: project?.color,
-											  logo : project?.logo
-										  });
+const ProjectItem = (props: { project: ProjectType, onSelect: (e: React.MouseEvent<HTMLElement>, project: ProjectType) => void, cm: React.MutableRefObject<any>, defaultAction: (id: number) => void }) => {
+	const { project, onSelect, cm, defaultAction } = props;
+	const logo                                     = useLogo(
+		{
+			type : 'project',
+			name : project.name,
+			color: project?.color,
+			logo : project?.logo
+		});
 	return (
-		<div className='projectItem ' id={`project-item-${project.id}`} onDoubleClick={e => defaultAction(e)} onClick={e => onSelect(e, project)}>
-			<li className='item p-ripple' key={project.id}>
+		<div className='projectItem ' id={`project-item-${project.id}`}>
+			<li
+				className='item p-ripple' key={project.id}
+				onContextMenu={(e) => {
+					onSelect(e, project);
+					cm.current.show(e);
+				}}
+				onDoubleClick={() => defaultAction(project.id)}
+				onClick={e => onSelect(e, project)}
+			>
 				<Ripple />
 				<div>
 					{logo}
