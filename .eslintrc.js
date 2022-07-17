@@ -24,7 +24,14 @@ module.exports = {
 		'@typescript-eslint/naming-convention'          : 0,
 		'guard-for-in'                                  : 0,
 		'promise/no-nesting'                            : 0,
-		'react/react-in-jsx-scope'                      : 0
+		'react/react-in-jsx-scope'                      : 0,
+		"object-shorthand"                              : 0,
+		'no-unused-vars'                                : 1,
+		'no-undef'                                      : 0,
+		'no-unused-expressions'                         : 1,
+		'no-useless-constructor'                        : 1,
+		'prefer-const'                                  : 1,
+
 	},
 	parserOptions: {
 		ecmaVersion         : 2020,
