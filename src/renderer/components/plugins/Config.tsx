@@ -3,6 +3,7 @@ import SettingInput    from '../ui/SettingInput';
 import gear            from '../../../../assets/icons/svg/gear.svg';
 import useLogo         from '../hooks/useLogo';
 import SelectIde       from '../ui/SelectIde';
+import { Button }      from 'react-bootstrap';
 
 const Config = (props: { project: ProjectType }) => {
 	const { project } = props;
@@ -35,8 +36,13 @@ const Config = (props: { project: ProjectType }) => {
 			}}
 			/>
 			<SettingInput settingKey='ide' type='select' value={project?.ide}>
-				<SelectIde id={project?.id} value={project?.ide}  setVal={(v) => window.electron.projects.config(project.id, 'ide', v)} />
+				<SelectIde id={project?.id} value={project?.ide} setVal={(v) => window.electron.projects.config(project.id, 'ide', v)} />
 			</SettingInput>
+			<Button
+				onClick={() => {
+					window.electron.projects.changeLogo(project.id);
+				}}
+			/>
 		</div>
 	);
 };

@@ -90,15 +90,15 @@ const SettingInput = (props: { settingKey: string, type: settingType, setVal?: (
 							isChanged ? <i className='pi pi-spin pi-spinner' />
 									  : <i className='pi  pi-check' />
 						}
-						<InputTextarea
-							autoResize id={id} value={newValue}
-							onChange={e => {
-								setNewValue(e.target.value);
-							}}
-							onBlur={e => {
-								commit(e.target.value);
-							}}
-						/>
+							<InputTextarea
+								autoResize id={id} value={newValue}
+								onChange={e => {
+									setNewValue(e.target.value);
+								}}
+								onBlur={e => {
+									commit(e.target.value);
+								}}
+							/>
 					</span>
 					</div>
 				</div>

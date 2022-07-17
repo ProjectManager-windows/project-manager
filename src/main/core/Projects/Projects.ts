@@ -1,13 +1,13 @@
-import { dialog, ipcMain } from 'electron';
-import path                from 'path';
-import fs                  from 'fs/promises';
-import Collection          from '../Storage/Collection';
-import { Project }         from './Project';
-import PM_Storage          from '../Storage/PM_Storage';
-import { ItemType }        from '../Storage/Item';
-import ProgressBar         from '../ProgressBar/ProgressBar';
-import PM_FileSystem       from '../Utils/PM_FileSystem';
-import { t }               from '../Utils/i18n';
+import { dialog, ipcMain, shell } from 'electron';
+import path                       from 'path';
+import fs                         from 'fs/promises';
+import Collection                 from '../Storage/Collection';
+import { Project }                from './Project';
+import PM_Storage                 from '../Storage/PM_Storage';
+import { ItemType }               from '../Storage/Item';
+import ProgressBar                from '../ProgressBar/ProgressBar';
+import PM_FileSystem              from '../Utils/PM_FileSystem';
+import { t }                      from '../Utils/i18n';
 
 export type ProjectsScheme = {
 	id: string
@@ -30,7 +30,7 @@ class Projects implements Collection {
 	private constructor() {
 		ipcMain.on('electron-project-getAll', async (event) => {
 			this.init();
-			event.returnValue = this.getAllRaw()
+			event.returnValue = this.getAllRaw();
 		});
 		ipcMain.on('electron-project-getProject', async (event, id) => {
 			this.init();
@@ -50,6 +50,16 @@ class Projects implements Collection {
 			const p = this.getById(id);
 			p.setVal(key, value);
 			p.save();
+		});
+		ipcMain.on('electron-project-open-folder', async (_event, id) => {
+			const p    = this.getById(id);
+			const path = p.getVal('path');
+			await shell.openPath(path);
+		});
+		ipcMain.on('electron-project-change-logo', async (_event, id) => {
+			const p    = this.getById(id);
+			const path = p.getVal('path');
+			await shell.openPath(path);
 		});
 	}
 
@@ -73,13 +83,13 @@ class Projects implements Collection {
 		const items: any = {};
 		const data       = this.getAll();
 		for (const tableKey in data) {
-			items[tableKey] = data[tableKey].toObject()
+			items[tableKey] = data[tableKey].toObject();
 		}
 		return items;
 	}
 
 	getById(id: number): Project {
-		const p = PM_Storage.getById<ItemType>(this.table, id)
+		const p = PM_Storage.getById<ItemType>(this.table, id);
 		return new Project(p);
 	}
 
@@ -118,20 +128,21 @@ class Projects implements Collection {
 	}
 
 	async addFromFolder(folder: string) {
+		await this.generateConfigFolder(folder);
 		const id = this.getIdByPath(folder);
 		if (!id) {
-			const p = new Project({
-									  id  : 0,
-									  path: folder,
-									  name: path.basename(folder)
-								  });
+			const p = new Project(
+				{
+					id  : 0,
+					path: folder,
+					name: path.basename(folder)
+				});
 			await p.analyzeFolder();
 			p.save();
 			return true;
 		}
 		const p = this.getById(id);
 		await p.analyzeFolder();
-		await this.generateConfigFolder(folder);
 		p.save();
 		return true;
 	}
@@ -161,15 +172,11 @@ class Projects implements Collection {
 
 	async generateConfigFolder(folder: string) {
 		const configFolder = path.join(folder, '.project-manager');
-		try {
-			await fs.stat(configFolder);
-		} catch (e) {
+		if (!await PM_FileSystem.folderExists(configFolder)) {
 			await fs.mkdir(configFolder, { recursive: true, mode: 0o777 });
 		}
 		const configFile = path.join(folder, '.project-manager', 'config.json');
-		try {
-			await fs.stat(configFile);
-		} catch (e) {
+		if (!await PM_FileSystem.fileExists(configFile)) {
 			await fs.writeFile(configFile, '{}', { encoding: 'utf8', mode: 0o777 });
 		}
 	}

@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
-import { glob }      from 'glob';
-import fs            from 'fs/promises';
-import * as fsSync   from 'fs';
-import path          from 'path';
-import rng           from 'seedrandom';
-import JSON5         from 'json5';
-import ignore from 'ignore';
-import { Item }      from '../Storage/Item';
+import { glob }                from 'glob';
+import fs                      from 'fs/promises';
+import * as fsSync             from 'fs';
+import path                    from 'path';
+import rng                     from 'seedrandom';
+import JSON5                   from 'json5';
+import ignore                  from 'ignore';
+import { Item }                from '../Storage/Item';
 import PM_FileSystem, { file } from '../Utils/PM_FileSystem';
-import APP           from '../../main';
+import APP                     from '../../main';
 
 export class Project extends Item {
 	public table: string = 'projects';
@@ -17,6 +17,7 @@ export class Project extends Item {
 		'ide',// string
 		'name',// string
 		'logo',// string
+		'logoBaseName',// string
 		'color'// string
 	];
 
@@ -53,10 +54,15 @@ export class Project extends Item {
 			super.setVal(key, value);
 			return;
 		}
+		if (key === 'logo') {
+			const confPath = path.join(this.getVal('path'), '.project-manager', 'logo.base64');
+			fsSync.writeFileSync(confPath, String(value));
+			return;
+		}
 		if (Project.externalProps?.includes(key)) {
 			try {
 				const confPath = path.join(this.getVal('path'), '.project-manager', 'config.json');
-				const config     = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
+				const config   = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
 				config[key]    = value;
 				fsSync.writeFileSync(confPath, JSON.stringify(config));
 			} catch (e) {
@@ -70,9 +76,16 @@ export class Project extends Item {
 	}
 
 	getVal<T = any>(key: string): T {
+		if (key === 'logo') {
+			if (super.getVal('logoBaseName')) {
+				const confPath = path.join(super.getVal('path'), '.project-manager', super.getVal('logoBaseName'));
+				return (PM_FileSystem.logoToBase64(confPath)) as unknown as T;
+			}
+			return '' as unknown as T;
+		}
 		if (Project.externalProps?.includes(key)) {
 			try {
-				const confPath                 = path.join(super.getVal('path'), '.project-manager', 'config.json');
+				const confPath                   = path.join(super.getVal('path'), '.project-manager', 'config.json');
 				const config: { [p: string]: T } = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
 				return config[key] || this.data[key];
 			} catch (e) {
@@ -95,23 +108,24 @@ export class Project extends Item {
 		for (const dataKey in this.data) {
 			results[dataKey] = this.getVal(dataKey);
 		}
+		results['logo'] = this.getVal('logo');
 		return results;
 	}
 
 
 	private async statLanguages() {
-		const localPath = this.getVal<string>('path');
-		const gitignoreWait = PM_FileSystem.fileExists(path.join(localPath, '.gitignore'));
-		const files = await new PM_FileSystem([]).getFiles(localPath);
-		const gitignore = await gitignoreWait;
+		const localPath          = this.getVal<string>('path');
+		const gitignoreWait      = PM_FileSystem.fileExists(path.join(localPath, '.gitignore'));
+		const files              = await new PM_FileSystem([]).getFiles(localPath);
+		const gitignore          = await gitignoreWait;
 		const finalFiles: file[] = [];
 		if (gitignore) {
 			const ignorer = ignore().add((await fs.readFile(path.join(localPath, '.gitignore'))).toString());
 			files.forEach((file) => {
-				if (!ignorer.ignores(path.relative(localPath, file.path))) {
-					finalFiles.push(file);
-				}
-			}
+							  if (!ignorer.ignores(path.relative(localPath, file.path))) {
+								  finalFiles.push(file);
+							  }
+						  }
 			);
 		} else {
 			finalFiles.push(...files);
@@ -119,7 +133,7 @@ export class Project extends Item {
 		const stats: { [key: string]: number } = {};
 		for (let i = 0; i < finalFiles.length; i++) {
 			const file = finalFiles[i];
-			if (typeof file.ext !== "number") {
+			if (typeof stats[file.ext] !== 'number') {
 				stats[file.ext] = 0;
 			}
 			stats[file.ext] += file.size;
@@ -192,7 +206,20 @@ export class Project extends Item {
 			if (a.size === b.size) return scoreA;
 			return (Math.log(a.size) * (scoreA + score2A) > Math.log(b.size) * (scoreB + score2B)) ? 1 : -1;
 		});
-		this.setVal('logo', await PM_FileSystem.logoToBase64(newIcons.pop()));
+
+		if (newIcons.length > 0) {
+			const logoPath = newIcons.pop()?.path;
+			if (logoPath) {
+				const name   = path.basename(logoPath);
+				let confPath = path.join(this.getVal('path'), '.project-manager');
+				if (!await PM_FileSystem.folderExists(confPath)) {
+					await fs.mkdir(confPath, { recursive: true, mode: 0o777 });
+				}
+				confPath = path.join(confPath, name);
+				await fs.copyFile(logoPath, confPath);
+				this.setVal('logoBaseName', name);
+			}
+		}
 	}
 
 }

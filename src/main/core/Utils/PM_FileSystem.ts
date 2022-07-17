@@ -1,7 +1,7 @@
-import * as fs from 'node:fs/promises';
-import path    from 'node:path';
-import Store   from 'electron-store';
-import plugins from '../../components/plugins';
+import * as fs  from 'node:fs/promises';
+import * as fss from 'node:fs';
+import path     from 'node:path';
+import plugins  from '../../components/plugins';
 
 export type file = {
 	path: string,
@@ -33,12 +33,15 @@ class PM_FileSystem {
 	static async fileExists(src: string): Promise<boolean> {
 		return fs.stat(src).then((stat) => stat.isFile()).catch(() => false);
 	}
+
 	static async folderExists(src: string): Promise<boolean> {
 		return fs.stat(src).then((stat) => stat.isDirectory()).catch(() => false);
 	}
+
 	static async exists(src: string): Promise<boolean> {
 		return fs.stat(src).then(() => true).catch(() => false);
 	}
+
 	async getDirectories(src: string, dirs: string[] = []): Promise<string[]> {
 		return fs
 			.readdir(src, { withFileTypes: true })
@@ -154,24 +157,25 @@ class PM_FileSystem {
 		return false;
 	}
 
-	static async logoToBase64(logo?: {
-		path: string
-		size: number
-		ext: string
-	}) {
+	static logoToBase64(logo: string) {
 		if (!logo) {
 			return '';
 		}
-		const data = await fs.readFile(logo.path);
-		switch (logo.ext) {
+		const ext  = path.extname(logo);
+		const data = fss.readFileSync(logo);
+		switch (ext.toLowerCase()) {
 			case '.svg':
 				return `data:image/svg+xml;base64,${data.toString('base64')}`;
 			case '.jpg':
+			case '.jpeg':
 				return `data:image/jpg;base64,${data.toString('base64')}`;
 			case '.png':
 				return `data:image/png;base64,${data.toString('base64')}`;
 			case '.ico':
 				return `data:image/ico;base64,${data.toString('base64')}`;
+			case '.base64':
+			case '.b64':
+				return data.toString();
 			default:
 				return '';
 		}

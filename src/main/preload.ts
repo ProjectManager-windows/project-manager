@@ -16,6 +16,9 @@ export const bridge = {
 		},
 		once(channel: Channels, func: (...args: unknown[]) => void) {
 			ipcRenderer.once(channel, (_event, ...args) => func(...args));
+		},
+		selectFolder(){
+			return ipcRenderer.sendSync('electron-selectFolder');
 		}
 	},
 	store      : {
@@ -62,8 +65,14 @@ export const bridge = {
 		open(id: number) {
 			ipcRenderer.send('electron-ide-execute', id);
 		},
+		openFolder(id: number) {
+			ipcRenderer.send('electron-project-open-folder', id);
+		},
 		config(id: number, key: string, value: any) {
 			ipcRenderer.send('electron-project-set', id, key, value);
+		},
+		changeLogo(id: number) {
+			ipcRenderer.send('electron-project-change-logo', id);
 		}
 	},
 	ides       : {
