@@ -30,7 +30,7 @@ class Projects implements Collection {
 	private constructor() {
 		ipcMain.on('electron-project-getAll', async (event) => {
 			this.init();
-			event.returnValue = this.getAllRaw();
+			event.returnValue = this.getAllRaw()
 		});
 		ipcMain.on('electron-project-getProject', async (event, id) => {
 			this.init();
@@ -45,6 +45,11 @@ class Projects implements Collection {
 			this.init();
 			await this.addFolder();
 			event.returnValue = 'ok';
+		});
+		ipcMain.on('electron-project-set', async (_event, id, key, value) => {
+			const p = this.getById(id);
+			p.setVal(key, value);
+			p.save();
 		});
 	}
 
@@ -66,15 +71,16 @@ class Projects implements Collection {
 
 	getAllRaw(): { [p: string]: any } {
 		const items: any = {};
-		const data       = PM_Storage.getAll<ItemType>(this.table);
+		const data       = this.getAll();
 		for (const tableKey in data) {
-			items[tableKey] = data[tableKey];
+			items[tableKey] = data[tableKey].toObject()
 		}
 		return items;
 	}
 
 	getById(id: number): Project {
-		return new Project(PM_Storage.getById<ItemType>(this.table, id));
+		const p = PM_Storage.getById<ItemType>(this.table, id)
+		return new Project(p);
 	}
 
 	async scan() {

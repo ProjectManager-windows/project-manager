@@ -22,22 +22,5 @@
 		align-items     : center;
 		flex-wrap       : nowrap;
 		justify-content : flex-start;
-
-		.SettingInput {
-			width                 : 100%;
-			margin-bottom         : 10px;
-			display               : grid;
-			grid-template-columns : 100px 1fr;
-			grid-template-rows    : 1fr;
-			gap                   : 10px;
-			grid-template-areas   : ". .";
-
-			.SettingInput-longText {
-				.p-inputtextarea {
-					width  : 100% !important;
-					resize : none;
-				}
-			}
-		}
 	}
 }

@@ -6,17 +6,36 @@ import * as fsSync   from 'fs';
 import path          from 'path';
 import PM_FileSystem from '../Utils/PM_FileSystem';
 import APP           from '../../main';
+import rng           from 'seedrandom';
 
 export class Project extends Item {
 	public table: string = 'projects';
 
-	public externalProps = [
-		'ide'//sting
+	public static externalProps = [
+		'ide',//string
+		'name',//string
+		'logo',//string
+		'color'//string
 	];
 
 	init() {
-		this.setVal('logo', '');
-		this.setVal('name', '');
+		this.setVal('logo', '', true);
+		this.setVal('name', '', true);
+	}
+
+	afterInit(data: any) {
+		if (!data.color) {
+			const backgroundColors = [
+				'#F44336', '#E91E63', '#9C27B0',
+				'#673AB7', '#3F51B5', '#2196F3',
+				'#03A9F4', '#00BCD4', '#009688',
+				'#4CAF50', '#8BC34A', '#CDDC39',
+				'#FFEB3B', '#FFC107', '#FF9800',
+				'#FF5722', '#795548', '#607D8B'
+			];
+			const color            = backgroundColors[Math.floor(rng(data.path)() * (backgroundColors.length - 1))];
+			this.setVal('color', color);
+		}
 	}
 
 	async analyzeFolder() {
@@ -27,21 +46,36 @@ export class Project extends Item {
 		return this;
 	}
 
-	setVal<T = any>(key: string, value: T) {
-		if (this.externalProps?.includes(key)) {
-			const confPath = path.join(this.getVal('path'), '.project-manager', 'config.json');
-			let config     = JSON.parse(fsSync.readFileSync(confPath).toString()) || {};
-			config[key]    = value;
-			fsSync.writeFileSync(confPath, JSON.stringify(config));
+	setVal<T = any>(key: string, value: T, init: boolean = false) {
+		if (init) {
+			super.setVal(key, value);
+			return;
+		}
+		if (Project.externalProps?.includes(key)) {
+			try {
+				const confPath = path.join(this.getVal('path'), '.project-manager', 'config.json');
+				let config     = JSON.parse(fsSync.readFileSync(confPath).toString()) || {};
+				config[key]    = value;
+				fsSync.writeFileSync(confPath, JSON.stringify(config));
+			} catch (e) {
+			} finally {
+				super.setVal(key, value);
+			}
 		} else {
 			super.setVal(key, value);
+
 		}
 	}
 
 	getVal<T = any>(key: string): T {
-		if (this.externalProps?.includes(key)) {
-			let config: { [p: string]: T } = JSON.parse(fsSync.readFileSync(path.join(this.getVal('path'), '.project-manager', 'config.json')).toString()) || {};
-			return config[key];
+		if (Project.externalProps?.includes(key)) {
+			try {
+				const confPath                 = path.join(super.getVal('path'), '.project-manager', 'config.json');
+				let config: { [p: string]: T } = JSON.parse(fsSync.readFileSync(confPath).toString()) || {};
+				return config[key] || this.data[key];
+			} catch (e) {
+				return super.getVal(key);
+			}
 		} else {
 			return super.getVal(key);
 		}
@@ -53,6 +87,15 @@ export class Project extends Item {
 		return id;
 
 	}
+
+	toObject() {
+		const results: any = {};
+		for (const dataKey in this.data) {
+			results[dataKey] = this.getVal(dataKey);
+		}
+		return results;
+	}
+
 
 	private async statTechnologies() {
 		const files                            = await (new PM_FileSystem).getFiles(this.getVal('path'));

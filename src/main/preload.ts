@@ -61,6 +61,9 @@ export const bridge = {
 		},
 		open(id: number) {
 			ipcRenderer.send('electron-ide-execute', id);
+		},
+		config(id: number, key: string, value: any) {
+			ipcRenderer.send('electron-project-set', id, key, value);
 		}
 	},
 	ides       : {

@@ -22,7 +22,6 @@ const Project = () => {
 	};
 	const TechnologiesSelect = (element: JSX.Element) => {
 		setView(element)
-		console.log(element);
 	};
 	return (
 		<div className='project'>

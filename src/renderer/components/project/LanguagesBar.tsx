@@ -39,7 +39,8 @@ const LanguagesBar = (props: { stats?: { [key: string]: number }, className?: st
 			progress.push(
 				<div
 					key={`${name}-${percent}`}
-					className={`tp progress-bar lang-${name}`} style={{ width: `${percent}%`, background: color, borderRight: '1px solid transparent' }} data-pr-tooltip={`${name} - ${percent2}%`}
+					className={`tp progress-bar lang-${name}`} style={{ width: `${percent}%`, background: color, borderRight: '1px solid transparent' }}
+					data-pr-tooltip={`${name} - ${percent2.toFixed(1)}%`}
 				/>
 			);
 		}
@@ -49,7 +50,7 @@ const LanguagesBar = (props: { stats?: { [key: string]: number }, className?: st
 
 			progress.push(<div
 				key='other' className='tp progress-bar lang-other`' style={{ width: `${percent}%`, background: color, borderRight: '1px solid transparent' }}
-				data-pr-tooltip={`other - ${percent}%`}
+				data-pr-tooltip={`other - ${percent.toFixed(1)}%`}
 			/>);
 		}
 		return progress;

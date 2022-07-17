@@ -1,9 +1,10 @@
-import { useTranslation }               from 'react-i18next';
-import { useEffect, useMemo, useState } from 'react';
-import { InputSwitch }                  from 'primereact/inputswitch';
-import { InputTextarea }                from 'primereact/inputtextarea';
-import { InputNumber }                  from 'primereact/inputnumber';
-import { InputText }                    from 'primereact/inputtext';
+import { useTranslation }                      from 'react-i18next';
+import React, { useEffect, useMemo, useState } from 'react';
+import { InputSwitch }                         from 'primereact/inputswitch';
+import { InputTextarea }                       from 'primereact/inputtextarea';
+import { InputNumber }                         from 'primereact/inputnumber';
+import { InputText }                           from 'primereact/inputtext';
+import { ColorPicker }                         from 'primereact/colorpicker';
 
 function guidGenerator() {
 	function S4() {
@@ -14,24 +15,29 @@ function guidGenerator() {
 	return (`a${S4()}${S4()}`);
 }
 
-export type settingType = 'text' | 'longText' | 'int' | 'float' | 'switch';
+export type settingType = 'text' | 'longText' | 'int' | 'float' | 'switch' | 'select' | 'color';
 
-const SettingInput = (props: { settingKey: string, type: settingType }) => {
-	const { t }                     = useTranslation();
-	const { settingKey, type }      = props;
-	const [oldValue, setOldValue]   = useState(window.electron.settings.get(settingKey));
-	const [newValue, setNewValue]   = useState(oldValue);
+const SettingInput = (props: { settingKey: string, type: settingType, setVal?: (value: any) => void, value: any, children?: React.ReactNode }) => {
+	const { t }                                         = useTranslation();
+	const { settingKey, type, setVal, value, children } = props;
+	const [newValue, setNewValue]                       = useState<any>();
+	const [oldValue, setOldValue]                       = useState<any>();
+	const [isChanged, setIsChanged]                     = useState<boolean>(false);
 	// eslint-disable-next-line no-useless-concat
-	const [className, setClassName] = useState(`SettingInput SettingInput-${type} noChanged`);
+	const [className, setClassName]                     = useState<string>(`SettingInput SettingInput-${type} noChanged`);
 	useEffect(() => {
 		setOldValue(window.electron.settings.get(settingKey));
 	}, [settingKey]);
 	const id     = useMemo(() => guidGenerator(), []);
 	const commit = (Val: any) => {
 		const write = (v: any) => {
-			window.electron.settings.set(settingKey, v);
-			setNewValue(v);
-			setOldValue(v);
+			if (oldValue != newValue) {
+				if (setVal) {
+					setVal(v);
+				}
+				setNewValue(v);
+				setOldValue(v);
+			}
 		};
 
 		if (type === 'int' || type === 'float') {
@@ -64,69 +70,190 @@ const SettingInput = (props: { settingKey: string, type: settingType }) => {
 		return write(Val);
 	};
 	useEffect(() => {
-		const isChanged = oldValue !== newValue;
-		setClassName(`SettingInput SettingInput-${type} ${isChanged ? 'changed' : 'noChanged'}`);
+		setNewValue(value);
+		setOldValue(value);
+	}, [value]);
+	useEffect(() => {
+		setIsChanged(oldValue !== newValue);
+		setClassName(`SettingInput SettingInput-${type} ${oldValue !== newValue ? 'changed' : 'noChanged'}`);
 	}, [oldValue, newValue, type]);
 	switch (type) {
-
 		case 'longText':
 			return (
 				<div className={className}>
-					<label htmlFor={id}> {t(settingKey)} </label>
-					<InputTextarea
-						autoResize id={id} value={newValue}
-						onChange={e => {
-							commit(e.target.value);
-						}}
-					/>
+					<div className='caption'>
+						<label htmlFor={id}> {t(settingKey)} </label>
+					</div>
+					<div className='input'>
+						<span className='p-input-icon-right'>
+						{
+							isChanged ? <i className='pi pi-spin pi-spinner' />
+									  : <i className='pi  pi-check' />
+						}
+						<InputTextarea
+							autoResize id={id} value={newValue}
+							onChange={e => {
+								setNewValue(e.target.value);
+							}}
+							onBlur={e => {
+								commit(e.target.value);
+							}}
+						/>
+					</span>
+					</div>
 				</div>
 			);
 		case 'int':
 			return (
 				<div className={className}>
-					<label htmlFor={id}> {t(settingKey)} </label>
-					<InputNumber
-						showButtons id={id} value={newValue}
-						onChange={e => {
-							commit(e.value);
-						}}
-					/>
+					<div className='caption'>
+						<label htmlFor={id}> {t(settingKey)} </label>
+					</div>
+					<div className='input'>
+						<span className='p-input-icon-right'>
+						{
+							isChanged ? <i className='pi pi-spin pi-spinner' />
+									  : <i className='pi  pi-check' />
+						}
+							<InputNumber
+								id={id} value={newValue}
+								onChange={e => {
+									setNewValue(e.value);
+								}}
+								onBlur={e => {
+									commit(e.target.value);
+								}}
+							/>
+					</span>
+					</div>
 				</div>
 			);
 		case 'float':
 			return (
 				<div className={className}>
-					<label htmlFor={id}> {t(settingKey)} </label>
-					<InputNumber
-						showButtons id={id} value={newValue} mode='decimal' minFractionDigits={0} maxFractionDigits={5}
-						onChange={e => {
-							commit(e.value);
-						}}
-					/>
+					<div className='caption'>
+						<label htmlFor={id}> {t(settingKey)} </label>
+					</div>
+					<div className='input'>
+						<span className='p-input-icon-right'>
+						{
+							isChanged ? <i className='pi pi-spin pi-spinner' />
+									  : <i className='pi  pi-check' />
+						}
+							<InputNumber
+								id={id} value={newValue} mode='decimal' minFractionDigits={0} maxFractionDigits={5}
+								onChange={e => {
+									setNewValue(e.value);
+								}}
+								onBlur={e => {
+									commit(e.target.value);
+								}}
+							/>
+					</span>
+					</div>
 				</div>
 			);
 		case 'switch':
 			return (
 				<div className={className}>
-					<label htmlFor={id}> {t(settingKey)} </label>
-					<InputSwitch
-						type='checkbox' id={id} checked={!!newValue}
-						onChange={e => {
-							commit(e.value);
-						}}
-					/>
+					<div className='caption'>
+						<label htmlFor={id}> {t(settingKey)} </label>
+					</div>
+					<div className='input'>
+						<span className='p-input-icon-right'>
+							{
+								isChanged ? <i className='pi pi-spin pi-spinner' />
+										  : <i className='pi  pi-check' />
+							}
+							<InputSwitch
+								type='checkbox' id={id}
+								checked={!!newValue}
+								onChange={(e) => {
+									setNewValue(e.value);
+									commit(e.value);
+								}}
+							/>
+						</span>
+					</div>
+				</div>
+			);
+		case 'select':
+			if (children) {
+				return (
+					<div className={className}>
+						<div className='caption'>
+							<label> {t(settingKey)} </label>
+						</div>
+						<div className='input'>
+							{children}
+						</div>
+					</div>
+				);
+			}
+			throw new Error('missing Dropdown');
+		case 'color':
+			return (
+				<div className={className}>
+					<div className='caption'>
+						<label htmlFor={id}> {t(settingKey)} </label>
+					</div>
+					<div className='input'>
+						<ColorPicker
+							id={id + 'p'}
+							value={newValue}
+							onChange={e => {
+								if (typeof e.value === 'string') {
+									setNewValue('#' + e.value.replaceAll('#', ''));
+									commit('#' + e.value.replaceAll('#', ''));
+								}
+							}}
+						/>
+						<InputText
+							id={id}
+							value={newValue}
+							onChange={e => {
+								setNewValue('#' + e.target.value.replaceAll('#', ''));
+							}}
+							onBlur={e => {
+								commit('#' + e.target.value.replaceAll('#', ''));
+							}}
+						/>
+					</div>
 				</div>
 			);
 		case 'text':
 		default:
+			if (!children) {
+				return (
+					<div className={className}>
+						<div className='caption'>
+							<label htmlFor={id}> {t(settingKey)} </label>
+						</div>
+						<div className='input'>
+							<span className='p-input-icon-right'>
+								{
+									isChanged ? <i className='pi pi-spin pi-spinner' />
+											  : <i className='pi  pi-check' />
+								}
+								<InputText
+									id={id}
+									value={newValue}
+									onChange={e => {
+										setNewValue(e.target.value);
+									}}
+									onBlur={e => {
+										commit(e.target.value);
+									}}
+								/>
+							</span>
+						</div>
+					</div>
+				);
+			}
 			return (
 				<div className={className}>
-					<label htmlFor={id}> {t(settingKey)} </label>
-					<InputText
-						id={id} value={newValue} onChange={e => {
-						commit(e.target.value);
-					}}
-					/>
+					<label> {t(settingKey)} </label>
+					{children}
 				</div>
 			);
 	}

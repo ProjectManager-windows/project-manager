@@ -2,19 +2,25 @@ import '../../styles/TechnologiesList.scss';
 import { ProjectType }         from 'types/project';
 import { useEffect, useState } from 'react';
 import TechnologyItem          from './TechnologyItem';
-import gear                    from '../../../../assets/icons/svg/gear.svg';
+import gear   from '../../../../assets/icons/svg/gear.svg';
+import Config from '../plugins/Config';
 
 const TechnologiesList = (props: { selectedProject?: ProjectType, onSelect: (element: JSX.Element) => void }) => {
 	const { selectedProject, onSelect } = props;
 	const [technology, setTechnology]   = useState('');
 
 	if (selectedProject) {
-		console.log(selectedProject);
 	}
 	useEffect(() => {
-		const element = (<h1>{technology} - {selectedProject?.name}</h1>);
 		if (selectedProject && technology) {
-
+			let element = (<h1>{technology} - {selectedProject?.name}</h1>);
+			switch (technology) {
+				case 'config':
+					element = (<Config project={selectedProject} />);
+					break;
+				default:
+					break;
+			}
 			onSelect(element);
 		}
 	}, [selectedProject, technology]);
@@ -26,7 +32,7 @@ const TechnologiesList = (props: { selectedProject?: ProjectType, onSelect: (ele
 	return (
 		<div className='TechnologiesList'>
 			<ul className='list'>
-				<TechnologyItem onSelect={select} name={'test2'} icon={gear} color="#ffffff"></TechnologyItem>
+				<TechnologyItem onSelect={select} name={'config'} icon={gear} color='#ffffff'></TechnologyItem>
 			</ul>
 		</div>
 	)

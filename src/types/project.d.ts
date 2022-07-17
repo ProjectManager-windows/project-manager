@@ -25,11 +25,12 @@ export interface PublisherType extends TechnologyType {
 
 export interface ProjectType {
 	logo?: string;
+	color?: string;
 	id: number;
 	name: string;
 	stats?: { [key: string]: number };
 	path: string; // unique identifier
-	IDE?: IDEType;
+	ide?: number;
 	technologies?: TechnologyType[]; // TODO v0
 	version?: Version; // TODO v1
 	publisher?: PublisherType; // prod-deployment //TODO v1

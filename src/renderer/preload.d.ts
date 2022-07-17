@@ -12,6 +12,8 @@ declare global {
 		Notifications: typeof Notifications;
 		LanguagesExtensions: typeof LanguagesExtensions;
 		languagesColors: { [key: string]: string };
+		ImageCache: { [key: string]: any };
+		pixel: string;
 	}
 
 	interface String {

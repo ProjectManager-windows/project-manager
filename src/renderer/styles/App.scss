@@ -6,7 +6,9 @@
 		cursor  : pointer;
 	}
 }
-
+.logo{
+	background-size: 70% auto !important;
+}
 html, body, #root, .App {
 	background : var(--primary-color-text);
 }
@@ -25,4 +27,11 @@ html, body, #root, .App {
 	outline    : unset !important;
 }
 
-
+.SettingInput{
+	display : grid;
+	grid-template-columns : minmax(100px,0.1fr) 1fr;
+	grid-template-rows    : 1fr;
+	gap                   : 0;
+	grid-template-areas   :
+    ". .";
+}
