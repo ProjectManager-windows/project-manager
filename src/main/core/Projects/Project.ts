@@ -143,6 +143,13 @@ export class Project extends Item {
 	}
 
 	public async analyzeIcon() {
+		const logoBaseName = this.getVal('logoBaseName');
+		if (logoBaseName) {
+			const logoPath = path.join(this.getVal('path'), '.project-manager', logoBaseName);
+			if (await PM_FileSystem.fileExists(logoPath)) {
+				return;
+			}
+		}
 		const icons: string[] = await new Promise((resolve, reject) => {
 			glob('**/@(favicon.ico|favicon.jpg|favicon.png|favicon.svg|icon.png|icon.svg|icon.jpg|icon.ico|logo.ico|logo.jpg|logo.png|logo.svg)', {
 				cwd     : this.getVal('path'),
