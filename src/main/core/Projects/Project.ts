@@ -233,4 +233,9 @@ export class Project extends Item {
 		return name;
 	}
 
+	async delete() {
+		const confPath = path.join(this.getVal('path'), '.project-manager');
+		super.delete();
+		await fs.rmdir(confPath, { recursive: true });
+	}
 }

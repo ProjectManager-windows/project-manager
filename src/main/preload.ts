@@ -73,6 +73,12 @@ export const bridge = {
 		},
 		changeLogo(id: number) {
 			ipcRenderer.send('electron-project-change-logo', id);
+		},
+		remove(id: number) {
+			ipcRenderer.send('electron-project-remove', id);
+		},
+		delete(id: number) {
+			ipcRenderer.send('electron-project-delete', id);
 		}
 	},
 	ides       : {

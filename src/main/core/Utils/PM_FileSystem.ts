@@ -173,6 +173,10 @@ class PM_FileSystem {
 				return `data:image/png;base64,${data.toString('base64')}`;
 			case '.ico':
 				return `data:image/ico;base64,${data.toString('base64')}`;
+			case '.gif':
+				return `data:image/gif;base64,${data.toString('base64')}`;
+			case '.webp':
+				return `data:image/gif;base64,${data.toString('base64')}`;
 			case '.base64':
 			case '.b64':
 				return data.toString();

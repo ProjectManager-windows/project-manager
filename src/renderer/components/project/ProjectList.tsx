@@ -2,11 +2,13 @@ import '../../styles/projectList.scss';
 import ProjectItem                 from './ProjectItem';
 import React, { useRef, useState } from 'react';
 import { ProjectType }             from '../../../types/project';
-import { ContextMenu }      from 'primereact/contextmenu';
-import { faCode, faFolder } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon }  from '@fortawesome/react-fontawesome';
+import { ContextMenu }                      from 'primereact/contextmenu';
+import { faBan, faCode, faFolder, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon }                  from '@fortawesome/react-fontawesome';
+import { useTranslation }          from 'react-i18next';
 
 const ProjectList = (props: { projects: { [key: string]: any }, onSelect: (e: React.MouseEvent<HTMLElement>, ide: ProjectType) => void }) => {
+		  const { t } = useTranslation();
 		  const cm                                  = useRef(null);
 		  const [contextProject, setContextProject] = useState<ProjectType>();
 		  const { projects, onSelect }              = props;
@@ -14,7 +16,7 @@ const ProjectList = (props: { projects: { [key: string]: any }, onSelect: (e: Re
 		  const list                                = [];
 		  const items                               = [
 			  {
-				  label  : 'open in ide',
+				  label  : t('open in ide').ucfirst(),
 				  icon   : (<FontAwesomeIcon className='p-menuitem-icon' icon={faCode} />),
 				  command: () => {
 					  if (!contextProject) {
@@ -24,13 +26,33 @@ const ProjectList = (props: { projects: { [key: string]: any }, onSelect: (e: Re
 				  }
 			  },
 			  {
-				  label  : 'open folder',
+				  label  : t('open folder').ucfirst(),
 				  icon   : (<FontAwesomeIcon className='p-menuitem-icon' icon={faFolder} />),
 				  command: () => {
 					  if (!contextProject) {
 						  return;
 					  }
 					  window.electron.projects.openFolder(contextProject.id);
+				  }
+			  },
+			  {
+				  label  : t('remove').ucfirst(),
+				  icon   : (<FontAwesomeIcon className='p-menuitem-icon' icon={faBan} />),
+				  command: () => {
+					  if (!contextProject) {
+						  return;
+					  }
+					  window.electron.projects.remove(contextProject.id);
+				  }
+			  },
+			  {
+				  label  : t('delete').ucfirst(),
+				  icon   : (<FontAwesomeIcon className='p-menuitem-icon' icon={faTrash} />),
+				  command: () => {
+					  if (!contextProject) {
+						  return;
+					  }
+					  window.electron.projects.delete(contextProject.id);
 				  }
 			  }
 		  ];

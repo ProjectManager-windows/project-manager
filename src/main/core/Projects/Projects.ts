@@ -57,13 +57,31 @@ class Projects implements Collection {
 			await shell.openPath(path);
 		});
 		ipcMain.on('electron-project-change-logo', async (_event, id: number) => {
-			const file = await dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: '', extensions: ['svg', 'ico', 'png', 'jpg', 'base64'] }] });
+			const file = await dialog.showOpenDialog(
+				{
+					properties: ['openFile'], filters: [
+						{
+							name      : '',
+							extensions: ['svg', 'jpg', 'jpeg', 'png', 'ico', 'gif', 'webp', 'base64', 'b64']
+						}]
+				});
 			if (!file.canceled) {
 				const logo = file.filePaths[0];
 				const p    = this.getById(id);
 				await p.setLogo(logo);
-				p.save()
+				p.save();
 			}
+		});
+
+		ipcMain.on('electron-project-remove', async (_event, id) => {
+			const p = this.getById(id);
+			await p.delete();
+		});
+		ipcMain.on('electron-project-delete', async (_event, id) => {
+			const p    = this.getById(id);
+			const path = p.getVal('path');
+			// await trash(path, { glob: false });
+			await p.delete();
 		});
 	}
 
