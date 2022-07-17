@@ -21,15 +21,24 @@ class PM_FileSystem {
 		'vendor'
 	];
 
-	constructor() {
-		const store = new Store();
-		const a     = store.get('settings.fs.blacklist') as any;
-		if (typeof a === 'string') {
-			this.blacklist = a.split('\uE000');
-		}
+	constructor(blacklist?: string[]) {
+		this.blacklist = blacklist ?? this.blacklist;
+		// const store = new Store();
+		// const a     = store.get('settings.fs.blacklist') as any;
+		// if (typeof a === 'string') {
+		// 	this.blacklist = a.split('\uE000');
+		// }
 	}
 
-
+	static async fileExists(src: string): Promise<boolean> {
+		return fs.stat(src).then((stat) => stat.isFile()).catch(() => false);
+	}
+	static async folderExists(src: string): Promise<boolean> {
+		return fs.stat(src).then((stat) => stat.isDirectory()).catch(() => false);
+	}
+	static async exists(src: string): Promise<boolean> {
+		return fs.stat(src).then(() => true).catch(() => false);
+	}
 	async getDirectories(src: string, dirs: string[] = []): Promise<string[]> {
 		return fs
 			.readdir(src, { withFileTypes: true })
@@ -170,3 +179,5 @@ class PM_FileSystem {
 }
 
 export default PM_FileSystem;
+
+
