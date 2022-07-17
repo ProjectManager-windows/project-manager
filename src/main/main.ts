@@ -1,10 +1,10 @@
 import { app, BrowserWindow, shell } from 'electron';
 import Store                         from 'electron-store';
 import path                          from 'path';
+import { autoUpdater }               from 'electron-updater';
+import log                           from 'electron-log';
 import MenuBuilder                   from './menu';
 import { resolveHtmlPath }           from './util';
-import log                           from 'electron-log';
-import { autoUpdater }               from 'electron-updater';
 import Projects                      from './core/Projects/Projects';
 import events                        from './ipcMain';
 import IDEs                          from './core/IDEs/IDEs';
@@ -18,6 +18,7 @@ export class PM_App {
 	private constructor() {
 		this.isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 		if (process.env.NODE_ENV === 'production') {
+			// eslint-disable-next-line global-require
 			const sourceMapSupport = require('source-map-support');
 			sourceMapSupport.install();
 		}
@@ -67,29 +68,28 @@ export class PM_App {
 	}
 
 	async sendRenderEvent(channel: string, ...args: any[]) {
-		return new Promise((resolve, reject) => {
-							   const send = (channel: string, ...args: any[]) => {
-								   if (this.mainWindow) {
-									   this.mainWindow.webContents.send(channel, ...args);
-									   resolve(true);
-								   }
-							   };
-							   if (this.mainWindow && this.isRunning) {
-								   send(channel, ...args);
-							   } else {
-								   let trys       = 0;
-								   const interval = setInterval(() => {
-									   trys++;
-									   if (trys < 10) {
-										   send(channel, ...args);
-									   } else {
-										   reject(false);
-										   clearInterval(interval);
-									   }
-								   }, 200);
-							   }
-						   }
-		);
+		return new Promise<void>((resolve, reject) => {
+			const send = (channel: string, ...args: any[]) => {
+				if (this.mainWindow) {
+					this.mainWindow.webContents.send(channel, ...args);
+					resolve();
+				}
+			};
+			if (this.mainWindow && this.isRunning) {
+				send(channel, ...args);
+			} else {
+				let trys = 0;
+				const interval = setInterval(() => {
+					trys++;
+					if (trys < 10) {
+						send(channel, ...args);
+					} else {
+						reject();
+						clearInterval(interval);
+					}
+				}, 200);
+			}
+		});
 	}
 
 	private async createWindow() {
@@ -153,6 +153,7 @@ export class PM_App {
 	}
 
 	private async installExtensions() {
+		// eslint-disable-next-line global-require
 		const installer     = require('electron-devtools-installer');
 		const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
 		const extensions    = ['REACT_DEVELOPER_TOOLS'];
