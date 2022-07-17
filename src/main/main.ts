@@ -60,7 +60,7 @@ export class PM_App {
 	}
 
 	beforeRun() {
-		// (new Store).clear();
+		(new Store).clear();
 		events.run();
 		Projects.init();
 		IDEs.init();

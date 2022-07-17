@@ -57,7 +57,7 @@ export class Project extends Item {
 				const confPath = path.join(this.getVal('path'), '.project-manager', 'config.json');
 				let config     = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
 				config[key]    = value;
-				fsSync.writeFileSync(confPath, JSON5.stringify(config));
+				fsSync.writeFileSync(confPath, JSON.stringify(config));
 			} catch (e) {
 			} finally {
 				super.setVal(key, value);
