@@ -31,7 +31,10 @@ const Menu = () => {
 						},
 						{
 							label: t('select folder').ucfirst(),
-							icon : <FontAwesomeIcon className='p-menuitem-icon' icon={faFolder} />
+							icon : <FontAwesomeIcon className='p-menuitem-icon' icon={faFolder} />,
+							command: () => {
+								window.electron.projects.add();
+							}
 						}
 					]
 				},

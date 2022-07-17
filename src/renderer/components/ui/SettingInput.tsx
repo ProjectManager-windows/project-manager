@@ -15,7 +15,7 @@ function guidGenerator() {
 	return (`a${S4()}${S4()}`);
 }
 
-export type settingType = 'text' | 'longText' | 'int' | 'float' | 'switch' | 'select' | 'color';
+export type settingType = 'text' | 'longText' | 'int' | 'float' | 'switch' | 'custom' | 'color';
 
 const SettingInput = (props: { settingKey: string, type: settingType, setVal?: (value: any) => void, value: any, children?: React.ReactNode }) => {
 	const { t }                                         = useTranslation();
@@ -177,7 +177,7 @@ const SettingInput = (props: { settingKey: string, type: settingType, setVal?: (
 					</div>
 				</div>
 			);
-		case 'select':
+		case 'custom':
 			if (children) {
 				return (
 					<div className={className}>

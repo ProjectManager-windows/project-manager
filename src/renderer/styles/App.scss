@@ -34,9 +34,29 @@ html, body, #root, .App {
 
 .SettingInput {
 	display               : grid;
-	grid-template-columns : minmax(100px, 0.1fr) 1fr;
+	grid-template-columns : minmax(100px, 0.1fr) 230px;
 	grid-template-rows    : 1fr;
 	gap                   : 0;
 	grid-template-areas   :
     ". .";
+
+	* {
+		max-width : 100%;
+	}
+
+	&.SettingInput-text {
+		.p-inputtext {
+			width : 100%
+		}
+	}
+
+	&.SettingInput-color {
+		.p-colorpicke {
+			width : 32px
+		}
+
+		.p-inputtext:not(.p-colorpicker-preview) {
+			width : calc(100% - 32px)
+		}
+	}
 }

@@ -6,22 +6,23 @@ import { ProjectType }                from '../../types/project';
 import TechnologiesList               from '../components/technologies/TechnologiesList';
 
 const Project = () => {
-	const [projects, setProjects] = useState(window.electron.projects.getAll());
-	const [view, setView] = useState((<div></div>));
+	const [projects, setProjects]          = useState(window.electron.projects.getAll());
+	const [view, setView]                  = useState((<div></div>));
+	const [selectedProject, selectProject] = useState<ProjectType>();
+
 	useEffect(() => {
 		return window.electron.projects.onUpdate(() => {
 			setProjects(window.electron.projects.getAll());
 		});
 	}, []);
 
-	const [selectedProject, selectProject] = useState<ProjectType>();
 
 	const projectSelect      = (e: React.MouseEvent<HTMLElement>, project: ProjectType) => {
 		e.preventDefault();
 		selectProject(project);
 	};
 	const TechnologiesSelect = (element: JSX.Element) => {
-		setView(element)
+		setView(element);
 	};
 	return (
 		<div className='project'>

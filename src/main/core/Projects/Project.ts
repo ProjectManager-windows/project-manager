@@ -113,7 +113,7 @@ export class Project extends Item {
 	}
 
 
-	private async statLanguages() {
+	public async statLanguages() {
 		const localPath          = this.getVal<string>('path');
 		const gitignoreWait      = PM_FileSystem.fileExists(path.join(localPath, '.gitignore'));
 		const files              = await new PM_FileSystem([]).getFiles(localPath);
@@ -142,7 +142,7 @@ export class Project extends Item {
 
 	}
 
-	private async analyzeIcon() {
+	public async analyzeIcon() {
 		const icons: string[] = await new Promise((resolve, reject) => {
 			glob('**/@(favicon.ico|favicon.jpg|favicon.png|favicon.svg|icon.png|icon.svg|icon.jpg|icon.ico|logo.ico|logo.jpg|logo.png|logo.svg)', {
 				cwd     : this.getVal('path'),
@@ -206,20 +206,24 @@ export class Project extends Item {
 			if (a.size === b.size) return scoreA;
 			return (Math.log(a.size) * (scoreA + score2A) > Math.log(b.size) * (scoreB + score2B)) ? 1 : -1;
 		});
-
 		if (newIcons.length > 0) {
 			const logoPath = newIcons.pop()?.path;
 			if (logoPath) {
-				const name   = path.basename(logoPath);
-				let confPath = path.join(this.getVal('path'), '.project-manager');
-				if (!await PM_FileSystem.folderExists(confPath)) {
-					await fs.mkdir(confPath, { recursive: true, mode: 0o777 });
-				}
-				confPath = path.join(confPath, name);
-				await fs.copyFile(logoPath, confPath);
-				this.setVal('logoBaseName', name);
+				await this.setLogo(logoPath);
 			}
 		}
+	}
+
+	public async setLogo(logoPath: string) {
+		const name   = path.basename(logoPath);
+		let confPath = path.join(this.getVal('path'), '.project-manager');
+		if (!await PM_FileSystem.folderExists(confPath)) {
+			await fs.mkdir(confPath, { recursive: true, mode: 0o777 });
+		}
+		confPath = path.join(confPath, name);
+		await fs.copyFile(logoPath, confPath);
+		this.setVal('logoBaseName', name);
+		return name;
 	}
 
 }

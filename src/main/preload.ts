@@ -59,8 +59,8 @@ export const bridge = {
 		scan() {
 			ipcRenderer.send('electron-project-scan');
 		},
-		add(property: string) {
-			ipcRenderer.send('electron-project-add', property);
+		add() {
+			ipcRenderer.send('electron-project-add');
 		},
 		open(id: number) {
 			ipcRenderer.send('electron-ide-execute', id);
