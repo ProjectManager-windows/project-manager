@@ -27,7 +27,7 @@ class IDEs implements Collection {
 			const project    = Projects.getById(projectId);
 			let ideId: number;
 			if (project.getVal('ide')) {
-				ideId = this.getIdByName(project.getVal('ide')) || defaultIde || 1;
+				ideId = project.getVal('ide');
 			} else {
 				ideId = defaultIde || 1;
 			}
