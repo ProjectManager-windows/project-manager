@@ -60,7 +60,7 @@ export class PM_App {
 	}
 
 	beforeRun() {
-		(new Store).clear();
+		// (new Store).clear();
 		events.run();
 		Projects.init();
 		IDEs.init();
@@ -105,17 +105,18 @@ export class PM_App {
 			return path.join(RESOURCES_PATH, ...paths);
 		};
 
-		this.mainWindow = new BrowserWindow({
-												show          : false,
-												width         : 1024,
-												height        : 728,
-												icon          : getAssetPath('icon.png'),
-												webPreferences: {
-													preload: app.isPackaged
-															 ? path.join(__dirname, 'preload.js')
-															 : path.join(__dirname, '../../.erb/dll/preload.js')
-												}
-											});
+		this.mainWindow = new BrowserWindow(
+			{
+				show          : false,
+				width         : 1024,
+				height        : 728,
+				icon          : getAssetPath('icon.png'),
+				webPreferences: {
+					preload: app.isPackaged
+							 ? path.join(__dirname, 'preload.js')
+							 : path.join(__dirname, '../../.erb/dll/preload.js')
+				}
+			});
 
 		this.mainWindow.loadURL(resolveHtmlPath('index.html'));
 
