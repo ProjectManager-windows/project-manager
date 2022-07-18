@@ -25,12 +25,13 @@ module.exports = {
 		'guard-for-in'                                  : 0,
 		'promise/no-nesting'                            : 0,
 		'react/react-in-jsx-scope'                      : 0,
-		"object-shorthand"                              : 0,
+		'object-shorthand'                              : 0,
 		'no-unused-vars'                                : 0,
 		'no-undef'                                      : 0,
+		'@typescript-eslint/no-unused-vars'            : 0,
 		'no-unused-expressions'                         : 1,
 		'no-useless-constructor'                        : 1,
-		'prefer-const'                                  : 1,
+		'prefer-const'                                  : 1
 
 	},
 	parserOptions: {

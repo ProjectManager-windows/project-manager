@@ -9,14 +9,11 @@ const Project = () => {
 	const [projects, setProjects]          = useState(window.electron.projects.getAll());
 	const [view, setView]                  = useState((<div></div>));
 	const [selectedProject, selectProject] = useState<ProjectType>();
-
 	useEffect(() => {
 		return window.electron.projects.onUpdate(() => {
 			setProjects(window.electron.projects.getAll());
 		});
 	}, []);
-
-
 	const projectSelect      = (e: React.MouseEvent<HTMLElement>, project: ProjectType) => {
 		e.preventDefault();
 		selectProject(project);
@@ -29,7 +26,7 @@ const Project = () => {
 			<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
 			<div className='grid'>
 				<div className='projects'>
-					<ProjectList projects={projects} onSelect={projectSelect} />
+					<ProjectList selectedProject={selectedProject} projects={projects} onSelect={projectSelect} />
 				</div>
 				<div className='technologies'>
 					<TechnologiesList selectedProject={selectedProject} onSelect={TechnologiesSelect} />

@@ -7,11 +7,11 @@ import { faBan, faCode, faFolder, faTrash } from '@fortawesome/free-solid-svg-ic
 import { FontAwesomeIcon }                  from '@fortawesome/react-fontawesome';
 import { useTranslation }          from 'react-i18next';
 
-const ProjectList = (props: { projects: { [key: string]: any }, onSelect: (e: React.MouseEvent<HTMLElement>, ide: ProjectType) => void }) => {
+const ProjectList = (props: {selectedProject: ProjectType, projects: { [key: string]: any }, onSelect: (e: React.MouseEvent<HTMLElement>, ide: ProjectType) => void }) => {
 		  const { t } = useTranslation();
 		  const cm                                  = useRef(null);
 		  const [contextProject, setContextProject] = useState<ProjectType>();
-		  const { projects, onSelect }              = props;
+		  const { projects, onSelect,selectedProject }              = props;
 		  let forSort                               = [];
 		  const list                                = [];
 		  const items                               = [
@@ -69,7 +69,7 @@ const ProjectList = (props: { projects: { [key: string]: any }, onSelect: (e: Re
 			  return a.name.localeCompare(b.name);
 		  });
 		  for (const project of forSort) {
-			  list.push(<ProjectItem onSelect={(e, project) => onSelect(e, project)} key={project.id} project={project} contextProject={setContextProject} cm={cm} defaultAction={defaultAction} />);
+			  list.push(<ProjectItem active={selectedProject?.id === project.id} onSelect={(e, project) => onSelect(e, project)} key={project.id} project={project} contextProject={setContextProject} cm={cm} defaultAction={defaultAction} />);
 		  }
 		  return (
 			  <div className='ProjectList'>

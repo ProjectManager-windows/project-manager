@@ -77,8 +77,8 @@ export class Project extends Item {
 
 	getVal<T = any>(key: string): T {
 		if (key === 'logo') {
-			if (super.getVal('logoBaseName')) {
-				const confPath = path.join(super.getVal('path'), '.project-manager', super.getVal('logoBaseName'));
+			if (this.getVal('logoBaseName')) {
+				const confPath = path.join(super.getVal('path'), '.project-manager', this.getVal('logoBaseName'));
 				return (PM_FileSystem.logoToBase64(confPath)) as unknown as T;
 			}
 			return '' as unknown as T;

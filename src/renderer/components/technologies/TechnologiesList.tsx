@@ -24,15 +24,21 @@ const TechnologiesList = (props: { selectedProject?: ProjectType, onSelect: (ele
 	const select = (name: string) => {
 		setTechnology(name);
 	};
-
+	if (selectedProject) {
+		return (
+			<div className='TechnologiesList'>
+				<ul className='list'>
+					<TechnologyItem active={technology === 'config'} onSelect={select} name={'config'} icon={gear} color='#ffffff'></TechnologyItem>
+				</ul>
+			</div>
+		);
+	}
 	return (
 		<div className='TechnologiesList'>
 			<ul className='list'>
-				<TechnologyItem onSelect={select} name={'config'} icon={gear} color='#ffffff'></TechnologyItem>
 			</ul>
 		</div>
-	)
-		;
+	);
 };
 
 export default TechnologiesList;
