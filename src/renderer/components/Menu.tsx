@@ -135,8 +135,7 @@ const Menu = () => {
 		}
 	});
 	const end   = <InputText
-		placeholder='Search' type='text' onChange={(e) => {
-		console.log(e.target.value);
+		placeholder='Search' type='text' onChange={() => {
 	}}
 	/>;
 

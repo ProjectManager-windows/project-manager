@@ -13,7 +13,6 @@ const TechnologyItem = (props: { active: boolean, onSelect: (name: string) => vo
 															  color: color,
 															  logo : icon
 														  });
-	console.log(active)
 	return (
 		<div className='TechnologyItem ' id={`technology-item-${name}`} onClick={() => onSelect(name)}>
 			<li className={`item p-ripple ${active ? 'active' : ''}`} key={name}>

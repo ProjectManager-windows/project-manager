@@ -1,19 +1,20 @@
 import '../../styles/projectList.scss';
-import ProjectItem                             from './ProjectItem';
-import React, { useContext, useRef, useState } from 'react';
-import { ProjectType }                         from '../../../types/project';
-import { ContextMenu }                         from 'primereact/contextmenu';
-import { faBan, faCode, faFolder, faTrash }    from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon }                     from '@fortawesome/react-fontawesome';
-import { useTranslation }                      from 'react-i18next';
-import { ProjectContext }                      from '../context/ProjectContext';
+import ProjectItem                          from './ProjectItem';
+import { useContext, useRef, useState }     from 'react';
+import { ProjectType }                      from '../../../types/project';
+import { ContextMenu }                      from 'primereact/contextmenu';
+import { faBan, faCode, faFolder, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon }                  from '@fortawesome/react-fontawesome';
+import { useTranslation }                   from 'react-i18next';
+import { ProjectContext }                   from '../context/ProjectContext';
+import { AppContext }                       from '../context/AppContext';
 
 const ProjectList = () => {
 		  const { projects, selectedProject }       = useContext(ProjectContext);
+		  const { toast }                           = useContext(AppContext);
 		  const { t }                               = useTranslation();
 		  const cm                                  = useRef(null);
 		  const [contextProject, setContextProject] = useState<ProjectType>();
-		  const toast                               = useRef<React.Component>(null);
 		  let forSort                               = [];
 		  const list                                = [];
 		  const items                               = [
@@ -45,6 +46,7 @@ const ProjectList = () => {
 						  return;
 					  }
 					  window.electron.projects.remove(contextProject.id);
+					  toast?.current?.show({ severity: 'success', summary: t('success').ucfirst(), detail: t('project removed'), life: 1500 });
 				  }
 			  },
 			  {
@@ -55,7 +57,7 @@ const ProjectList = () => {
 						  return;
 					  }
 					  // @ts-ignore
-					  toast?.current?.show({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+					  toast?.current?.show({ severity: 'success', summary: t('success').ucfirst(), detail: t('project deleted'), life: 1500 });
 				  }
 			  }
 		  ];

@@ -17,7 +17,7 @@ export const bridge = {
 		once(channel: Channels, func: (...args: unknown[]) => void) {
 			ipcRenderer.once(channel, (_event, ...args) => func(...args));
 		},
-		selectFolder(){
+		selectFolder() {
 			return ipcRenderer.sendSync('electron-selectFolder');
 		}
 	},
@@ -92,6 +92,7 @@ export const bridge = {
 		add(property: string) {
 			ipcRenderer.send('electron-ide-add', property);
 		}
-	}
+	},
+	tray       : false
 };
 contextBridge.exposeInMainWorld('electron', bridge);

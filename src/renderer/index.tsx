@@ -12,6 +12,7 @@ import 'primereact/resources/primereact.min.css';
 import './styles/reset.scss';
 import LanguagesExtensions               from '../../assets/Programming_Languages_Extensions.json';
 import languagesColors                   from '../../assets/Programming_Languages_colors.json';
+import AppTray                           from './AppTray';
 
 PrimeReact.ripple     = true;
 PrimeReact.inputStyle = 'filled';
@@ -33,14 +34,8 @@ window.pixel               = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEA
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const container            = document.getElementById('root')!;
 const root                 = createRoot(container);
-root.render(<App />);
-
-// calling IPC exposed from preload script
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// const { once, sendMessage } = window.electron.ipcRenderer;
-// once('ipc-example', (arg: any) => {
-// 	// eslint-disable-next-line no-console
-// 	console.log(arg);
-// });
-// sendMessage('ipc-example', ['ping']);
+if (window.electron.tray) {
+	root.render(<AppTray />);
+} else {
+	root.render(<App />);
+}

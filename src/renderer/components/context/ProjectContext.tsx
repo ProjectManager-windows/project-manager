@@ -15,12 +15,12 @@ export const ProjectContext = createContext({
 												}
 											} as {
 												projects: { [key: string]: any },
-												setProjects: (value: { [key: string]: any }) => void,
-												selectedProject: any,
-												selectProject: (value: any) => void,
-												view: any,
-												setView: (value: any) => void,
-												technology: string,
-												setTechnology: (value: string) => void,
+												setProjects?: (value: { [key: string]: any }) => void,
+												selectedProject?: any,
+												selectProject?: (value: any) => void,
+												view?: any,
+												setView?: (value: any) => void,
+												technology?: string,
+												setTechnology?: (value: string) => void,
 											}
 );

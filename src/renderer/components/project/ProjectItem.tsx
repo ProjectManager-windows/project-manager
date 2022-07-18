@@ -27,7 +27,7 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.M
 						  cm.current.show(e);
 					  }}
 					  onDoubleClick={() => defaultAction(project.id)}
-					  onClick={() => selectProject(project)}
+					  onClick={() =>{ if(selectProject) selectProject(project)}}
 				  >
 					  <Ripple />
 					  <div>

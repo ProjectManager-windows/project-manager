@@ -5,21 +5,28 @@ import Settings                                  from './pages/Settings';
 import './styles/App.scss';
 import Ides                                      from './pages/Ides';
 import Menu                                      from './components/menu';
+import { AppContext }                            from './components/context/AppContext';
+import { useRef }                                from 'react';
+import { Toast }                                 from 'primereact/toast';
 
 export default function App() {
+	const toast = useRef(null);
 	return (
-		<div className='App'>
-			<Router>
-				<Menu />
-				<div className='wrapper'>
-					<Routes>
-						<Route path='/' element={<Project />} />
-						<Route path='/settings' element={<Settings />} />
-						<Route path='/ides' element={<Ides />} />
-					</Routes>
-				</div>
-				<Footer />
-			</Router>
-		</div>
+		<AppContext.Provider value={{ toast }}>
+			<Toast ref={toast} />
+			<div className='App'>
+				<Router>
+					<Menu />
+					<div className='wrapper'>
+						<Routes>
+							<Route path='/' element={<Project />} />
+							<Route path='/settings' element={<Settings />} />
+							<Route path='/ides' element={<Ides />} />
+						</Routes>
+					</div>
+					<Footer />
+				</Router>
+			</div>
+		</AppContext.Provider>
 	);
 }
