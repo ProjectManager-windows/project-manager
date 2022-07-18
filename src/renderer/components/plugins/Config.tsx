@@ -1,34 +1,17 @@
-import { ProjectType }    from '../../../types/project';
-import SettingInput       from '../ui/SettingInput';
-import gear               from '../../../../assets/icons/svg/gear.svg';
-import useLogo            from '../hooks/useLogo';
-import SelectIde          from '../ui/SelectIde';
 import { Button }         from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { ProjectType }    from '../../../types/project';
+import SettingInput       from '../ui/SettingInput';
+import SelectIde          from '../ui/SelectIde';
 
 const Config = (props: { project: ProjectType }) => {
 	const { project } = props;
 	const { t }       = useTranslation();
-	const techLogo    = useLogo({
-									type : 'technology',
-									name : 'config',
-									logo : gear,
-									color: '#FFFFFF'
-								});
-	const projectLogo = useLogo({
-									type : 'project',
-									name : project.name,
-									logo : project.logo,
-									color: project.color
-								});
+
 	return (
-		<div className="Config">
-			<div className='header'>
-				{techLogo}
-				<div>
-					{'-'}
-				</div>
-				{projectLogo}
+		<div className='Config'>
+			<div>
+				<h3>{project.name}</h3>
 			</div>
 			<br />
 			<SettingInput value={project.name} settingKey='name' type='text' setVal={(v) => window.electron.projects.config(project.id, 'name', v)} />

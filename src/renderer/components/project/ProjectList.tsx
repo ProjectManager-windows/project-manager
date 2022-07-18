@@ -7,7 +7,7 @@ import { faBan, faCode, faFolder, faTrash } from '@fortawesome/free-solid-svg-ic
 import { FontAwesomeIcon }                  from '@fortawesome/react-fontawesome';
 import { useTranslation }          from 'react-i18next';
 
-const ProjectList = (props: {selectedProject: ProjectType, projects: { [key: string]: any }, onSelect: (e: React.MouseEvent<HTMLElement>, ide: ProjectType) => void }) => {
+const ProjectList = (props: {selectedProject: ProjectType|undefined, projects: { [key: string]: any }, onSelect: (e: React.MouseEvent<HTMLElement>, ide: ProjectType) => void }) => {
 		  const { t } = useTranslation();
 		  const cm                                  = useRef(null);
 		  const [contextProject, setContextProject] = useState<ProjectType>();

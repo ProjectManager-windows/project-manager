@@ -7,7 +7,7 @@ import TechnologiesList               from '../components/technologies/Technolog
 
 const Project = () => {
 	const [projects, setProjects]          = useState(window.electron.projects.getAll());
-	const [view, setView]                  = useState((<div></div>));
+	const [view, setView]                  = useState((<div />));
 	const [selectedProject, selectProject] = useState<ProjectType>();
 	useEffect(() => {
 		return window.electron.projects.onUpdate(() => {
