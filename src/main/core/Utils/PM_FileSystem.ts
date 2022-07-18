@@ -1,7 +1,8 @@
-import * as fs  from 'node:fs/promises';
-import * as fss from 'node:fs';
-import path     from 'node:path';
-import plugins  from '../../components/plugins';
+import * as fs           from 'node:fs/promises';
+import * as fss          from 'node:fs';
+import path              from 'node:path';
+import plugins           from '../../components/plugins';
+import { Dirent, Stats } from 'fs';
 
 export type file = {
 	path: string,
@@ -138,7 +139,6 @@ class PM_FileSystem {
 			.catch(() => []);
 	}
 
-
 	async isProject(item: string) {
 		const stat = await fs.stat(item);
 		if (stat.isFile()) {
@@ -183,6 +183,30 @@ class PM_FileSystem {
 			default:
 				return '';
 		}
+	}
+
+	static async readFolder(path: string): Promise<Dirent[]> {
+		return await fs.readdir(path, { withFileTypes: true });
+	}
+
+	static async removeFolder(folder: string, stat?: Dirent | Stats): Promise<boolean> {
+		const stats = stat ?? (await fs.stat(folder));
+		if (stats.isFile()) {
+			await fs.unlink(folder);
+			return false;
+		}
+		const thisFolder = await PM_FileSystem.readFolder(folder);
+		const promises   = thisFolder.map(async (file) => {
+			const filePath = path.join(folder, file.name);
+			if (file.isDirectory()) {
+				await PM_FileSystem.removeFolder(filePath, file);
+			} else {
+				await fs.unlink(filePath);
+			}
+		});
+		await Promise.all(promises);
+		await fs.rmdir(folder);
+		return true;
 	}
 }
 

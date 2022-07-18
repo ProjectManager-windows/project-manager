@@ -236,6 +236,7 @@ export class Project extends Item {
 	async delete() {
 		const confPath = path.join(this.getVal('path'), '.project-manager');
 		super.delete();
-		await fs.rmdir(confPath, { recursive: true });
+		await PM_FileSystem.removeFolder(confPath);
+		await APP.sendRenderEvent('electron-project-update');
 	}
 }

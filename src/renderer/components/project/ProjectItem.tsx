@@ -1,13 +1,15 @@
-import React           from 'react';
-import { Ripple }      from 'primereact/ripple';
-import { ProjectType } from '../../../types/project';
-import LanguagesBar    from './LanguagesBar';
-import useLogo         from '../hooks/useLogo';
+import React, { useContext } from 'react';
+import { Ripple }            from 'primereact/ripple';
+import { ProjectType }       from '../../../types/project';
+import LanguagesBar          from './LanguagesBar';
+import useLogo               from '../hooks/useLogo';
 import '../../styles/projectItem.scss';
+import { ProjectContext }    from '../context/ProjectContext';
 
-const ProjectItem = (props: { active: boolean, project: ProjectType, onSelect: (e: React.MouseEvent<HTMLElement>, project: ProjectType) => void, cm: React.MutableRefObject<any>, defaultAction: (id: number) => void, contextProject: (value: ProjectType) => void }) => {
-		  const { project, onSelect, cm, defaultAction, contextProject, active } = props;
-		  const logo                                                             = useLogo(
+const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.MutableRefObject<any>, defaultAction: (id: number) => void, contextProject: (value: ProjectType) => void }) => {
+		  const { selectProject }                                      = useContext(ProjectContext);
+		  const { project, cm, defaultAction, contextProject, active } = props;
+		  const logo                                                   = useLogo(
 			  {
 				  type : 'project',
 				  name : project.name,
@@ -25,7 +27,7 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, onSelect: (
 						  cm.current.show(e);
 					  }}
 					  onDoubleClick={() => defaultAction(project.id)}
-					  onClick={e => onSelect(e, project)}
+					  onClick={() => selectProject(project)}
 				  >
 					  <Ripple />
 					  <div>

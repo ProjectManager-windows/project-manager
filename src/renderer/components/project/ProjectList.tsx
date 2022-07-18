@@ -1,17 +1,19 @@
 import '../../styles/projectList.scss';
-import ProjectItem                 from './ProjectItem';
-import React, { useRef, useState } from 'react';
-import { ProjectType }             from '../../../types/project';
-import { ContextMenu }                      from 'primereact/contextmenu';
-import { faBan, faCode, faFolder, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon }                  from '@fortawesome/react-fontawesome';
-import { useTranslation }          from 'react-i18next';
+import ProjectItem                             from './ProjectItem';
+import React, { useContext, useRef, useState } from 'react';
+import { ProjectType }                         from '../../../types/project';
+import { ContextMenu }                         from 'primereact/contextmenu';
+import { faBan, faCode, faFolder, faTrash }    from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon }                     from '@fortawesome/react-fontawesome';
+import { useTranslation }                      from 'react-i18next';
+import { ProjectContext }                      from '../context/ProjectContext';
 
-const ProjectList = (props: {selectedProject: ProjectType|undefined, projects: { [key: string]: any }, onSelect: (e: React.MouseEvent<HTMLElement>, ide: ProjectType) => void }) => {
-		  const { t } = useTranslation();
+const ProjectList = () => {
+		  const { projects, selectedProject }       = useContext(ProjectContext);
+		  const { t }                               = useTranslation();
 		  const cm                                  = useRef(null);
 		  const [contextProject, setContextProject] = useState<ProjectType>();
-		  const { projects, onSelect,selectedProject }              = props;
+		  const toast                               = useRef<React.Component>(null);
 		  let forSort                               = [];
 		  const list                                = [];
 		  const items                               = [
@@ -52,7 +54,8 @@ const ProjectList = (props: {selectedProject: ProjectType|undefined, projects: {
 					  if (!contextProject) {
 						  return;
 					  }
-					  window.electron.projects.delete(contextProject.id);
+					  // @ts-ignore
+					  toast?.current?.show({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
 				  }
 			  }
 		  ];
@@ -69,7 +72,10 @@ const ProjectList = (props: {selectedProject: ProjectType|undefined, projects: {
 			  return a.name.localeCompare(b.name);
 		  });
 		  for (const project of forSort) {
-			  list.push(<ProjectItem active={selectedProject?.id === project.id} onSelect={(e, project) => onSelect(e, project)} key={project.id} project={project} contextProject={setContextProject} cm={cm} defaultAction={defaultAction} />);
+			  list.push(<ProjectItem
+				  active={selectedProject?.id === project.id} key={project.id} project={project} contextProject={setContextProject} cm={cm}
+				  defaultAction={defaultAction}
+			  />);
 		  }
 		  return (
 			  <div className='ProjectList'>
