@@ -201,6 +201,7 @@ export class PM_App {
 					width         : 300,
 					height        : 600,
 					icon          : this.getAssetPath('icon.png'),
+					type          : 'tray',
 					webPreferences: {
 						preload: app.isPackaged
 								 ? path.join(__dirname, 'preload.js')
@@ -209,8 +210,10 @@ export class PM_App {
 				}
 			);
 			if (this.windowTray) {
-				this.windowTray.loadURL(resolveHtmlPath('index.html')).then(() => console.log('ok'));
-				this.windowTray.webContents.openDevTools()
+				this.windowTray.loadURL(resolveHtmlPath('index.html'), {
+					extraHeaders: 'tray'
+				}).then(() => console.log('ok'));
+				this.windowTray.webContents.openDevTools();
 				trayWindow.setOptions({ tray: this.tray, window: this.windowTray, windowUrl: resolveHtmlPath('index.html') });
 			}
 		}
