@@ -54,30 +54,26 @@ export class PM_App {
 				}
 				store.set('engine.TrayWindowWidth', this.TrayWindowWidth);
 				store.set('engine.TrayWindowHeight', this.TrayWindowHeight);
-				// eslint-disable-next-line promise/no-nesting
 				this.createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
 				this.createTray().then(() => console.log('ok')).catch((err) => console.log(err));
 				app.on('activate', () => {
-					// On macOS it's common to re-create a window in the app when the
-					// dock icon is clicked and there are no other windows open.
 					if (this.mainWindow === null) {
-						// eslint-disable-next-line promise/no-nesting
 						this.createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
 						this.createTray().then(() => console.log('ok')).catch((err) => console.log(err));
 					}
 				});
 			})
 			.catch(console.log);
+		this.app.on('window-all-closed', () => {
+			if (process.platform !== 'darwin') {
+				app.quit();
+			}
+		});
 		this.app.on('before-quit', () => {
 			if (this.tray) this.tray.destroy();
 		});
 		this.app.on('quit', () => {
 			if (process.env.NODE_ENV === 'development') process.exit(0);
-		});
-		this.app.on('window-all-closed', () => {
-			if (process.platform !== 'darwin') {
-				app.quit();
-			}
 		});
 	}
 
