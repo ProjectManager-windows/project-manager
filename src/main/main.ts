@@ -78,9 +78,6 @@ export class PM_App {
 	}
 
 	afterRun() {
-		ipcMain.on('electron-close-tray', async () => {
-			this.windowTray?.close();
-		});
 	}
 
 	beforeRun() {
@@ -198,17 +195,16 @@ export class PM_App {
 	public async createTray() {
 		const screenBounds = screen.getPrimaryDisplay();
 		this.tray          = new Tray(this.getAssetPath('icon.ico'));
-		const contextMenu  = Menu.buildFromTemplate(
-			[
-				{
-					label: 'quit', type: 'normal', click: () => {
-						this.app.quit();
-					}
-				}
-			]
-		);
-
-		// Call this again for Linux because we modified the context menu
+		const contextMenu  = Menu.buildFromTemplate([
+														{
+															label: 'quit', type: 'normal', click: () => {
+																this.app.quit();
+															}
+														}
+													]);
+		ipcMain.on('electron-close-tray', async () => {
+			this.windowTray?.close();
+		});
 		if (this.tray) {
 			this.tray.setToolTip('This is my application.');
 			this.tray.setContextMenu(contextMenu);
