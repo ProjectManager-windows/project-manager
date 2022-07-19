@@ -94,6 +94,13 @@ export class PM_App {
 		IDEs.init();
 	}
 
+	getAssetPath(...paths: string[]): string {
+		const RESOURCES_PATH = app.isPackaged
+							   ? path.join(process.resourcesPath, 'assets')
+							   : path.join(__dirname, '../../assets');
+		return path.join(RESOURCES_PATH, ...paths);
+	};
+
 	async sendRenderEvent(channel: string, ...args: any[]) {
 		return new Promise<void>((resolve, reject) => {
 			const send = (channel: string, ...args: any[]) => {
@@ -118,13 +125,6 @@ export class PM_App {
 			}
 		});
 	}
-
-	getAssetPath(...paths: string[]): string {
-		const RESOURCES_PATH = app.isPackaged
-							   ? path.join(process.resourcesPath, 'assets')
-							   : path.join(__dirname, '../../assets');
-		return path.join(RESOURCES_PATH, ...paths);
-	};
 
 	public async createWindow() {
 		if (this.isDebug) {
