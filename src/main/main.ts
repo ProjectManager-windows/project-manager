@@ -197,13 +197,13 @@ export class PM_App {
 	public async createTray() {
 		const screenBounds = screen.getPrimaryDisplay();
 		this.tray          = new Tray(this.getAssetPath('icon.ico'));
-		const contextMenu  = Menu.buildFromTemplate([
-														{
-															label: 'quit', type: 'normal', click: () => {
-																this.app.quit();
-															}
-														}
-													]);
+		const contextMenu  = Menu.buildFromTemplate(
+			[{
+				label: 'quit', type: 'normal', click: () => {
+					this.app.quit();
+				}
+			}]
+		);
 		ipcMain.on('electron-close-tray', async () => {
 			this.windowTray?.close();
 		});
