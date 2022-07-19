@@ -34,7 +34,8 @@ window.pixel               = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEA
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const container            = document.getElementById('root')!;
 const root                 = createRoot(container);
-if (window.innerWidth < 350) {
+const TrayWindowWidth      = window.electron.store.get('engine.TrayWindowWidth');
+if (window.innerWidth <= TrayWindowWidth + 5) {
 	root.render(<AppTray />);
 } else {
 	root.render(<App />);

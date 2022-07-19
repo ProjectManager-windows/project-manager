@@ -60,12 +60,3 @@ html, body, #root, .App {
 		}
 	}
 }
-#root-tray{
-	.ProjectList {
-		max-height : 100vh;
-		overflow   : auto;
-	}
-	.projectItem .item > div .info{
-		width: 100%;
-	}
-}

@@ -1,14 +1,14 @@
-import { app, BrowserWindow, Menu, shell, Tray, BrowserWindowConstructorOptions, screen } from 'electron';
-import Store                                                                              from 'electron-store';
-import path                                                                               from 'path';
-import { autoUpdater }                                                                    from 'electron-updater';
-import log                                                                                from 'electron-log';
-import MenuBuilder                                                                        from './menu';
-import { resolveHtmlPath }                                                                from './util';
-import Projects                                                                           from './core/Projects/Projects';
-import events                                                                             from './ipcMain';
-import IDEs                                                                               from './core/IDEs/IDEs';
-import trayWindow                                                                         from './TrayWindow';
+import { app, BrowserWindow, BrowserWindowConstructorOptions, ipcMain, Menu, screen, shell, Tray } from 'electron';
+import Store                                                                                       from 'electron-store';
+import path                                                                                        from 'path';
+import { autoUpdater }                                                                             from 'electron-updater';
+import log                                                                                         from 'electron-log';
+import MenuBuilder                                                                                 from './menu';
+import { resolveHtmlPath }                                                                         from './util';
+import Projects                                                                                    from './core/Projects/Projects';
+import events                                                                                      from './ipcMain';
+import IDEs                                                                                        from './core/IDEs/IDEs';
+import { minmax }                                                                                  from '../utills/PM_Math';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -17,6 +17,9 @@ export class PM_App {
 	private isRunning: boolean               = false;
 	private tray: Tray | null                = null;
 	private windowTray: BrowserWindow | null = null;
+	private app: typeof app;
+	private TrayWindowWidth: number          = 300;
+	private TrayWindowHeight: number         = 600;
 
 	private constructor() {
 		this.isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
@@ -25,7 +28,7 @@ export class PM_App {
 			const sourceMapSupport = require('source-map-support');
 			sourceMapSupport.install();
 		}
-
+		this.app = app;
 	}
 
 	static getInstance() {
@@ -37,14 +40,20 @@ export class PM_App {
 
 	run() {
 		this.beforeRun();
-		app
+		this.app
 			.whenReady()
 			.then(() => {
-				const store = new Store();
+				const screenBounds    = screen.getPrimaryDisplay();
+				const widthRatio      = 4;
+				const heightRatio     = 1.6;
+				this.TrayWindowWidth  = Math.round(minmax(screenBounds.workAreaSize.width / widthRatio, 1280 / widthRatio, 2560 / widthRatio));
+				this.TrayWindowHeight = Math.round(minmax(screenBounds.workAreaSize.height / heightRatio, 720 / heightRatio, 1440 / heightRatio));
+				const store           = new Store();
 				if (!store.get('settings.locale')) {
 					store.set('settings.locale', app.getLocale());
 				}
-				store.get('settings.locale');
+				store.set('engine.TrayWindowWidth', this.TrayWindowWidth);
+				store.set('engine.TrayWindowHeight', this.TrayWindowHeight);
 				// eslint-disable-next-line promise/no-nesting
 				this.createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
 				this.createTray().then(() => console.log('ok')).catch((err) => console.log(err));
@@ -59,7 +68,13 @@ export class PM_App {
 				});
 			})
 			.catch(console.log);
-		app.on('window-all-closed', function() {
+		this.app.on('before-quit', () => {
+			if (this.tray) this.tray.destroy();
+		});
+		this.app.on('quit', () => {
+			if (process.env.NODE_ENV === 'development') process.exit(0);
+		});
+		this.app.on('window-all-closed', () => {
 			if (process.platform !== 'darwin') {
 				app.quit();
 			}
@@ -67,7 +82,9 @@ export class PM_App {
 	}
 
 	afterRun() {
-
+		ipcMain.on('electron-close-tray', async () => {
+			this.windowTray?.close();
+		});
 	}
 
 	beforeRun() {
@@ -115,6 +132,7 @@ export class PM_App {
 		}
 		this.mainWindow = new BrowserWindow(
 			{
+				minWidth      : this.TrayWindowWidth + 50,
 				show          : false,
 				width         : 1024,
 				height        : 728,
@@ -127,7 +145,7 @@ export class PM_App {
 				}
 			});
 
-		this.mainWindow.loadURL(resolveHtmlPath('index.html'));
+		this.mainWindow.loadURL(resolveHtmlPath('index.html')).then(r => console.log(r));
 
 		this.mainWindow.on('ready-to-show', () => {
 			if (!this.mainWindow) {
@@ -150,14 +168,14 @@ export class PM_App {
 		menuBuilder.buildMenu();
 
 		// Open urls in the user's browser
-		this.mainWindow.webContents.setWindowOpenHandler((edata) => {
-			shell.openExternal(edata.url);
+		this.mainWindow.webContents.setWindowOpenHandler((data) => {
+			shell.openExternal(data.url).then(r => console.log(r));
 			return { action: 'deny' };
 		});
 
 		// Remove this if your app does not use auto updates
 		// eslint-disable-next-line
-		this.AppUpdater();
+		this.AppUpdater().then(r => console.log(r));
 		return true;
 	}
 
@@ -181,20 +199,18 @@ export class PM_App {
 		return autoUpdater.checkForUpdatesAndNotify();
 	}
 
-
 	public async createTray() {
 		const screenBounds = screen.getPrimaryDisplay();
-
-		const width       = Math.round(screenBounds.workAreaSize.width / 6);
-		const height      = Math.round(screenBounds.workAreaSize.height / 1.8);
-		this.tray         = new Tray(this.getAssetPath('icon.ico'));
-		const contextMenu = Menu.buildFromTemplate([
-													   { label: 'Item1', type: 'radio' },
-													   { label: 'Item2', type: 'radio' }
-												   ]);
-
-		// Make a change to the context menu
-		contextMenu.items[1].checked = false;
+		this.tray          = new Tray(this.getAssetPath('icon.ico'));
+		const contextMenu  = Menu.buildFromTemplate(
+			[
+				{
+					label: 'quit', type: 'normal', click: () => {
+						this.app.quit();
+					}
+				}
+			]
+		);
 
 		// Call this again for Linux because we modified the context menu
 		if (this.tray) {
@@ -202,15 +218,23 @@ export class PM_App {
 			this.tray.setContextMenu(contextMenu);
 			const options: BrowserWindowConstructorOptions = {
 				show          : false,
-				width,
-				height,
+				width         : this.TrayWindowWidth,
+				height        : this.TrayWindowHeight,
 				icon          : this.getAssetPath('icon.png'),
 				type          : 'tray',
 				frame         : false,
+				fullscreenable: false,
+				resizable     : false,
+				useContentSize: true,
+				transparent   : true,
+				kiosk         : true,
+				// hasShadow     : false,
+				alwaysOnTop   : true,
 				webPreferences: {
-					preload: app.isPackaged
-							 ? path.join(__dirname, 'preload.js')
-							 : path.join(__dirname, '../../.erb/dll/preload.js')
+					backgroundThrottling: false,
+					preload             : app.isPackaged
+										  ? path.join(__dirname, 'preload.js')
+										  : path.join(__dirname, '../../.erb/dll/preload.js')
 				}
 			};
 			if (this.mainWindow) {
@@ -218,11 +242,27 @@ export class PM_App {
 			}
 			this.windowTray = new BrowserWindow(options);
 			if (this.windowTray) {
+				this.windowTray.on('blur', () => {
+					if (!this.windowTray) return;
+					if (!this.windowTray.webContents.isDevToolsOpened()) {
+						// this.windowTray.hide();
+					}
+				});
+				this.windowTray.on('close', (event) => {
+					if (!this.windowTray) return;
+					event.preventDefault();
+					this.windowTray.hide();
+				});
 				console.log(screenBounds);
-				this.windowTray.setPosition(screenBounds.workAreaSize.width - width, screenBounds.workAreaSize.height - height, false);
+				this.windowTray.setPosition(screenBounds.workAreaSize.width - this.TrayWindowWidth, screenBounds.workAreaSize.height - this.TrayWindowHeight, false);
 				this.windowTray.loadURL(resolveHtmlPath('index.html')).then(() => console.log('ok')).catch(() => console.log('err'));
-				// this.windowTray.webContents.openDevTools();
-				trayWindow.setOptions({ tray: this.tray, window: this.windowTray, windowUrl: resolveHtmlPath('index.html') });
+				this.windowTray.webContents.openDevTools();
+				this.tray.on('click', () => {
+					if (!this.windowTray || !this.tray) return;
+					const trayBound = this.tray.getBounds();
+					console.log(trayBound);
+					if (this.windowTray) this.windowTray.show();
+				});
 			}
 		}
 	}

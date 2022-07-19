@@ -93,6 +93,10 @@ export const bridge = {
 			ipcRenderer.send('electron-ide-add', property);
 		}
 	},
-	tray       : false
+	tray       : {
+		close(){
+			ipcRenderer.send('electron-close-tray');
+		}
+	}
 };
 contextBridge.exposeInMainWorld('electron', bridge);
