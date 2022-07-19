@@ -144,6 +144,7 @@ function toggleWindow() {
 }
 
 function alignWindow() {
+	return;
 	if (!window) return;
 	const position = calculateWindowPosition();
 	if (!position) return;

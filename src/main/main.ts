@@ -1,14 +1,14 @@
-import { app, BrowserWindow, Menu, shell, Tray } from 'electron';
-import Store                                     from 'electron-store';
-import path                                      from 'path';
-import { autoUpdater }                           from 'electron-updater';
-import log                                       from 'electron-log';
-import MenuBuilder                               from './menu';
-import { resolveHtmlPath }                       from './util';
-import Projects                                  from './core/Projects/Projects';
-import events                                    from './ipcMain';
-import IDEs                                      from './core/IDEs/IDEs';
-import trayWindow                                from './TrayWindow';
+import { app, BrowserWindow, Menu, shell, Tray, BrowserWindowConstructorOptions, screen } from 'electron';
+import Store                                                                              from 'electron-store';
+import path                                                                               from 'path';
+import { autoUpdater }                                                                    from 'electron-updater';
+import log                                                                                from 'electron-log';
+import MenuBuilder                                                                        from './menu';
+import { resolveHtmlPath }                                                                from './util';
+import Projects                                                                           from './core/Projects/Projects';
+import events                                                                             from './ipcMain';
+import IDEs                                                                               from './core/IDEs/IDEs';
+import trayWindow                                                                         from './TrayWindow';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -109,7 +109,7 @@ export class PM_App {
 		return path.join(RESOURCES_PATH, ...paths);
 	};
 
-	private async createWindow() {
+	public async createWindow() {
 		if (this.isDebug) {
 			await this.installExtensions();
 		}
@@ -118,6 +118,7 @@ export class PM_App {
 				show          : false,
 				width         : 1024,
 				height        : 728,
+				type          : 'main',
 				icon          : this.getAssetPath('icon.png'),
 				webPreferences: {
 					preload: app.isPackaged
@@ -182,6 +183,10 @@ export class PM_App {
 
 
 	public async createTray() {
+		const screenBounds = screen.getPrimaryDisplay();
+
+		const width       = Math.round(screenBounds.workAreaSize.width / 6);
+		const height      = Math.round(screenBounds.workAreaSize.height / 1.8);
 		this.tray         = new Tray(this.getAssetPath('icon.ico'));
 		const contextMenu = Menu.buildFromTemplate([
 													   { label: 'Item1', type: 'radio' },
@@ -195,25 +200,28 @@ export class PM_App {
 		if (this.tray) {
 			this.tray.setToolTip('This is my application.');
 			this.tray.setContextMenu(contextMenu);
-			this.windowTray = new BrowserWindow(
-				{
-					show          : false,
-					width         : 300,
-					height        : 600,
-					icon          : this.getAssetPath('icon.png'),
-					type          : 'tray',
-					webPreferences: {
-						preload: app.isPackaged
-								 ? path.join(__dirname, 'preload.js')
-								 : path.join(__dirname, '../../.erb/dll/preload.js')
-					}
+			const options: BrowserWindowConstructorOptions = {
+				show          : false,
+				width,
+				height,
+				icon          : this.getAssetPath('icon.png'),
+				type          : 'tray',
+				frame         : false,
+				webPreferences: {
+					preload: app.isPackaged
+							 ? path.join(__dirname, 'preload.js')
+							 : path.join(__dirname, '../../.erb/dll/preload.js')
 				}
-			);
+			};
+			if (this.mainWindow) {
+				// options.parent = this.mainWindow;
+			}
+			this.windowTray = new BrowserWindow(options);
 			if (this.windowTray) {
-				this.windowTray.loadURL(resolveHtmlPath('index.html'), {
-					extraHeaders: 'tray'
-				}).then(() => console.log('ok'));
-				this.windowTray.webContents.openDevTools();
+				console.log(screenBounds);
+				this.windowTray.setPosition(screenBounds.workAreaSize.width - width, screenBounds.workAreaSize.height - height, false);
+				this.windowTray.loadURL(resolveHtmlPath('index.html')).then(() => console.log('ok')).catch(() => console.log('err'));
+				// this.windowTray.webContents.openDevTools();
 				trayWindow.setOptions({ tray: this.tray, window: this.windowTray, windowUrl: resolveHtmlPath('index.html') });
 			}
 		}
