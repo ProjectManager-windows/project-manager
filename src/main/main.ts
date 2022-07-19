@@ -86,7 +86,7 @@ export class PM_App {
 		// (new Store).clear();
 		events.run();
 		Projects.init();
-		IDEs.init();
+		IDEs.init().then(r => console.log(r));
 	}
 
 	getAssetPath(...paths: string[]): string {
