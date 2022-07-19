@@ -17,7 +17,7 @@ export default function AppTray() {
 		});
 	}, []);
 	const closeTray = () => {
-		window.electron.tray.close()
+		window.electron.tray.close();
 	};
 	return (
 		<div className='App-tray'>

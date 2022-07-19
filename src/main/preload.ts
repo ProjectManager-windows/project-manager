@@ -94,7 +94,7 @@ export const bridge = {
 		}
 	},
 	tray       : {
-		close(){
+		close() {
 			ipcRenderer.send('electron-close-tray');
 		}
 	}
