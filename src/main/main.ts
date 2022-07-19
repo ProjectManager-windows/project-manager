@@ -71,9 +71,11 @@ export class PM_App {
 		});
 		this.app.on('before-quit', () => {
 			if (this.tray) this.tray.destroy();
+			if (this.mainWindow) this.mainWindow.close();
+			if (this.windowTray) this.windowTray.close();
 		});
 		this.app.on('quit', () => {
-			if (process.env.NODE_ENV === 'development') process.exit(0);
+
 		});
 	}
 
@@ -234,6 +236,10 @@ export class PM_App {
 			}
 			this.windowTray = new BrowserWindow(options);
 			if (this.windowTray) {
+				this.windowTray.loadURL(resolveHtmlPath('index.html')).then(() => console.log('ok')).catch(() => console.log('err'));
+				this.windowTray.setSkipTaskbar(true);
+				this.windowTray.setPosition(screenBounds.workAreaSize.width - this.TrayWindowWidth, screenBounds.workAreaSize.height - this.TrayWindowHeight, false);
+				this.windowTray.webContents.openDevTools();
 				this.windowTray.on('blur', () => {
 					if (!this.windowTray) return;
 					if (!this.windowTray.webContents.isDevToolsOpened()) {
@@ -245,10 +251,6 @@ export class PM_App {
 					event.preventDefault();
 					this.windowTray.hide();
 				});
-				console.log(screenBounds);
-				this.windowTray.setPosition(screenBounds.workAreaSize.width - this.TrayWindowWidth, screenBounds.workAreaSize.height - this.TrayWindowHeight, false);
-				this.windowTray.loadURL(resolveHtmlPath('index.html')).then(() => console.log('ok')).catch(() => console.log('err'));
-				this.windowTray.webContents.openDevTools();
 				this.tray.on('click', () => {
 					if (!this.windowTray || !this.tray) return;
 					const trayBound = this.tray.getBounds();

@@ -1,4 +1,7 @@
 .App-tray {
+	background-color: transparent;
+	border : 1px solid var(--primary-color);
+
 	.close {
 		font-size : 1.2em;
 		position  : absolute;
