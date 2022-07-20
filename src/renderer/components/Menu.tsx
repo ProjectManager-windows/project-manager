@@ -1,6 +1,5 @@
 import '../styles/menu.scss';
 import { Menubar }                                                                                             from 'primereact/menubar';
-import { InputText }                                                                                           from 'primereact/inputtext';
 import logo                                                                                                    from '/assets/icon.svg';
 import React                                                                                                   from 'react';
 import { useTranslation }                                                                                      from 'react-i18next';
@@ -30,8 +29,8 @@ const Menu = () => {
 							}
 						},
 						{
-							label: t('select folder').ucfirst(),
-							icon : <FontAwesomeIcon className='p-menuitem-icon' icon={faFolder} />,
+							label  : t('select folder').ucfirst(),
+							icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faFolder} />,
 							command: () => {
 								window.electron.projects.add();
 							}
@@ -53,7 +52,7 @@ const Menu = () => {
 					label  : t('settings').ucfirst(),
 					icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faGear} />,
 					command: () => {
-						if (location.pathname != '/settings') navigate('/settings');
+						if (location.pathname !== '/settings') navigate('/settings');
 					}
 				}
 			]
@@ -85,7 +84,7 @@ const Menu = () => {
 			label  : t('IDEs').ucfirst(),
 			icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faMicrochip} />,
 			command: () => {
-				if (location.pathname != '/ides') navigate('/ides');
+				if (location.pathname !== '/ides') navigate('/ides');
 			}
 		},
 		{
@@ -134,10 +133,7 @@ const Menu = () => {
 			marginRight: '5px'
 		}
 	});
-	const end   = <InputText
-		placeholder='Search' type='text' onChange={() => {
-	}}
-	/>;
+	const end   = <div />;
 
 	return (
 		<div className='pm-menu'>

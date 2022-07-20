@@ -38,7 +38,7 @@ export const useLogo = (props: { type: 'ide' | 'project' | 'technology', name: s
 </svg>
 		`.trim())}`;
 		return { background: `${newColor} url(${img}) no-repeat scroll 50% 50%`, ...newStyle };
-	}, [type, name, color, logo, style]);
+	}, [name, color, logo, style]);
 	return (<img src={window.pixel} className={`logo ${type}-${name} ${className || ''}`} style={image} alt={name} />);
 
 };

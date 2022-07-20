@@ -97,28 +97,54 @@ export class PM_App {
 	};
 
 	async sendRenderEvent(channel: string, ...args: any[]) {
-		return new Promise<void>((resolve, reject) => {
-			const send = (channel: string, ...args: any[]) => {
-				if (this.mainWindow) {
-					this.mainWindow.webContents.send(channel, ...args);
-					resolve();
-				}
-			};
-			if (this.mainWindow && this.isRunning) {
-				send(channel, ...args);
-			} else {
-				let trys       = 0;
-				const interval = setInterval(() => {
-					trys++;
-					if (trys < 10) {
-						send(channel, ...args);
-					} else {
-						reject();
-						clearInterval(interval);
-					}
-				}, 200);
-			}
-		});
+
+		return Promise.all([
+							   new Promise<void>((resolve, reject) => {
+								   const send = (channel: string, ...args: any[]) => {
+									   if (this.mainWindow) {
+										   this.mainWindow.webContents.send(channel, ...args);
+										   resolve();
+									   }
+								   };
+								   if (this.mainWindow && this.isRunning) {
+									   send(channel, ...args);
+								   } else {
+									   let trys       = 0;
+									   const interval = setInterval(() => {
+										   trys++;
+										   if (trys < 10) {
+											   send(channel, ...args);
+										   } else {
+											   reject();
+											   clearInterval(interval);
+										   }
+									   }, 200);
+								   }
+							   }),
+							   new Promise<void>((resolve, reject) => {
+								   const send = (channel: string, ...args: any[]) => {
+									   if (this.windowTray) {
+										   this.windowTray.webContents.send(channel, ...args);
+										   resolve();
+									   }
+								   };
+								   if (this.windowTray && this.isRunning) {
+									   send(channel, ...args);
+								   } else {
+									   let trys       = 0;
+									   const interval = setInterval(() => {
+										   trys++;
+										   if (trys < 10) {
+											   send(channel, ...args);
+										   } else {
+											   reject();
+											   clearInterval(interval);
+										   }
+									   }, 200);
+								   }
+							   })
+						   ]
+		);
 	}
 
 	public async createWindow() {

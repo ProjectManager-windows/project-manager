@@ -5,6 +5,8 @@ import ProjectList             from '../components/project/ProjectList';
 import { ProjectType }         from '../../types/project';
 import TechnologiesList        from '../components/technologies/TechnologiesList';
 import { ProjectContext }      from '../components/context/ProjectContext';
+import { InputText }           from 'primereact/inputtext';
+import useSearch               from '../components/hooks/useSearch';
 
 const Project = () => {
 	const [projects, setProjects]          = useState(window.electron.projects.getAll());
@@ -16,19 +18,20 @@ const Project = () => {
 			setProjects(window.electron.projects.getAll());
 		});
 	}, []);
-	// const projectSelect      = (e: React.MouseEvent<HTMLElement>, project: ProjectType) => {
-	// 	e.preventDefault();
-	// 	selectProject(project);
-	// };
-	// const TechnologiesSelect = (element: JSX.Element) => {
-	// 	setView(element);
-	// };
+	const [searchString, setSearch] = useState('');
+	const projectList               = useSearch({ projects, searchString });
 	return (
-		<ProjectContext.Provider value={{ projects, setProjects, selectedProject, selectProject, view, setView, technology, setTechnology }}>
+		<ProjectContext.Provider value={{ projects: projectList, setProjects, selectedProject, selectProject, view, setView, technology, setTechnology }}>
 			<div className='project'>
 				<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
 				<div className='grid'>
 					<div className='projects'>
+						<div className='search'>
+						 <span className='p-input-icon-left'>
+							<i className='pi pi-search' />
+							<InputText className='search-input' value={searchString} onChange={(e) => setSearch(e.target.value)} placeholder='Search' />
+						</span>
+						</div>
 						<ProjectList />
 					</div>
 					<div className='technologies'>

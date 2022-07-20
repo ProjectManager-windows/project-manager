@@ -81,7 +81,7 @@ const ProjectList = () => {
 		  }
 		  return (
 			  <div className='ProjectList'>
-				  <ContextMenu model={items} ref={cm}></ContextMenu>
+				  <ContextMenu model={items} ref={cm} />
 				  <ul className='list'>
 					  {list}
 				  </ul>
