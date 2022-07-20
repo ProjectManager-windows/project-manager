@@ -158,30 +158,34 @@ class PM_FileSystem {
 	}
 
 	static logoToBase64(logo: string) {
-		if (!logo) {
-			return '';
-		}
-		const ext  = path.extname(logo);
-		const data = fss.readFileSync(logo);
-		switch (ext.toLowerCase()) {
-			case '.svg':
-				return `data:image/svg+xml;base64,${data.toString('base64')}`;
-			case '.jpg':
-			case '.jpeg':
-				return `data:image/jpg;base64,${data.toString('base64')}`;
-			case '.png':
-				return `data:image/png;base64,${data.toString('base64')}`;
-			case '.ico':
-				return `data:image/ico;base64,${data.toString('base64')}`;
-			case '.gif':
-				return `data:image/gif;base64,${data.toString('base64')}`;
-			case '.webp':
-				return `data:image/gif;base64,${data.toString('base64')}`;
-			case '.base64':
-			case '.b64':
-				return data.toString();
-			default:
+		try {
+			if (!logo) {
 				return '';
+			}
+			const ext  = path.extname(logo);
+			const data = fss.readFileSync(logo);
+			switch (ext.toLowerCase()) {
+				case '.svg':
+					return `data:image/svg+xml;base64,${data.toString('base64')}`;
+				case '.jpg':
+				case '.jpeg':
+					return `data:image/jpg;base64,${data.toString('base64')}`;
+				case '.png':
+					return `data:image/png;base64,${data.toString('base64')}`;
+				case '.ico':
+					return `data:image/ico;base64,${data.toString('base64')}`;
+				case '.gif':
+					return `data:image/gif;base64,${data.toString('base64')}`;
+				case '.webp':
+					return `data:image/gif;base64,${data.toString('base64')}`;
+				case '.base64':
+				case '.b64':
+					return data.toString();
+				default:
+					return '';
+			}
+		} catch (e) {
+			return '';
 		}
 	}
 
