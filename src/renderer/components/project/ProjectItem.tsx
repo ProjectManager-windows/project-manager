@@ -16,6 +16,14 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.M
 				  color: project?.color,
 				  logo : project?.logo
 			  });
+		  const ides                                                   = window.electron.ides.getAll();
+		  const ideLogo                                                = useLogo(
+			  {
+				  type : 'ide',
+				  name : project.ide ? ides[project.ide].name : '',
+				  color: project.ide ? ides[project.ide]?.color : '',
+				  logo : project.ide ? ides[project.ide]?.logo : ''
+			  });
 		  return (
 			  <div className='projectItem ' id={`project-item-${project.id}`}>
 				  <li
@@ -27,13 +35,18 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.M
 						  cm.current.show(e);
 					  }}
 					  onDoubleClick={() => defaultAction(project.id)}
-					  onClick={() =>{ if(selectProject) selectProject(project)}}
+					  onClick={() => {
+						  if (selectProject) selectProject(project);
+					  }}
 				  >
 					  <Ripple />
 					  <div>
 						  {logo}
 						  <div className='info'>
 							  <div className='tp name' data-pr-tooltip={project.name}>{project.name}</div>
+							  {project.ide ? <div className='tp ide' data-pr-tooltip={ides[project.ide].name}>
+								  {ideLogo}
+							  </div> : ''}
 							  <LanguagesBar className='languageBar' stats={project.stats} />
 						  </div>
 					  </div>

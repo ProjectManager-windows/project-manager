@@ -8,6 +8,8 @@
 	}
 
 	.item {
+		position : relative;
+
 		> div {
 			display         : flex;
 			height          : 40px;
@@ -38,6 +40,18 @@
 					text-overflow : clip;
 					line-height   : 1.3em;
 					margin-bottom : 5px;
+				}
+
+				.ide {
+					right    : 0;
+					top      : 0;
+					position : absolute;
+
+					img{
+						width: 20px;
+						height: 20px;
+						background-size : 70% auto !important;
+					}
 				}
 
 				.languageBar {
