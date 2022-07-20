@@ -1,6 +1,10 @@
 .App-tray {
-	background-color: transparent;
-	border : 1px solid var(--primary-color);
+	background-color : transparent;
+	border           : 1px solid var(--primary-color);
+
+	.ProjectList {
+		height : 100%;
+	}
 
 	.close {
 		font-size : 1.2em;

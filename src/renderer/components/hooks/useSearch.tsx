@@ -19,6 +19,6 @@ export const useSearch = (props: { projects: { [key: string]: ProjectType }, sea
 			return search.search(searchString);
 		}
 		return projectList;
-	}, [projectList, search]);
+	}, [search, searchString]);
 };
 export default useSearch;

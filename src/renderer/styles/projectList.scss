@@ -1,6 +1,6 @@
 .ProjectList {
 	font-family : var(--font-family);
-	height: 100%;
+	height: calc(100% - 50px);
 	.header {
 		margin-bottom : 10px;
 	}

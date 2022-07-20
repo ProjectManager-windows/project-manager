@@ -97,15 +97,15 @@
 			background-color : var(--primary-color-text);
 
 			.header {
-				display         : flex;
-				font-size       : 2em;
-				padding         : 0;
-				margin          : 0;
-				align-items     : center;
-				flex-wrap       : nowrap;
-				flex-direction  : row;
-				align-content   : center;
-				justify-content : space-between;
+				display         : flex !important;
+				font-size       : 2em !important;
+				padding         : 0 !important;
+				margin          : 0 !important;
+				align-items     : flex-start !important;
+				flex-wrap       : nowrap !important;
+				flex-direction  : column !important;
+				align-content   : center !important;
+				justify-content : space-between !important;
 
 				img {
 					width         : 40px;
