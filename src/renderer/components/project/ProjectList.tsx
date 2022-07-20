@@ -79,11 +79,21 @@ const ProjectList = () => {
 				  defaultAction={defaultAction}
 			  />);
 		  }
+		  if (list.length > 0) {
+			  return (
+				  <div className='ProjectList'>
+					  <ContextMenu model={items} ref={cm} />
+					  <ul className='list'>
+						  {list}
+					  </ul>
+				  </div>
+			  );
+		  }
 		  return (
 			  <div className='ProjectList'>
 				  <ContextMenu model={items} ref={cm} />
 				  <ul className='list'>
-					  {list}
+					  {t('projects not founded')}
 				  </ul>
 			  </div>
 		  );
