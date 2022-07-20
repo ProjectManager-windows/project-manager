@@ -26,7 +26,7 @@ const SettingInput = (props: { settingKey: string, type: settingType, setVal?: (
 	// eslint-disable-next-line no-useless-concat
 	const [className, setClassName]                     = useState<string>(`SettingInput SettingInput-${type} noChanged`);
 	useEffect(() => {
-		setOldValue(window.electron.settings.get(settingKey));
+		setOldValue(window.electron.settings.get(settingKey) ?? null);
 	}, [settingKey]);
 	const id     = useMemo(() => guidGenerator(), []);
 	const commit = (Val: any) => {
@@ -91,7 +91,8 @@ const SettingInput = (props: { settingKey: string, type: settingType, setVal?: (
 									  : <i className='pi  pi-check' />
 						}
 							<InputTextarea
-								autoResize id={id} value={newValue}
+								autoResize id={id}
+								value={newValue|| ''}
 								onChange={e => {
 									setNewValue(e.target.value);
 								}}
@@ -116,7 +117,7 @@ const SettingInput = (props: { settingKey: string, type: settingType, setVal?: (
 									  : <i className='pi  pi-check' />
 						}
 							<InputNumber
-								id={id} value={newValue}
+								id={id} value={newValue || 0}
 								onChange={e => {
 									setNewValue(e.value);
 								}}
@@ -141,7 +142,7 @@ const SettingInput = (props: { settingKey: string, type: settingType, setVal?: (
 									  : <i className='pi  pi-check' />
 						}
 							<InputNumber
-								id={id} value={newValue} mode='decimal' minFractionDigits={0} maxFractionDigits={5}
+								id={id} value={newValue || 0} mode='decimal' minFractionDigits={0} maxFractionDigits={5}
 								onChange={e => {
 									setNewValue(e.value);
 								}}
@@ -200,7 +201,7 @@ const SettingInput = (props: { settingKey: string, type: settingType, setVal?: (
 					<div className='input'>
 						<ColorPicker
 							id={id + 'p'}
-							value={newValue}
+							value={newValue || '#ffffff'}
 							onChange={e => {
 								if (typeof e.value === 'string') {
 									setNewValue('#' + e.value.replaceAll('#', ''));
@@ -237,7 +238,7 @@ const SettingInput = (props: { settingKey: string, type: settingType, setVal?: (
 								}
 								<InputText
 									id={id}
-									value={newValue}
+									value={newValue || ''}
 									onChange={e => {
 										setNewValue(e.target.value);
 									}}

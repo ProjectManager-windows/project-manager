@@ -28,6 +28,7 @@ export interface ProjectType {
 	color?: string;
 	id: number;
 	name: string;
+	description: string;
 	stats?: { [key: string]: number };
 	path: string; // unique identifier
 	ide?: number;

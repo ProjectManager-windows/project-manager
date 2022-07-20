@@ -6,15 +6,19 @@ export const useSearch = (props: { projects: { [key: string]: ProjectType }, sea
 	const { projects, searchString } = props;
 	const projectList                = Object.values(projects);
 
+	const search = useMemo(() => {
+		const search = new JsSearch.Search('id');
+		search.addIndex('name');
+		search.addIndex('description');
+		search.addDocuments(projectList);
+		return search;
+	}, [projectList]);
+
 	return useMemo(() => {
 		if (searchString) {
-			const search = new JsSearch.Search('id');
-			search.addIndex('name');
-			search.addIndex('path');
-			search.addDocuments(projectList);
 			return search.search(searchString);
 		}
 		return projectList;
-	}, [projectList, searchString]);
+	}, [projectList, search]);
 };
 export default useSearch;

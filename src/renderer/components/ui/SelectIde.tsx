@@ -3,7 +3,7 @@ import '../../styles/SelectIde.scss';
 import { useEffect, useState } from 'react';
 import useLogo                 from '../hooks/useLogo';
 
-const SelectIde = (props: { id: any, value?: number, setVal?: (value: any) => void }) => {
+const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void }) => {
 	const { value, setVal, id }   = props;
 	const [newValue, setNewValue] = useState<any>();
 	useEffect(() => {

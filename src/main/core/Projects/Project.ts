@@ -18,12 +18,14 @@ export class Project extends Item {
 		'name',// string
 		'logo',// string
 		'logoBaseName',// string
-		'color'// string
+		'color',// string
+		'description'// string
 	];
 
 	init() {
 		this.setVal('logo', '', true);
 		this.setVal('name', '', true);
+		this.setVal('description', '', true);
 	}
 
 	afterInit(data: any) {
