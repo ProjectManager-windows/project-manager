@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-export const useCommit = <T, >(initState: T, change: (value: T) => void) => {
-	const [state, setState]         = useState<T>();
+export const useCommit = <T, >(initState: T, change: (value: T) => void):[T,(value:T)=>void,(value?:T)=>void,boolean] => {
+	const [state, setState]         = useState<T>(initState);
 	const [isChanged, setIsChanged] = useState(false);
 	useEffect(() => {
 		setState(initState);

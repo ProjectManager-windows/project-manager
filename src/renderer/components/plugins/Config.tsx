@@ -29,6 +29,10 @@ const Config = (props: { project: ProjectType }) => {
 			</div>
 			<hr />
 			<table>
+				<colgroup>
+					<col style={{ width: '50%' }} />
+					<col style={{ width: '50%' }} />
+				</colgroup>
 				<thead/>
 				<tbody>
 				<tr>
@@ -68,7 +72,7 @@ const Config = (props: { project: ProjectType }) => {
 										setColor(`#${String(e.value).replaceAll('#', '')}`);
 									}
 								}}
-								onMouseUp={e => commitColor()}
+								onMouseUp={() => commitColor()}
 
 							/>
 							<span
@@ -103,6 +107,7 @@ const Config = (props: { project: ProjectType }) => {
 					</td>
 					<td>
 						<Button
+							style={{ width: 'calc(100% - 35px)' }}
 							onClick={() => {
 								window.electron.projects.changeLogo(project.id);
 							}}

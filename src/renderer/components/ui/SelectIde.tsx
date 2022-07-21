@@ -11,7 +11,7 @@ const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void 
 	}, [value, id]);
 	const data         = window.electron.ides.getAll();
 	const IDEs         = Object.values(data);
-	const defaultIdeId = window.electron.settings.get('defaultIde')
+	const defaultIdeId = window.electron.settings.get('defaultIde');
 
 	if (defaultIdeId) {
 		IDEs.unshift({
@@ -20,7 +20,7 @@ const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void 
 						 logo : data[defaultIdeId].logo,
 						 color: data[defaultIdeId].color
 					 });
-	}else{
+	} else {
 		IDEs.unshift({
 						 id   : 0,
 						 name : `(default)`,
@@ -56,12 +56,12 @@ const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void 
 					<div>{`${data[defaultIdeId].name} (default)`}</div>
 				</div>
 			);
-		}else{
+		} else {
 			const logo = useLogo({
 									 type : 'ide',
-									 name : "default",
+									 name : 'default',
 									 logo : window.pixel,
-									 color: "transparent"
+									 color: 'transparent'
 								 });
 			return (
 				<div className='ide-item ide-item-value'>
@@ -93,6 +93,7 @@ const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void 
 	return (
 		<div className='SelectIde'>
 			<Dropdown
+				style={{ width: 'calc(100% - 35px)' }}
 				options={IDEs}
 				optionLabel='name'
 				value={newValue}
