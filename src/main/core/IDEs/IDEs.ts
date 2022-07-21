@@ -1,8 +1,8 @@
+import { ipcMain }  from 'electron';
 import Collection   from '../Storage/Collection';
 import { IDE }      from './IDE';
 import PM_Storage   from '../Storage/PM_Storage';
 import { ItemType } from '../Storage/Item';
-import { ipcMain }  from 'electron';
 import editors      from '../../components/IDEs';
 import Projects     from '../Projects/Projects';
 import Settings     from '../Settings';

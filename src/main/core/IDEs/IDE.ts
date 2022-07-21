@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
-import { Item }    from '../Storage/Item';
 import os          from 'os';
 import { exec }    from 'child_process';
 import { shell }   from 'electron';
+import { Item }    from '../Storage/Item';
 import { Project } from '../Projects/Project';
 
 export class IDE extends Item {

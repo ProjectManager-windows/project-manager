@@ -1,10 +1,10 @@
-import React, { useContext, useMemo } from 'react';
-import { Ripple }                     from 'primereact/ripple';
-import { ProjectType }                from '../../../types/project';
-import LanguagesBar                   from './LanguagesBar';
-import useLogo                        from '../hooks/useLogo';
+import React, { useContext } from 'react';
+import { Ripple }            from 'primereact/ripple';
+import { ProjectType }       from '../../../types/project';
+import LanguagesBar          from './LanguagesBar';
+import useLogo               from '../hooks/useLogo';
 import '../../styles/projectItem.scss';
-import { ProjectContext }             from '../context/ProjectContext';
+import { ProjectContext }    from '../context/ProjectContext';
 
 const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.MutableRefObject<any>, defaultAction: (id: number) => void, contextProject: (value: ProjectType) => void }) => {
 		  const { selectProject }                                      = useContext(ProjectContext);
