@@ -7,7 +7,6 @@ import { ProjectContext }        from '../context/ProjectContext';
 
 const TechnologiesList = () => {
 	const { selectedProject, technology, setTechnology, setView } = useContext(ProjectContext);
-
 	useEffect(() => {
 		if (selectedProject && technology) {
 			let element = (<h1>{technology} - {selectedProject?.name}</h1>);
@@ -18,11 +17,11 @@ const TechnologiesList = () => {
 				default:
 					break;
 			}
-			setView(element);
+			if (setView) setView(element);
 		}
 	}, [selectedProject, technology]);
 	const select = (name: string) => {
-		setTechnology(name);
+		if (setTechnology) setTechnology(name);
 	};
 	if (selectedProject) {
 		return (
@@ -35,8 +34,7 @@ const TechnologiesList = () => {
 	}
 	return (
 		<div className='TechnologiesList'>
-			<ul className='list'>
-			</ul>
+			<ul className='list'/>
 		</div>
 	);
 };
