@@ -16,6 +16,6 @@ export class Cmd extends Terminal {
 	}
 
 	async execute(project: Project): Promise<void> {
-		exec(`start cmd.exe /K "cd ${project.getVal('path')} /U"`);
+		exec(`start cmd.exe /K cd "${project.getVal('path')}"`);
 	}
 }
