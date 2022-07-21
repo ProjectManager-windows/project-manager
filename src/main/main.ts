@@ -166,7 +166,7 @@ export class PM_App {
 				}
 			});
 
-		this.mainWindow.loadURL(resolveHtmlPath('index.html')).then(r => console.log(r));
+		this.mainWindow.loadURL(resolveHtmlPath('index.html')).then(r => console.log(r)).catch(r => console.log(r));
 
 		this.mainWindow.on('ready-to-show', () => {
 			if (!this.mainWindow) {
@@ -181,6 +181,10 @@ export class PM_App {
 			}
 		});
 
+		this.mainWindow.on('close', (event) => {
+			event.preventDefault();
+			if (this.mainWindow) this.mainWindow.hide();
+		});
 		this.mainWindow.on('closed', () => {
 			this.mainWindow = null;
 		});
@@ -190,7 +194,7 @@ export class PM_App {
 
 		// Open urls in the user's browser
 		this.mainWindow.webContents.setWindowOpenHandler((data) => {
-			shell.openExternal(data.url).then(r => console.log(r));
+			shell.openExternal(data.url).then(r => console.log(r)).catch(r => console.log(r));
 			return { action: 'deny' };
 		});
 
@@ -224,11 +228,18 @@ export class PM_App {
 		const screenBounds = screen.getPrimaryDisplay();
 		this.tray          = new Tray(this.getAssetPath('icon.ico'));
 		const contextMenu  = Menu.buildFromTemplate(
-			[{
-				label: 'quit', type: 'normal', click: () => {
-					this.app.quit();
+			[
+				{
+					label: 'quit', type: 'normal', click: () => {
+						this.app.quit();
+					}
+				},
+				{
+					label: 'open', type: 'normal', click: () => {
+						if (this.mainWindow && !this.mainWindow.isVisible()) this.mainWindow.show();
+					}
 				}
-			}]
+			]
 		);
 		ipcMain.on('electron-close-tray', async () => {
 			this.windowTray?.close();
@@ -279,9 +290,16 @@ export class PM_App {
 				});
 				this.tray.on('click', () => {
 					if (!this.windowTray || !this.tray) return;
-					const trayBound = this.tray.getBounds();
-					console.log(trayBound);
-					if (this.windowTray) this.windowTray.show();
+					if (this.windowTray) {
+						if (!this.windowTray.isVisible()) {
+							this.windowTray.show();
+						} else {
+							this.windowTray.hide();
+						}
+					}
+				});
+				this.tray.on('double-click', () => {
+					if (this.mainWindow && !this.mainWindow.isVisible()) this.mainWindow.show();
 				});
 			}
 		}
