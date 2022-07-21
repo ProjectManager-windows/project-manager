@@ -1,13 +1,13 @@
 import { MemoryRouter as Router, Route, Routes } from 'react-router-dom';
+import { Toast }                                 from 'primereact/toast';
+import { useRef }                                from 'react';
 import Footer                                    from './components/Footer';
 import Project                                   from './pages/Project';
 import Settings                                  from './pages/Settings';
 import './styles/App.scss';
 import Ides                                      from './pages/Ides';
-import Menu                                      from './components/menu';
+import Menu                                      from './components/Menu';
 import { AppContext }                            from './components/context/AppContext';
-import { useRef }                                from 'react';
-import { Toast }                                 from 'primereact/toast';
 
 export default function App() {
 	const toast = useRef(null);
