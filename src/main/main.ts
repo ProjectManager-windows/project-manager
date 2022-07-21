@@ -86,7 +86,7 @@ export class PM_App {
 		// (new Store).clear();
 		events.run();
 		Projects.init();
-		IDEs.init().then(r => console.log(r));
+		IDEs.init().then(r => console.log(r)).catch(r => console.log(r));
 	}
 
 	getAssetPath(...paths: string[]): string {
@@ -290,5 +290,6 @@ export class PM_App {
 }
 
 const APP = PM_App.getInstance();
+Object.assign(console, log.functions);
 APP.run();
 export default APP;

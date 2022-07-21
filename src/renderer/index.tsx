@@ -35,6 +35,7 @@ window.pixel               = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEA
 const container            = document.getElementById('root')!;
 const root                 = createRoot(container);
 const TrayWindowWidth      = window.electron.store.get('engine.TrayWindowWidth');
+Object.assign(console, window.electron.log.functions);
 if (window.innerWidth <= TrayWindowWidth + 5) {
 	root.render(<AppTray />);
 } else {

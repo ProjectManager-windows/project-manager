@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import log                                              from 'electron-log';
 
 export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'test';
 
@@ -97,6 +98,8 @@ export const bridge = {
 		close() {
 			ipcRenderer.send('electron-close-tray');
 		}
-	}
+	},
+	log        : log
 };
+Object.assign(console, log.functions);
 contextBridge.exposeInMainWorld('electron', bridge);
