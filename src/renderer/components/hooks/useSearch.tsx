@@ -2,7 +2,7 @@ import { useMemo }     from 'react';
 import * as JsSearch   from 'js-search';
 import { ProjectType } from '../../../types/project';
 
-export const useSearch = (props: { projects: { [key: string]: ProjectType }, searchString: string }) => {
+export const useSearch = (props: { projects: { [key: string]: ProjectType }, searchString: string }):ProjectType[] => {
 	const { projects, searchString } = props;
 	const projectList                = Object.values(projects);
 
@@ -16,9 +16,9 @@ export const useSearch = (props: { projects: { [key: string]: ProjectType }, sea
 
 	return useMemo(() => {
 		if (searchString) {
-			return search.search(searchString);
+			return search.search(searchString) as ProjectType[];
 		}
 		return projectList;
-	}, [search, searchString]);
+	}, [projectList, search, searchString]);
 };
 export default useSearch;

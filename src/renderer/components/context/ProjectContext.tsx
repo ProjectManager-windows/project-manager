@@ -1,7 +1,8 @@
 import { createContext } from 'react';
+import { ProjectType }   from '../../../types/project';
 
 export const ProjectContext = createContext({
-												projects       : {},
+												projects       : [],
 												setProjects    : () => {
 												},
 												selectedProject: {},
@@ -12,9 +13,10 @@ export const ProjectContext = createContext({
 												},
 												technology     : '',
 												setTechnology  : () => {
-												}
+												},
+												ides           : {}
 											} as {
-												projects: { [key: string]: any },
+												projects: ProjectType[],
 												setProjects?: (value: { [key: string]: any }) => void,
 												selectedProject?: any,
 												selectProject?: (value: any) => void,
@@ -22,5 +24,6 @@ export const ProjectContext = createContext({
 												setView?: (value: any) => void,
 												technology?: string,
 												setTechnology?: (value: string) => void,
+												ides?: { [key: string]: any },
 											}
 );
