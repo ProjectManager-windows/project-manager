@@ -38,7 +38,7 @@ const Config = (props: { project: ProjectType }) => {
 					<td>
 						 <span className='p-input-icon-right'>
                     		<i className={`pi ${isChangedName ? 'pi-spin pi-spinner' : 'pi-check'}`} />
-							<InputText style={{ width: '100%' }} value={name} onChange={e => setName(e.target.value)} onBlur={e => commitName(e.target.value)} />
+							<InputText style={{ width: '100%' }} value={name || ''} onChange={e => setName(e.target.value)} onBlur={e => commitName(e.target.value)} />
 						 </span>
 					</td>
 				</tr>
@@ -49,7 +49,7 @@ const Config = (props: { project: ProjectType }) => {
 					<td>
 						 <span className='p-input-icon-right'>
                     		<i className={`pi ${isChangedDescription ? 'pi-spin pi-spinner' : 'pi-check'}`} />
-							<InputText style={{ width: '100%' }} value={description} onChange={e => setDescription(e.target.value)} onBlur={e => commitDescription(e.target.value)} />
+							<InputText style={{ width: '100%' }} value={description || ''} onChange={e => setDescription(e.target.value)} onBlur={e => commitDescription(e.target.value)} />
 						</span>
 					</td>
 				</tr>

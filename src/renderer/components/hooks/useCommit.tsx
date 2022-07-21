@@ -4,12 +4,7 @@ export const useCommit = <T, >(initState: T, change: (value: T) => void) => {
 	const [state, setState]         = useState<T>();
 	const [isChanged, setIsChanged] = useState(false);
 	useEffect(() => {
-		if(initState !== undefined) {
-			setState(initState);
-		}else{
-			// @ts-ignore
-			setState(null);
-		}
+		setState(initState);
 	}, [initState]);
 
 
@@ -23,12 +18,12 @@ export const useCommit = <T, >(initState: T, change: (value: T) => void) => {
 	}
 
 	function commit(value?: T) {
-		if(value === undefined) {
-			// @ts-ignore
-			change(state);
-			setIsChanged(false);
-		}else {
-			setState(value);
+		if (value === undefined) {
+			if (state) {
+				change(state);
+				setIsChanged(false);
+			}
+		} else {
 			change(value);
 			setIsChanged(false);
 		}
