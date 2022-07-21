@@ -10,7 +10,16 @@ export interface IDEType {
 	isInstalled: () => Promise<boolean>;
 	cmd: string;
 }
-
+export interface TerminalType {
+	color: string;
+	id: number;
+	name: string;
+	logo: string;
+	path: string;
+	execute: (Project: ProjectType) => void;
+	isInstalled: () => Promise<boolean>;
+	cmd: string;
+}
 export interface TechnologyType {
 	id: number;
 	name: string;

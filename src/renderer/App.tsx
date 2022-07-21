@@ -8,6 +8,7 @@ import './styles/App.scss';
 import Ides                                      from './pages/Ides';
 import Menu                                      from './components/Menu';
 import { AppContext }                            from './components/context/AppContext';
+import Terminals                                 from './pages/Teminals';
 
 export default function App() {
 	const toast = useRef(null);
@@ -22,6 +23,7 @@ export default function App() {
 							<Route path='/' element={<Project />} />
 							<Route path='/settings' element={<Settings />} />
 							<Route path='/ides' element={<Ides />} />
+							<Route path='/terminals' element={<Terminals />} />
 						</Routes>
 					</div>
 					<Footer />

@@ -1,11 +1,11 @@
 import '../styles/menu.scss';
-import { Menubar }                                                                                             from 'primereact/menubar';
-import logo                                                                                                    from '/assets/icon.svg';
-import React                                                                                                   from 'react';
-import { useTranslation }                                                                                      from 'react-i18next';
-import { FontAwesomeIcon }                                                                                     from '@fortawesome/react-fontawesome';
-import { faArrowUpRightFromSquare, faFile, faFolder, faGear, faMagnifyingGlass, faMicrochip, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { useLocation, useNavigate }                                                                            from 'react-router-dom';
+import { Menubar }                                                                                                         from 'primereact/menubar';
+import React                                                                                                               from 'react';
+import { useTranslation }                                                                                                  from 'react-i18next';
+import { FontAwesomeIcon }                                                                                                 from '@fortawesome/react-fontawesome';
+import { faArrowUpRightFromSquare, faFile, faFolder, faGear, faMagnifyingGlass, faMicrochip, faPlus, faTerminal, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useLocation, useNavigate }                                                                                        from 'react-router-dom';
+import logo                                                                                                                from '../../../assets/icon.svg';
 
 const Menu = () => {
 	const navigate = useNavigate();
@@ -85,6 +85,13 @@ const Menu = () => {
 			icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faMicrochip} />,
 			command: () => {
 				if (location.pathname !== '/ides') navigate('/ides');
+			}
+		},
+		{
+			label  : t('terminals').ucfirst(),
+			icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faTerminal} />,
+			command: () => {
+				if (location.pathname !== '/terminals') navigate('/terminals');
 			}
 		},
 		{

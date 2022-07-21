@@ -1,7 +1,7 @@
 import i18n                 from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import en                   from '../../../locale/common/en.json';
-import ru                   from '../../../locale/common/ru.json';
+import en                   from '../../../../assets/locale/common/en.json';
+import ru                   from '../../../../assets/locale/common/ru.json';
 import Store                from 'electron-store';
 
 const store = new Store();

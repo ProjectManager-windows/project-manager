@@ -1,13 +1,13 @@
 import '../../styles/projectList.scss';
-import ProjectItem                          from './ProjectItem';
-import { useContext, useRef, useState }     from 'react';
-import { ProjectType }                      from '../../../types/project';
-import { ContextMenu }                      from 'primereact/contextmenu';
-import { faBan, faCode, faFolder, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon }                  from '@fortawesome/react-fontawesome';
-import { useTranslation }                   from 'react-i18next';
-import { ProjectContext }                   from '../context/ProjectContext';
-import { AppContext }                       from '../context/AppContext';
+import { useContext, useRef, useState }                 from 'react';
+import { ContextMenu }                                  from 'primereact/contextmenu';
+import { faBan, faCode, faFolder, faTerminal, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon }                              from '@fortawesome/react-fontawesome';
+import { useTranslation }                               from 'react-i18next';
+import ProjectItem                                      from './ProjectItem';
+import { ProjectType }                                  from '../../../types/project';
+import { ProjectContext }                               from '../context/ProjectContext';
+import { AppContext }                                   from '../context/AppContext';
 
 const ProjectList = () => {
 		  const { projects, selectedProject }       = useContext(ProjectContext);
@@ -36,6 +36,16 @@ const ProjectList = () => {
 						  return;
 					  }
 					  window.electron.projects.openFolder(contextProject.id);
+				  }
+			  },
+			  {
+				  label  : t('open terminal').ucfirst(),
+				  icon   : (<FontAwesomeIcon className='p-menuitem-icon' icon={faTerminal} />),
+				  command: () => {
+					  if (!contextProject) {
+						  return;
+					  }
+					  window.electron.projects.openInTerminal(contextProject.id);
 				  }
 			  },
 			  {

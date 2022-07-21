@@ -9,6 +9,7 @@ import Projects                                                                 
 import events                                                                                      from './ipcMain';
 import IDEs                                                                                        from './core/IDEs/IDEs';
 import { minmax }                                                                                  from '../utills/PM_Math';
+import Terminals                                                                                   from './core/Terminals/Terminals';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -54,7 +55,9 @@ export class PM_App {
 				}
 				store.set('engine.TrayWindowWidth', this.TrayWindowWidth);
 				store.set('engine.TrayWindowHeight', this.TrayWindowHeight);
+				// eslint-disable-next-line no-console
 				this.createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
+				// eslint-disable-next-line no-console
 				this.createTray().then(() => console.log('ok')).catch((err) => console.log(err));
 				app.on('activate', () => {
 					if (this.mainWindow === null) {
@@ -63,6 +66,7 @@ export class PM_App {
 					}
 				});
 			})
+			// eslint-disable-next-line no-console
 			.catch(console.log);
 		this.app.on('window-all-closed', () => {
 			if (process.platform !== 'darwin') {
@@ -86,7 +90,10 @@ export class PM_App {
 		// (new Store).clear();
 		events.run();
 		Projects.init();
+		// eslint-disable-next-line no-console
 		IDEs.init().then(r => console.log(r)).catch(r => console.log(r));
+		// eslint-disable-next-line no-console
+		Terminals.init().then(r => console.log(r)).catch(r => console.log(r));
 	}
 
 	getAssetPath(...paths: string[]): string {

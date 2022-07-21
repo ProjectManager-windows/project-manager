@@ -64,7 +64,10 @@ export const bridge = {
 			ipcRenderer.send('electron-project-add');
 		},
 		open(id: number) {
-			ipcRenderer.send('electron-ide-execute', id);
+			bridge.ides.exec(id);
+		},
+		openInTerminal(id: number) {
+			bridge.terminals.exec(id);
 		},
 		openFolder(id: number) {
 			ipcRenderer.send('electron-project-open-folder', id);
@@ -88,10 +91,29 @@ export const bridge = {
 		},
 		onUpdate(callback: () => void): () => void {
 			ipcRenderer.on('electron-ide-update', callback);
-			return () => ipcRenderer.removeListener('electron-ides-update', callback);
+			return () => ipcRenderer.removeListener('electron-ide-update', callback);
 		},
 		add(property: string) {
 			ipcRenderer.send('electron-ide-add', property);
+		},
+		exec(id: number) {
+			ipcRenderer.send('electron-ide-execute', id);
+
+		}
+	},
+	terminals  : {
+		getAll() {
+			return ipcRenderer.sendSync('electron-terminal-getAll');
+		},
+		onUpdate(callback: () => void): () => void {
+			ipcRenderer.on('electron-ide-update', callback);
+			return () => ipcRenderer.removeListener('electron-terminal-update', callback);
+		},
+		add(property: string) {
+			ipcRenderer.send('electron-terminal-add', property);
+		},
+		exec(id: number) {
+			ipcRenderer.send('electron-terminal-execute', id);
 		}
 	},
 	tray       : {

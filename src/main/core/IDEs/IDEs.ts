@@ -72,11 +72,11 @@ class IDEs implements Collection {
 	}
 
 	getIdByName(_name: string): number {
-		const projects = this.getAll();
+		const ides = this.getAll();
 		// eslint-disable-next-line guard-for-in
-		for (const id in projects) {
-			const project = projects[id];
-			if (_name === project.getVal('name')) {
+		for (const id in ides) {
+			const ide = ides[id];
+			if (_name === ide.getVal('name')) {
 				return parseInt(id, 10);
 			}
 		}
@@ -84,10 +84,11 @@ class IDEs implements Collection {
 	}
 
 	public async init() {
+		PM_Storage.init(this.table);
 		for (const argumentsKey in editors) {
 			// @ts-ignore
 			const ide = new editors[argumentsKey]({}) as IDE;
-			const id  = this.getIdByName(ide.getVal('name'));
+			const id  = this.getIdByName(ide.getVal('name')) || PM_Storage.getNextId(this.table);
 			if (await ide.isInstalled()) {
 				ide.setVal('id', id);
 				ide.save();
@@ -96,7 +97,6 @@ class IDEs implements Collection {
 				ide.delete();
 			}
 		}
-		PM_Storage.init(this.table);
 	}
 }
 
