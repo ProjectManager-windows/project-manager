@@ -1,5 +1,7 @@
-import { Cmd } from './Cmd';
+import { Cmd }     from './Cmd';
+import { GitBash } from './GitBash';
 
 export default {
-	Cmd
+	Cmd,
+	GitBash
 };

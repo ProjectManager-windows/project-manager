@@ -1,6 +1,6 @@
-import { exec } from 'child_process';
-import { Project }     from '../../core/Projects/Project';
-import { Terminal }    from '../../core/Terminals/Terminal';
+import { exec }     from 'child_process';
+import { Project }  from '../../core/Projects/Project';
+import { Terminal } from '../../core/Terminals/Terminal';
 
 export class Cmd extends Terminal {
 
@@ -12,7 +12,7 @@ export class Cmd extends Terminal {
 	}
 
 	async isInstalled() {
-		return true;
+		return process.platform === 'win32';
 	}
 
 	async execute(project: Project): Promise<void> {
