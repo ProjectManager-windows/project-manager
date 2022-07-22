@@ -146,7 +146,10 @@ const Menu = () => {
 		},
 		{
 			label: 'Quit',
-			icon : 'pi pi-fw pi-power-off'
+			icon : 'pi pi-fw pi-power-off',
+			command: () => {
+				window.electron.app.quit()
+			}
 		}
 	];
 
