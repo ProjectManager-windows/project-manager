@@ -7,6 +7,7 @@ import SelectIde          from '../ui/SelectIde';
 import useCommit          from '../hooks/useCommit';
 import '../../styles/Config.scss';
 import { ProjectContext } from '../context/ProjectContext';
+import SelectTerminal     from '../ui/SelectTerminal';
 
 const Config = () => {
 	const { selectedProject }                                                    = useContext(ProjectContext);
@@ -100,6 +101,14 @@ const Config = () => {
 					</td>
 					<td>
 						<SelectIde id={selectedProject?.id} value={selectedProject?.ide} setVal={(v) => window.electron.projects.config(selectedProject.id, 'ide', v)} />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						{t('terminal')}
+					</td>
+					<td>
+						<SelectTerminal id={selectedProject?.id} value={selectedProject?.terminal} setVal={(v) => window.electron.projects.config(selectedProject.id, 'terminal', v)} />
 					</td>
 				</tr>
 				<tr>

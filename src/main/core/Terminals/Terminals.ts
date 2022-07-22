@@ -24,8 +24,8 @@ class Terminals implements Collection {
 			const defaultTerminal = Number(Settings.get('defaultTerminal'));
 			const project         = Projects.getById(projectId);
 			let terminalsId: number;
-			if (project.getVal('terminals')) {
-				terminalsId = project.getVal('terminals');
+			if (project.getVal('terminal')) {
+				terminalsId = project.getVal('terminal');
 			} else {
 				terminalsId = defaultTerminal || 1;
 			}

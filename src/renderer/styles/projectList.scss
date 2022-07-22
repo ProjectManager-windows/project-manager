@@ -1,13 +1,14 @@
 .ProjectList {
 	font-family : var(--font-family);
-	height: calc(100% - 50px);
+	height      : calc(100% - 50px);
+
 	.header {
 		margin-bottom : 10px;
 	}
 
 	.list {
 		overflow-y : auto;
-		max-height: 100%;
+		max-height : calc(100% - 20px);
 
 		.item {
 			display       : block;

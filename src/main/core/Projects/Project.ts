@@ -15,6 +15,7 @@ export class Project extends Item {
 
 	public static externalProps = [
 		'ide',// string
+		'terminal',// string
 		'name',// string
 		'logo',// string
 		'logoBaseName',// string
