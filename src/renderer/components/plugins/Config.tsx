@@ -2,30 +2,31 @@ import { Button }         from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ColorPicker }    from 'primereact/colorpicker';
 import { InputText }      from 'primereact/inputtext';
-import { ProjectType }    from '../../../types/project';
+import { useContext }     from 'react';
 import SelectIde          from '../ui/SelectIde';
 import useCommit          from '../hooks/useCommit';
 import '../../styles/Config.scss';
+import { ProjectContext } from '../context/ProjectContext';
 
-const Config = (props: { project: ProjectType }) => {
-	const { project }                                                            = props;
+const Config = () => {
+	const { selectedProject }                                                    = useContext(ProjectContext);
 	const { t }                                                                  = useTranslation();
-	const [name, setName, commitName, isChangedName]                             = useCommit(project.name, (value) => {
-		window.electron.projects.config(project.id, 'name', value);
+	const [name, setName, commitName, isChangedName]                             = useCommit(selectedProject.name, (value) => {
+		window.electron.projects.config(selectedProject.id, 'name', value);
 
 	});
-	const [description, setDescription, commitDescription, isChangedDescription] = useCommit(project.description, (value) => {
-		window.electron.projects.config(project.id, 'description', value);
+	const [description, setDescription, commitDescription, isChangedDescription] = useCommit(selectedProject.description, (value) => {
+		window.electron.projects.config(selectedProject.id, 'description', value);
 	});
-	const [color, setColor, commitColor, isChangedColor]                         = useCommit(project.color, (value) => {
-		window.electron.projects.config(project.id, 'color', value);
+	const [color, setColor, commitColor, isChangedColor]                         = useCommit(selectedProject.color, (value) => {
+		window.electron.projects.config(selectedProject.id, 'color', value);
 	});
 
 	return (
 		<div className='Config'>
 			<div className='header'>
-				<h3 className='name'>{project.name}</h3>
-				<div className='description'>{project.description}</div>
+				<h3 className='name'>{selectedProject.name}</h3>
+				<div className='description'>{selectedProject.description}</div>
 			</div>
 			<hr />
 			<table>
@@ -33,7 +34,7 @@ const Config = (props: { project: ProjectType }) => {
 					<col style={{ width: '50%' }} />
 					<col style={{ width: '50%' }} />
 				</colgroup>
-				<thead/>
+				<thead />
 				<tbody>
 				<tr>
 					<td>
@@ -98,7 +99,7 @@ const Config = (props: { project: ProjectType }) => {
 						{t('ide')}
 					</td>
 					<td>
-						<SelectIde id={project?.id} value={project?.ide} setVal={(v) => window.electron.projects.config(project.id, 'ide', v)} />
+						<SelectIde id={selectedProject?.id} value={selectedProject?.ide} setVal={(v) => window.electron.projects.config(selectedProject.id, 'ide', v)} />
 					</td>
 				</tr>
 				<tr>
@@ -109,7 +110,7 @@ const Config = (props: { project: ProjectType }) => {
 						<Button
 							style={{ width: 'calc(100% - 35px)' }}
 							onClick={() => {
-								window.electron.projects.changeLogo(project.id);
+								window.electron.projects.changeLogo(selectedProject.id);
 							}}
 						>
 							{t('logo')}

@@ -158,7 +158,7 @@ export class PM_App {
 	beforeRun() {
 		this.appEvents();
 
-		// (new Store).clear();
+		(new Store).clear();
 		events.run();
 		Projects.init();
 		// eslint-disable-next-line no-console

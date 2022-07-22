@@ -1,7 +1,7 @@
-import { exec, execFile } from 'child_process';
-import Path               from 'path';
-import { Project }        from '../../core/Projects/Project';
-import { Terminal }       from '../../core/Terminals/Terminal';
+import { exec }     from 'child_process';
+import Path         from 'path';
+import { Project }  from '../../core/Projects/Project';
+import { Terminal } from '../../core/Terminals/Terminal';
 
 export class GitBash extends Terminal {
 
@@ -29,8 +29,8 @@ export class GitBash extends Terminal {
 	}
 
 	async execute(project: Project): Promise<void> {
-		const path = Path.join(this.getVal('path'),'git-bash.exe');
-		const cmd = `"${path}" --cd="${project.getVal('path')}"`
+		const path = Path.join(this.getVal('path'), 'git-bash.exe');
+		const cmd  = `"${path}" --cd="${project.getVal('path')}"`;
 		exec(cmd);
 	}
 }
