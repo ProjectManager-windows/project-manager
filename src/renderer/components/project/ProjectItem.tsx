@@ -7,7 +7,7 @@ import '../../styles/projectItem.scss';
 import { ProjectContext }    from '../context/ProjectContext';
 
 const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.MutableRefObject<any>, defaultAction: (id: number) => void, contextProject: (value: ProjectType) => void }) => {
-		  const { selectProject,ides }                                      = useContext(ProjectContext);
+		  const { selectProject, ides, terminals }                     = useContext(ProjectContext);
 		  const { project, cm, defaultAction, contextProject, active } = props;
 		  const logo                                                   = useLogo(
 			  {
@@ -23,7 +23,13 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.M
 				  color: project.ide && ides ? ides[project.ide]?.color : '',
 				  logo : project.ide && ides ? ides[project.ide]?.logo : ''
 			  });
-
+		  const terminalLogo                                           = useLogo(
+			  {
+				  type : 'terminal',
+				  name : project.terminal && terminals ? terminals[project.terminal].name : '',
+				  color: project.terminal && terminals ? terminals[project.terminal]?.color : '',
+				  logo : project.terminal && terminals ? terminals[project.terminal]?.logo : ''
+			  });
 		  return (
 			  <div className='projectItem ' id={`project-item-${project.id}`}>
 				  <li
@@ -44,9 +50,10 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.M
 						  {logo}
 						  <div className='info'>
 							  <div className='tp name' data-pr-tooltip={project.name}>{project.name}</div>
-							  {project.ide ? <div className='tp ide' data-pr-tooltip={ides && ides[project.ide].name}>
-								  {ideLogo}
-							  </div> : ''}
+							  <div className='notDefaultElems'>
+								  {project.ide ? <div className='tp ' data-pr-tooltip={ides && ides[project.ide].name}>{ideLogo}</div> : ''}
+								  {project.terminal ? <div className='tp' data-pr-tooltip={terminals && terminals[project.terminal].name}>{terminalLogo}</div> : ''}
+							  </div>
 							  <LanguagesBar className='languageBar' stats={project.stats} />
 						  </div>
 					  </div>

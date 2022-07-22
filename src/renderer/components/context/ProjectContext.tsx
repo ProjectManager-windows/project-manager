@@ -14,7 +14,8 @@ export const ProjectContext = createContext({
 												technology     : '',
 												setTechnology  : () => {
 												},
-												ides           : {}
+												ides           : {},
+												terminals      : {}
 											} as {
 												projects: ProjectType[],
 												setProjects?: (value: { [key: string]: any }) => void,
@@ -25,5 +26,6 @@ export const ProjectContext = createContext({
 												technology?: string,
 												setTechnology?: (value: string) => void,
 												ides?: { [key: string]: any },
+												terminals?: { [key: string]: any },
 											}
 );

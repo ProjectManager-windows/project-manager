@@ -10,7 +10,8 @@ import useSearch               from '../components/hooks/useSearch';
 
 const Project = () => {
 	const [projects, setProjects]          = useState(window.electron.projects.getAll());
-	const [ides]          = useState(window.electron.ides.getAll());
+	const [ides]                           = useState(window.electron.ides.getAll());
+	const [terminals]                      = useState(window.electron.terminals.getAll());
 	const [view, setView]                  = useState((<div />));
 	const [selectedProject, selectProject] = useState<ProjectType>();
 	const [technology, setTechnology]      = useState<string>('');
@@ -22,7 +23,7 @@ const Project = () => {
 	const [searchString, setSearch] = useState('');
 	const projectList               = useSearch({ projects, searchString });
 	return (
-		<ProjectContext.Provider value={{ projects: projectList, setProjects, selectedProject, selectProject, view, setView, technology, setTechnology,ides }}>
+		<ProjectContext.Provider value={{ projects: projectList, setProjects, selectedProject, selectProject, view, setView, technology, setTechnology, ides, terminals }}>
 			<div className='project'>
 				<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
 				<div className='grid'>

@@ -41,6 +41,7 @@ export interface ProjectType {
 	stats?: { [key: string]: number };
 	path: string; // unique identifier
 	ide?: number;
+	terminal?: number;
 	technologies?: TechnologyType[]; // TODO v0
 	version?: Version; // TODO v1
 	publisher?: PublisherType; // prod-deployment //TODO v1
