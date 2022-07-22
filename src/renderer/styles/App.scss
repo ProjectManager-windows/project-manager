@@ -60,3 +60,9 @@ html, body, #root, .App {
 		}
 	}
 }
+
+@media screen and (min-width : 960px) {
+	.p-menubar-button{
+		display: none !important;
+	}
+}

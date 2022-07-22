@@ -1,23 +1,11 @@
 import '../styles/menu.scss';
-import { Menubar }                    from 'primereact/menubar';
-import React, { useEffect, useState } from 'react';
-import { useTranslation }             from 'react-i18next';
-import { FontAwesomeIcon }            from '@fortawesome/react-fontawesome';
-import {
-	faArrowUpRightFromSquare,
-	faFile,
-	faFolder,
-	faGear,
-	faMagnifyingGlass,
-	faMaximize,
-	faMicrochip,
-	faPlus, faSquareXmark,
-	faTerminal,
-	faTrash,
-	faWindowMinimize, faWindowRestore
-}                                     from '@fortawesome/free-solid-svg-icons';
-import { useLocation, useNavigate }   from 'react-router-dom';
-import logo                           from '../../../assets/icon.svg';
+import { Menubar }                                                                                                                                    from 'primereact/menubar';
+import React, { useEffect, useState }                                                                                                                 from 'react';
+import { useTranslation }                                                                                                                             from 'react-i18next';
+import { FontAwesomeIcon }                                                                                                                            from '@fortawesome/react-fontawesome';
+import { faFile, faFolder, faGear, faMagnifyingGlass, faMaximize, faMicrochip, faPlus, faSquareXmark, faTerminal, faWindowMinimize, faWindowRestore } from '@fortawesome/free-solid-svg-icons';
+import { useLocation, useNavigate }                                                                                                                   from 'react-router-dom';
+import logo                                                                                                                                           from '../../../assets/icon.svg';
 
 const Menu = () => {
 	const navigate          = useNavigate();
@@ -33,9 +21,12 @@ const Menu = () => {
 	);
 	const items             = [
 		{
-			label: t('file').ucfirst(),
-			icon : <FontAwesomeIcon className='p-menuitem-icon' icon={faFile} />,
-			items: [
+			label  : t('project').ucfirst(),
+			icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faFile} />,
+			command: () => {
+				if (location.pathname !== '/') navigate('/');
+			},
+			items  : [
 				{
 					label: t('add project').ucfirst(),
 					icon : <FontAwesomeIcon className='p-menuitem-icon' icon={faPlus} />,
@@ -57,14 +48,6 @@ const Menu = () => {
 					]
 				},
 				{
-					label: 'delete project',
-					icon : <FontAwesomeIcon className='p-menuitem-icon' icon={faTrash} />
-				},
-				{
-					label: 'Export',
-					icon : <FontAwesomeIcon className='p-menuitem-icon' icon={faArrowUpRightFromSquare} />
-				},
-				{
 					separator: true
 				},
 				{
@@ -74,29 +57,6 @@ const Menu = () => {
 						if (location.pathname !== '/settings') navigate('/settings');
 					}
 				}
-			]
-		},
-		{
-			label: 'Edit',
-			icon : 'pi pi-fw pi-pencil',
-			items: [
-				{
-					label: 'Left',
-					icon : 'pi pi-fw pi-align-left'
-				},
-				{
-					label: 'Right',
-					icon : 'pi pi-fw pi-align-right'
-				},
-				{
-					label: 'Center',
-					icon : 'pi pi-fw pi-align-center'
-				},
-				{
-					label: 'Justify',
-					icon : 'pi pi-fw pi-align-justify'
-				}
-
 			]
 		},
 		{
@@ -114,41 +74,10 @@ const Menu = () => {
 			}
 		},
 		{
-			label: 'Events',
-			icon : 'pi pi-fw pi-calendar',
-			items: [
-				{
-					label: 'Edit',
-					icon : 'pi pi-fw pi-pencil',
-					items: [
-						{
-							label: 'Save',
-							icon : 'pi pi-fw pi-calendar-plus'
-						},
-						{
-							label: 'Delete',
-							icon : 'pi pi-fw pi-calendar-minus'
-						}
-
-					]
-				},
-				{
-					label: 'Archieve',
-					icon : 'pi pi-fw pi-calendar-times',
-					items: [
-						{
-							label: 'Remove',
-							icon : 'pi pi-fw pi-calendar-minus'
-						}
-					]
-				}
-			]
-		},
-		{
-			label: 'Quit',
-			icon : 'pi pi-fw pi-power-off',
+			label  : 'Quit',
+			icon   : 'pi pi-fw pi-power-off',
 			command: () => {
-				window.electron.app.quit()
+				window.electron.app.quit();
 			}
 		}
 	];
