@@ -121,6 +121,28 @@ export const bridge = {
 			ipcRenderer.send('electron-close-tray');
 		}
 	},
+	app        : {
+		quit() {
+			ipcRenderer.send('electron-app-close');
+		},
+		toggleMinimize() {
+			ipcRenderer.send('electron-app-toggleMinimize');
+		},
+		toggleMaximize() {
+			ipcRenderer.send('electron-app-toggleMaximize');
+		},
+		hide() {
+			ipcRenderer.send('electron-app-hide');
+		},
+		show() {
+			ipcRenderer.send('electron-app-show');
+		},
+		onChangeState(func: (...args: any[]) => void): () => void {
+			const subscription = (_event: IpcRendererEvent, ...args: unknown[]) => func(...args);
+			ipcRenderer.on('change-window-state', subscription);
+			return () => ipcRenderer.removeListener('change-window-state', subscription);
+		}
+	},
 	log        : log
 };
 Object.assign(console, log.functions);

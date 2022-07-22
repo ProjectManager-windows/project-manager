@@ -1,18 +1,37 @@
 import '../styles/menu.scss';
-import { Menubar }                                                                                                         from 'primereact/menubar';
-import React                                                                                                               from 'react';
-import { useTranslation }                                                                                                  from 'react-i18next';
-import { FontAwesomeIcon }                                                                                                 from '@fortawesome/react-fontawesome';
-import { faArrowUpRightFromSquare, faFile, faFolder, faGear, faMagnifyingGlass, faMicrochip, faPlus, faTerminal, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { useLocation, useNavigate }                                                                                        from 'react-router-dom';
-import logo                                                                                                                from '../../../assets/icon.svg';
+import { Menubar }                    from 'primereact/menubar';
+import React, { useEffect, useState } from 'react';
+import { useTranslation }             from 'react-i18next';
+import { FontAwesomeIcon }            from '@fortawesome/react-fontawesome';
+import {
+	faArrowUpRightFromSquare,
+	faFile,
+	faFolder,
+	faGear,
+	faMagnifyingGlass,
+	faMaximize,
+	faMicrochip,
+	faPlus, faSquareXmark,
+	faTerminal,
+	faTrash,
+	faWindowMinimize, faWindowRestore
+}                                     from '@fortawesome/free-solid-svg-icons';
+import { useLocation, useNavigate }   from 'react-router-dom';
+import logo                           from '../../../assets/icon.svg';
 
 const Menu = () => {
-	const navigate = useNavigate();
-	const location = useLocation();
-	const { t }    = useTranslation();
-
-	const items = [
+	const navigate          = useNavigate();
+	const location          = useLocation();
+	const { t }             = useTranslation();
+	const [state, setState] = useState(
+		{
+			isMinimized: false,
+			isMaximized: false,
+			isVisible  : false,
+			isFocused  : false
+		}
+	);
+	const items             = [
 		{
 			label: t('file').ucfirst(),
 			icon : <FontAwesomeIcon className='p-menuitem-icon' icon={faFile} />,
@@ -141,9 +160,21 @@ const Menu = () => {
 		}
 	});
 	const end   = <div />;
-
+	useEffect(() => {
+		return window.electron.app.onChangeState((_state) => {
+			setState(_state);
+		});
+	}, []);
 	return (
 		<div className='pm-menu'>
+			<div className='pm-menu-top'>
+				<div className='drag' />
+				<div className='buttons'>
+					<FontAwesomeIcon className='p-menuitem-icon' onClick={e => window.electron.app.toggleMinimize()} icon={faWindowMinimize} />
+					<FontAwesomeIcon className='p-menuitem-icon' onClick={e => window.electron.app.toggleMaximize()} icon={state.isMaximized ? faWindowRestore : faMaximize} />
+					<FontAwesomeIcon className='p-menuitem-icon' onClick={e => window.electron.app.quit()} icon={faSquareXmark} />
+				</div>
+			</div>
 			<Menubar model={items} start={start} end={end} />
 		</div>
 	);

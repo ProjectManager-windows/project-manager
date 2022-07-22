@@ -1,8 +1,8 @@
 import { exec }    from 'child_process';
 import os          from 'os';
+import * as Path   from 'path';
 import { IDE }     from '../../core/IDEs/IDE';
 import { Project } from '../../core/Projects/Project';
-import * as Path   from 'path';
 import Logo        from '../../../../assets/icons/b64/vscode';
 
 export class VsCode extends IDE {

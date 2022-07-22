@@ -33,8 +33,9 @@ module.exports = {
 		'import/order'                                   : 1,
 		'jsx-a11y/click-events-have-key-events'          : 0,
 		'jsx-a11y/no-noninteractive-element-interactions': 0,
-		'jsx-a11y/no-static-element-interactions'       : 0,
-		'no-unused-expressions'                          : 1,
+		'jsx-a11y/no-static-element-interactions'        : 0,
+		'no-unused-expressions'                          : 0,
+		'@typescript-eslint/no-unused-expressions'       : 0,
 		'no-useless-constructor'                         : 1,
 		'prefer-const'                                   : 1
 

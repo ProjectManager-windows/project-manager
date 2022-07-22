@@ -15,11 +15,9 @@ class IDEs implements Collection {
 
 	private constructor() {
 		ipcMain.on('electron-ide-getAll', async (event) => {
-			this.init();
 			event.returnValue = this.getAllRaw();
 		});
 		ipcMain.on('electron-ide-getProject', async (event, id) => {
-			this.init();
 			event.returnValue = this.getById(id);
 		});
 		ipcMain.on('electron-ide-execute', async (_event, projectId) => {
@@ -85,6 +83,7 @@ class IDEs implements Collection {
 
 	public async init() {
 		PM_Storage.init(this.table);
+		console.log('IDE INIT')
 		for (const argumentsKey in editors) {
 			// @ts-ignore
 			const ide = new editors[argumentsKey]({}) as IDE;

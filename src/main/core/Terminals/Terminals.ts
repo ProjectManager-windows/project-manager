@@ -15,11 +15,9 @@ class Terminals implements Collection {
 
 	private constructor() {
 		ipcMain.on('electron-terminal-getAll', async (event) => {
-			await this.init();
 			event.returnValue = this.getAllRaw();
 		});
 		ipcMain.on('electron-terminal-getProject', async (event, id) => {
-			await this.init();
 			event.returnValue = this.getById(id);
 		});
 		ipcMain.on('electron-terminal-execute', async (_event, projectId) => {
@@ -85,6 +83,7 @@ class Terminals implements Collection {
 
 	public async init() {
 		PM_Storage.init(this.table);
+		console.log('Terminals INIT')
 		for (const argumentsKey in cmds) {
 			// @ts-ignore
 			const terminal = new cmds[argumentsKey]({}) as Terminal;

@@ -1,7 +1,41 @@
 .pm-menu {
+	$buttons-size : 65px;
+
+	.pm-menu-top {
+		display          : flex;
+		background-color : var(--primary-color);
+		justify-content  : flex-end;
+		align-content    : center;
+		flex-wrap        : nowrap;
+		flex-direction   : row;
+		align-items      : center;
+
+
+		.drag {
+			width              : calc(100vw - $buttons-size);
+			height             : 20px;
+			-webkit-app-region : drag;
+		}
+
+		.buttons {
+			text-align : end;
+			width      : $buttons-size;
+
+			svg {
+				&:hover {
+					opacity : 0.7;
+				}
+
+				margin-left : 2px;
+				margin-right : 3px;
+			}
+		}
+	}
+
 	.p-menubar, .p-menubar-root-list {
 		background-color : var(--primary-color-text)
 	}
-	border-bottom:2px solid var(--primary-color)
+
+	border-bottom : 2px solid var(--primary-color)
 
 }

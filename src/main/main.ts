@@ -13,14 +13,14 @@ import Terminals                                                                
 
 export class PM_App {
 	private static instance: PM_App;
-	mainWindow: BrowserWindow | null         = null;
-	private readonly isDebug: boolean;
-	private isRunning: boolean               = false;
-	private tray: Tray | null                = null;
-	private windowTray: BrowserWindow | null = null;
-	private app: typeof app;
-	private TrayWindowWidth: number          = 300;
-	private TrayWindowHeight: number         = 600;
+	public mainWindow: BrowserWindow | null = null;
+	public readonly isDebug: boolean;
+	public isRunning: boolean               = false;
+	public tray: Tray | null                = null;
+	public windowTray: BrowserWindow | null = null;
+	public app: typeof app;
+	private TrayWindowWidth: number         = 300;
+	private TrayWindowHeight: number        = 600;
 
 	private constructor() {
 		this.isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
@@ -84,9 +84,80 @@ export class PM_App {
 	}
 
 	afterRun() {
+		if (this.mainWindow) {
+			const changeWindowState = () => {
+				if (this.mainWindow) {
+					this.mainWindow.webContents.send('change-window-state', {
+						isMinimized: this.mainWindow.isMinimized(),
+						isMaximized: this.mainWindow.isMaximized(),
+						isVisible  : this.mainWindow.isVisible(),
+						isFocused  : this.mainWindow.isFocused()
+					});
+				}
+			};
+			this.mainWindow.on('maximize', changeWindowState);
+			this.mainWindow.on('restore', changeWindowState);
+			this.mainWindow.on('resized', changeWindowState);
+			this.mainWindow.on('minimize', changeWindowState);
+			this.mainWindow.on('show', changeWindowState);
+			this.mainWindow.on('hide', changeWindowState);
+			this.mainWindow.on('focus', changeWindowState);
+			this.mainWindow.on('blur', changeWindowState);
+		}
+	}
+
+	appEvents() {
+		ipcMain.on('electron-app-close', async () => {
+			this.app.quit();
+		});
+		ipcMain.on('electron-app-toggleMinimize', async () => {
+			if (!this.mainWindow) return;
+			this.mainWindow.isMinimized() ? this.mainWindow.restore() : this.mainWindow.minimize();
+		});
+		ipcMain.on('electron-app-toggleMaximize', async () => {
+			if (!this.mainWindow) return;
+			this.mainWindow.isMaximized() ? this.mainWindow.restore() : this.mainWindow.maximize();
+		});
+
+		ipcMain.on('electron-app-hide', async () => {
+			if (!this.mainWindow) return;
+			this.mainWindow.hide();
+		});
+		ipcMain.on('electron-app-show', async () => {
+			if (!this.mainWindow) return;
+			this.mainWindow.show();
+		});
+		ipcMain.on('electron-app-toggleShow', async () => {
+			if (!this.mainWindow) return;
+			this.mainWindow.isVisible() ? this.mainWindow.show() : this.mainWindow.hide();
+		});
+
+		ipcMain.on('electron-app-isMinimized', async (event) => {
+			if (!this.mainWindow) {
+				event.returnValue = false;
+				return;
+			}
+			event.returnValue = this.mainWindow.isVisible();
+		});
+		ipcMain.on('electron-app-isHide', async (event) => {
+			if (!this.mainWindow) {
+				event.returnValue = false;
+				return;
+			}
+			event.returnValue = this.mainWindow.isVisible();
+		});
+		ipcMain.on('electron-app-isMaximized', async (event) => {
+			if (!this.mainWindow) {
+				event.returnValue = false;
+				return;
+			}
+			event.returnValue = this.mainWindow.isVisible();
+		});
 	}
 
 	beforeRun() {
+		this.appEvents();
+
 		// (new Store).clear();
 		events.run();
 		Projects.init();
@@ -162,6 +233,7 @@ export class PM_App {
 			{
 				minWidth      : this.TrayWindowWidth + 50,
 				show          : false,
+				frame         : false,
 				width         : 1024,
 				height        : 728,
 				type          : 'main',
@@ -252,7 +324,7 @@ export class PM_App {
 			this.windowTray?.close();
 		});
 		if (this.tray) {
-			this.tray.setToolTip('This is my application.');
+			this.tray.setToolTip(this.app.getName());
 			this.tray.setContextMenu(contextMenu);
 			const options: BrowserWindowConstructorOptions = {
 				show          : false,
@@ -265,14 +337,11 @@ export class PM_App {
 				resizable     : false,
 				useContentSize: true,
 				transparent   : true,
-				kiosk         : true,
-				// hasShadow     : false,
 				alwaysOnTop   : true,
 				webPreferences: {
-					backgroundThrottling: false,
-					preload             : app.isPackaged
-										  ? path.join(__dirname, 'preload.js')
-										  : path.join(__dirname, '../../.erb/dll/preload.js')
+					preload: app.isPackaged
+							 ? path.join(__dirname, 'preload.js')
+							 : path.join(__dirname, '../../.erb/dll/preload.js')
 				}
 			};
 			if (this.mainWindow) {

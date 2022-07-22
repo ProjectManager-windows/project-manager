@@ -7,7 +7,6 @@ export const useCommit = <T, >(initState: T, change: (value: T) => void):[T,(val
 		setState(initState);
 	}, [initState]);
 
-
 	function setValue(value: T) {
 		if (state !== value) {
 			setIsChanged(true);
