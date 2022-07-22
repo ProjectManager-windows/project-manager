@@ -98,6 +98,7 @@ export class PM_App {
 			this.mainWindow.on('maximize', changeWindowState);
 			this.mainWindow.on('restore', changeWindowState);
 			this.mainWindow.on('resized', changeWindowState);
+			this.mainWindow.on('unmaximize', changeWindowState);
 			this.mainWindow.on('minimize', changeWindowState);
 			this.mainWindow.on('show', changeWindowState);
 			this.mainWindow.on('hide', changeWindowState);
@@ -116,7 +117,7 @@ export class PM_App {
 		});
 		ipcMain.on('electron-app-toggleMaximize', async () => {
 			if (!this.mainWindow) return;
-			this.mainWindow.isMaximized() ? this.mainWindow.restore() : this.mainWindow.maximize();
+			this.mainWindow.isMaximized() ? this.mainWindow.unmaximize() : this.mainWindow.maximize();
 		});
 
 		ipcMain.on('electron-app-hide', async () => {
@@ -158,7 +159,7 @@ export class PM_App {
 	beforeRun() {
 		this.appEvents();
 
-		(new Store).clear();
+		// (new Store).clear();
 		events.run();
 		Projects.init();
 		// eslint-disable-next-line no-console

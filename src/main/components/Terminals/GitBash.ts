@@ -2,11 +2,13 @@ import { exec }     from 'child_process';
 import Path         from 'path';
 import { Project }  from '../../core/Projects/Project';
 import { Terminal } from '../../core/Terminals/Terminal';
+import Logo         from '../../../../assets/icons/b64/gitBash';
 
 export class GitBash extends Terminal {
 
 	afterInit(data: { [x: string]: any; id?: number; logo?: any; }) {
 		if (!data.logo) {
+			this.setVal('logo', Logo);
 			this.setVal('color', 'transparent');
 		}
 		this.setVal('name', 'GitBash');

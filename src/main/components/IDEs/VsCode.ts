@@ -9,7 +9,7 @@ export class VsCode extends IDE {
 	afterInit(data: { [x: string]: any; id?: number; logo?: any; }) {
 		if (!data.logo) {
 			this.setVal('logo', Logo);
-			this.setVal('color', '#2A2A2F');
+			this.setVal('color', 'transparent');
 		}
 		this.setVal('name', 'VsCode');
 	}
