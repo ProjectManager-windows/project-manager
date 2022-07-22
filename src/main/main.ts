@@ -95,15 +95,15 @@ export class PM_App {
 					});
 				}
 			};
-			this.mainWindow.on('maximize', changeWindowState);
-			this.mainWindow.on('restore', changeWindowState);
-			this.mainWindow.on('resized', changeWindowState);
-			this.mainWindow.on('unmaximize', changeWindowState);
-			this.mainWindow.on('minimize', changeWindowState);
 			this.mainWindow.on('show', changeWindowState);
 			this.mainWindow.on('hide', changeWindowState);
-			this.mainWindow.on('focus', changeWindowState);
 			this.mainWindow.on('blur', changeWindowState);
+			this.mainWindow.on('focus', changeWindowState);
+			this.mainWindow.on('restore', changeWindowState);
+			this.mainWindow.on('resized', changeWindowState);
+			this.mainWindow.on('maximize', changeWindowState);
+			this.mainWindow.on('minimize', changeWindowState);
+			this.mainWindow.on('unmaximize', changeWindowState);
 		}
 	}
 
