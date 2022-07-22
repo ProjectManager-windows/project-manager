@@ -31,7 +31,7 @@ function Footer() {
 					{/* TODO */}
 					<Notifications />
 					<Link data-pr-tooltip={t('settings')} to='/settings' className='tp footer-right-item'><i className='iBtn pi pi-sliders-h' /></Link>
-					<ProgressBar style={{ width: '150px' }} value={1} />
+					{/* <ProgressBar style={{ width: '150px' }} value={1} /> */}
 				</div>
 			</div>
 		</NotificationsContext.Provider>
