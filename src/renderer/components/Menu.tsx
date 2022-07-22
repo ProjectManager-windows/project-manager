@@ -170,9 +170,9 @@ const Menu = () => {
 			<div className='pm-menu-top'>
 				<div className='drag' />
 				<div className='buttons'>
-					<FontAwesomeIcon className='p-menuitem-icon' onClick={e => window.electron.app.toggleMinimize()} icon={faWindowMinimize} />
-					<FontAwesomeIcon className='p-menuitem-icon' onClick={e => window.electron.app.toggleMaximize()} icon={state.isMaximized ? faWindowRestore : faMaximize} />
-					<FontAwesomeIcon className='p-menuitem-icon' onClick={e => window.electron.app.quit()} icon={faSquareXmark} />
+					<FontAwesomeIcon className='p-menuitem-icon' onClick={() => window.electron.app.toggleMinimize()} icon={faWindowMinimize} />
+					<FontAwesomeIcon className='p-menuitem-icon' onClick={() => window.electron.app.toggleMaximize()} icon={state.isMaximized ? faWindowRestore : faMaximize} />
+					<FontAwesomeIcon className='p-menuitem-icon' onClick={() => window.electron.app.quit()} icon={faSquareXmark} />
 				</div>
 			</div>
 			<Menubar model={items} start={start} end={end} />
