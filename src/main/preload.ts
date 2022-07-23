@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import log                                              from 'electron-log';
 
-export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'test';
+export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'electron-notification-update' | 'test';
 
 export const bridge = {
 	ipcRenderer: {

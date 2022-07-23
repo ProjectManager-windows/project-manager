@@ -1,6 +1,6 @@
 import { MemoryRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toast }                                 from 'primereact/toast';
-import { useRef }                                from 'react';
+import { useEffect, useRef, useState }           from 'react';
 import Footer                                    from './components/Footer';
 import Project                                   from './pages/Project';
 import Settings                                  from './pages/Settings';
@@ -9,11 +9,23 @@ import Ides                                      from './pages/Ides';
 import Menu                                      from './components/Menu';
 import { AppContext }                            from './components/context/AppContext';
 import Terminals                                 from './pages/Teminals';
+import { NotificationItemInterface }             from './classes/Notifications';
 
 export default function App() {
-	const toast = useRef(null);
+	const toast                         = useRef(null);
+	const [notificationList, setNotify] = useState<NotificationItemInterface[]>([]);
+	const [showNotify, setShowNotify]   = useState<boolean>(false);
+	const updateNotify                  = () => {
+		setNotify(Object.values(window.Notifications.Notifications));
+	};
+	useEffect(() => {
+		window.Notifications.on('update', updateNotify);
+		return () => {
+			window.Notifications.off('update', updateNotify);
+		};
+	}, []);
 	return (
-		<AppContext.Provider value={{ toast }}>
+		<AppContext.Provider value={{ toast, notificationList, showNotify, setShowNotify }}>
 			<Toast ref={toast} />
 			<div className='App'>
 				<Router>

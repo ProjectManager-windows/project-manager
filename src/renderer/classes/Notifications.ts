@@ -1,6 +1,7 @@
 import EventEmitter from 'events';
 import ProgressBars from './ProgressBars';
 
+
 export interface NotificationItemInterface {
 	setName(name: string): void;
 
@@ -54,6 +55,19 @@ export class Notifications extends EventEmitter {
 			this.Notifications[key] = bar;
 			this.emit('update', this.Notifications);
 		});
+		window.electron.ipcRenderer.on('electron-notification-update', (message: any) => {
+			if (this.Notifications[message.key] === undefined) {
+				this.Notifications[message.key] = new NotificationItem(message.key, message.name, message.message);
+			}
+			this.Notifications[message.key].setName(message.name);
+			this.Notifications[message.key].setBody(message.message);
+			this.emit('progressbar-update', message.key, this.Notifications[message.key]);
+		});
+	}
+
+	del(key: string){
+		delete this.Notifications[key];
+		this.emit('update', this.Notifications);
 	}
 
 	static getInstance() {
