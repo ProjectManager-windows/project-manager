@@ -1,3 +1,4 @@
+import '../../styles/Config.scss';
 import { Button }         from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ColorPicker }    from 'primereact/colorpicker';
@@ -5,7 +6,6 @@ import { InputText }      from 'primereact/inputtext';
 import { useContext }     from 'react';
 import SelectIde          from '../ui/SelectIde';
 import useCommit          from '../hooks/useCommit';
-import '../../styles/Config.scss';
 import { ProjectContext } from '../context/ProjectContext';
 import SelectTerminal     from '../ui/SelectTerminal';
 
