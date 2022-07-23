@@ -31,17 +31,13 @@ const Config = () => {
 			</div>
 			<hr />
 			<table>
-				<colgroup>
-					<col style={{ width: '50%' }} />
-					<col style={{ width: '50%' }} />
-				</colgroup>
 				<thead />
 				<tbody>
 				<tr>
-					<td>
+					<td className='name-column'>
 						{t('name')}
 					</td>
-					<td>
+					<td className='value-column'>
 						 <span className='p-input-icon-right'>
                     		<i className={`pi ${isChangedName ? 'pi-spin pi-spinner' : 'pi-check'}`} />
 							<InputText style={{ width: '100%' }} value={name || ''} onChange={e => setName(e.target.value)} onBlur={e => commitName(e.target.value)} />
@@ -49,10 +45,10 @@ const Config = () => {
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td className='name-column'>
 						{t('description')}
 					</td>
-					<td>
+					<td className='value-column'>
 						 <span className='p-input-icon-right'>
                     		<i className={`pi ${isChangedDescription ? 'pi-spin pi-spinner' : 'pi-check'}`} />
 							<InputText style={{ width: '100%' }} value={description || ''} onChange={e => setDescription(e.target.value)} onBlur={e => commitDescription(e.target.value)} />
@@ -60,10 +56,10 @@ const Config = () => {
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td className='name-column'>
 						{t('color')}
 					</td>
-					<td>
+					<td className='value-column'>
 						<div style={{ width: '100%' }}>
 
 							<ColorPicker
@@ -96,10 +92,10 @@ const Config = () => {
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td className='name-column'>
 						{t('ide')}
 					</td>
-					<td>
+					<td className='value-column'>
 						<SelectIde id={selectedProject?.id} value={selectedProject?.ide} setVal={(v) => window.electron.projects.config(selectedProject.id, 'ide', v)} />
 					</td>
 				</tr>
@@ -107,15 +103,15 @@ const Config = () => {
 					<td>
 						{t('terminal')}
 					</td>
-					<td>
+					<td className='value-column'>
 						<SelectTerminal id={selectedProject?.id} value={selectedProject?.terminal} setVal={(v) => window.electron.projects.config(selectedProject.id, 'terminal', v)} />
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td className='name-column'>
 						{t('logo')}
 					</td>
-					<td>
+					<td className='value-column'>
 						<Button
 							style={{ width: 'calc(100% - 35px)' }}
 							onClick={() => {

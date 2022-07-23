@@ -17,4 +17,16 @@
 			font-size : 0.65em;
 		}
 	}
+
+	.name-column {
+		width     : 30%;
+		min-width : 150px;
+	}
+
+	.value-column {
+		width : 500px;
+		.p-input-icon-right{
+			width: calc(100% - 35px);
+		}
+	}
 }
