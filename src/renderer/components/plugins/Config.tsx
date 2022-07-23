@@ -61,7 +61,6 @@ const Config = () => {
 					</td>
 					<td className='value-column'>
 						<div style={{ width: '100%' }}>
-
 							<ColorPicker
 								style={{ width: '35px' }}
 								value={color}
