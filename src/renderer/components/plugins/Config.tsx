@@ -71,7 +71,6 @@ const Config = () => {
 									}
 								}}
 								onMouseUp={() => commitColor()}
-
 							/>
 							<span
 								className='p-input-icon-right' style={{ width: 'calc(100% - 70px)' }}
