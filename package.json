@@ -196,7 +196,7 @@
 		"webpack-merge": "^5.8.0"
 	},
 	"build": {
-		"productName": "ElectronReact",
+		"productName": "Project-manager",
 		"appId": "org.erb.ElectronReact",
 		"asar": true,
 		"asarUnpack": "**\\*.{node,dll}",
@@ -255,8 +255,8 @@
 		],
 		"publish": {
 			"provider": "github",
-			"owner": "electron-react-boilerplate",
-			"repo": "electron-react-boilerplate"
+			"owner": "project-manager",
+			"repo": "project-manager"
 		}
 	},
 	"collective": {

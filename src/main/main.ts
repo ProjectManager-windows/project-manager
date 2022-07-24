@@ -353,7 +353,9 @@ export class PM_App {
 				this.windowTray.loadURL(resolveHtmlPath('index.html')).then(() => console.log('ok')).catch(() => console.log('err'));
 				this.windowTray.setSkipTaskbar(true);
 				this.windowTray.setPosition(screenBounds.workAreaSize.width - this.TrayWindowWidth, screenBounds.workAreaSize.height - this.TrayWindowHeight, false);
-				this.windowTray.webContents.openDevTools();
+				if(this.isDebug) {
+					this.windowTray.webContents.openDevTools();
+				}
 				this.windowTray.on('blur', () => {
 					if (!this.windowTray) return;
 					if (!this.windowTray.webContents.isDevToolsOpened()) {
@@ -383,8 +385,7 @@ export class PM_App {
 	}
 
 }
-
-const APP = PM_App.getInstance();
 Object.assign(console, log.functions);
+const APP = PM_App.getInstance();
 APP.run();
 export default APP;

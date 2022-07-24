@@ -74,10 +74,10 @@ const Menu = () => {
 			}
 		},
 		{
-			label  : 'Quit',
+			label  : 'Close',
 			icon   : 'pi pi-fw pi-power-off',
 			command: () => {
-				window.electron.app.quit();
+				window.electron.app.hide();
 			}
 		}
 	];
@@ -104,7 +104,7 @@ const Menu = () => {
 				<div className='buttons'>
 					<FontAwesomeIcon className='p-menuitem-icon' onClick={() => window.electron.app.toggleMinimize()} icon={faWindowMinimize} />
 					<FontAwesomeIcon className='p-menuitem-icon' onClick={() => window.electron.app.toggleMaximize()} icon={state.isMaximized ? faWindowRestore : faMaximize} />
-					<FontAwesomeIcon className='p-menuitem-icon' onClick={() => window.electron.app.quit()} icon={faSquareXmark} />
+					<FontAwesomeIcon className='p-menuitem-icon' onClick={() => window.electron.app.hide()} icon={faSquareXmark} />
 				</div>
 			</div>
 			<Menubar model={items} start={start} end={end} />
