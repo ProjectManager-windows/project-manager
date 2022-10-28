@@ -1,15 +1,16 @@
-import { app, BrowserWindow, BrowserWindowConstructorOptions, ipcMain, Menu, screen, shell, Tray } from 'electron';
-import Store                                                                                       from 'electron-store';
-import path                                                                                        from 'path';
-import { autoUpdater }                                                                             from 'electron-updater';
-import log                                                                                         from 'electron-log';
-import MenuBuilder                                                                                 from './menu';
-import { resolveHtmlPath }                                                                         from './util';
-import Projects                                                                                    from './core/Projects/Projects';
-import events                                                                                      from './ipcMain';
-import IDEs                                                                                        from './core/IDEs/IDEs';
-import { minmax }                                                                                  from '../utills/PM_Math';
-import Terminals                                                                                   from './core/Terminals/Terminals';
+import { app, BrowserWindow, BrowserWindowConstructorOptions, ipcMain, Menu, protocol, screen, shell, Tray } from 'electron';
+import Store               from 'electron-store';
+import path                from 'path';
+import { autoUpdater }     from 'electron-updater';
+import log                 from 'electron-log';
+import * as url            from 'url';
+import MenuBuilder         from './menu';
+import { resolveHtmlPath } from './util';
+import Projects            from './core/Projects/Projects';
+import events              from './ipcMain';
+import IDEs                from './core/IDEs/IDEs';
+import { minmax }          from '../utills/PM_Math';
+import Terminals           from './core/Terminals/Terminals';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -240,9 +241,10 @@ export class PM_App {
 				type          : 'main',
 				icon          : this.getAssetPath('icon.png'),
 				webPreferences: {
-					preload: app.isPackaged
-							 ? path.join(__dirname, 'preload.js')
-							 : path.join(__dirname, '../../.erb/dll/preload.js')
+					webSecurity: false,
+					preload    : app.isPackaged
+								 ? path.join(__dirname, 'preload.js')
+								 : path.join(__dirname, '../../.erb/dll/preload.js')
 				}
 			});
 
@@ -340,9 +342,10 @@ export class PM_App {
 				transparent   : true,
 				alwaysOnTop   : true,
 				webPreferences: {
-					preload: app.isPackaged
-							 ? path.join(__dirname, 'preload.js')
-							 : path.join(__dirname, '../../.erb/dll/preload.js')
+					webSecurity: false,
+					preload    : app.isPackaged
+								 ? path.join(__dirname, 'preload.js')
+								 : path.join(__dirname, '../../.erb/dll/preload.js')
 				}
 			};
 			if (this.mainWindow) {
@@ -353,7 +356,7 @@ export class PM_App {
 				this.windowTray.loadURL(resolveHtmlPath('index.html')).then(() => console.log('ok')).catch(() => console.log('err'));
 				this.windowTray.setSkipTaskbar(true);
 				this.windowTray.setPosition(screenBounds.workAreaSize.width - this.TrayWindowWidth, screenBounds.workAreaSize.height - this.TrayWindowHeight, false);
-				if(this.isDebug) {
+				if (this.isDebug) {
 					this.windowTray.webContents.openDevTools();
 				}
 				this.windowTray.on('blur', () => {
@@ -385,6 +388,7 @@ export class PM_App {
 	}
 
 }
+
 Object.assign(console, log.functions);
 const APP = PM_App.getInstance();
 APP.run();

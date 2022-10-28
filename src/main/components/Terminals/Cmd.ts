@@ -1,13 +1,12 @@
 import { exec }     from 'child_process';
 import { Project }  from '../../core/Projects/Project';
 import { Terminal } from '../../core/Terminals/Terminal';
-import Logo         from '../../../../assets/icons/b64/cmd';
 
 export class Cmd extends Terminal {
 
 	afterInit(data: { [x: string]: any; id?: number; logo?: any; }) {
 		if (!data.logo) {
-			this.setVal('logo', Logo);
+			this.setVal('logo', 'icons/terminals/cmd.svg');
 			this.setVal('color', 'transparent');
 		}
 		this.setVal('name', 'Cmd');

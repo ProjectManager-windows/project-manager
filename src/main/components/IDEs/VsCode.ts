@@ -3,12 +3,11 @@ import os          from 'os';
 import * as Path   from 'path';
 import { IDE }     from '../../core/IDEs/IDE';
 import { Project } from '../../core/Projects/Project';
-import Logo        from '../../../../assets/icons/b64/vscode';
 
 export class VsCode extends IDE {
 	afterInit(data: { [x: string]: any; id?: number; logo?: any; }) {
 		if (!data.logo) {
-			this.setVal('logo', Logo);
+			this.setVal('logo', 'icons/ides/vscode.svg');
 			this.setVal('color', 'transparent');
 		}
 		this.setVal('name', 'VsCode');

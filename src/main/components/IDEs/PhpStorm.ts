@@ -3,13 +3,15 @@ import os          from 'os';
 import * as Path   from 'path';
 import { IDE }     from '../../core/IDEs/IDE';
 import { Project } from '../../core/Projects/Project';
-import Logo        from '../../../../assets/icons/b64/phpstorm';
 
 export class PhpStorm extends IDE {
 
 	afterInit(data: { [x: string]: any; id?: number; logo?: any; }) {
 		if (!data.logo) {
-			this.setVal('logo', Logo);
+			let p = `file://${Path.join(__dirname,'..','..','..', '..', 'assets','icons','ides','phpstorm.svg')}`
+			p =p.replaceAll("\\",'/')
+			console.log(p)
+			this.setVal('logo', p);
 			this.setVal('color', 'transparent');
 		}
 		this.setVal('name', 'PhpStorm');
