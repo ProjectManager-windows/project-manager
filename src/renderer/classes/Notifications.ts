@@ -55,7 +55,7 @@ export class Notifications extends EventEmitter {
 			this.Notifications[key] = bar;
 			this.emit('update', this.Notifications);
 		});
-		window.electron.ipcRenderer.on('electron-notification-update', (message: any) => {
+		window.electron.ipcRenderer.on(BackgroundEvens.NotificationUpdate, (message: any) => {
 			if (this.Notifications[message.key] === undefined) {
 				this.Notifications[message.key] = new NotificationItem(message.key, message.name, message.message);
 			}

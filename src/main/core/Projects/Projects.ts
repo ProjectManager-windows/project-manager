@@ -3,11 +3,12 @@ import path                       from 'path';
 import fs                         from 'fs/promises';
 import Collection                 from '../Storage/Collection';
 import { Project }                from './Project';
-import PM_Storage                 from '../Storage/PM_Storage';
+import PM_Storage, { Tables }     from '../Storage/PM_Storage';
 import { ItemType }               from '../Storage/Item';
 import ProgressBar                from '../ProgressBar/ProgressBar';
 import PM_FileSystem              from '../Utils/PM_FileSystem';
 import { t }                      from '../Utils/i18n';
+import { BackgroundEvens }        from '../../../utills/Enums';
 
 export type ProjectsScheme = {
 	id: string
@@ -24,39 +25,39 @@ class Projects implements Collection {
 	private static instance: Projects;
 	private static scan_index: number;
 	item                            = Project;
-	table                           = 'projects';
+	table                           = Tables.projects;
 	items: { [p: string]: Project } = {};
 
 	private constructor() {
-		ipcMain.on('electron-project-getAll', async (event) => {
+		ipcMain.on(BackgroundEvens.ProjectGetAll, async (event) => {
 			this.init();
 			event.returnValue = this.getAllRaw();
 		});
-		ipcMain.on('electron-project-getProject', async (event, id) => {
+		ipcMain.on(BackgroundEvens.ProjectGetProject, async (event, id) => {
 			this.init();
 			event.returnValue = this.getById(id);
 		});
-		ipcMain.on('electron-project-scan', async (event) => {
+		ipcMain.on(BackgroundEvens.ProjectScan, async (event) => {
 			this.init();
 			await this.scan();
 			event.returnValue = 'ok';
 		});
-		ipcMain.on('electron-project-add', async (event) => {
+		ipcMain.on(BackgroundEvens.ProjectAdd, async (event) => {
 			this.init();
 			await this.addFolder();
 			event.returnValue = 'ok';
 		});
-		ipcMain.on('electron-project-set', async (_event, id, key, value) => {
+		ipcMain.on(BackgroundEvens.ProjectSet, async (_event, id, key, value) => {
 			const p = this.getById(id);
 			p.setVal(key, value);
 			p.save();
 		});
-		ipcMain.on('electron-project-open-folder', async (_event, id) => {
+		ipcMain.on(BackgroundEvens.ProjectOpenFolder, async (_event, id) => {
 			const p    = this.getById(id);
 			const path = p.getVal('path');
 			await shell.openPath(path);
 		});
-		ipcMain.on('electron-project-change-logo', async (_event, id: number) => {
+		ipcMain.on(BackgroundEvens.ProjectChangeLogo, async (_event, id: number) => {
 			const p = this.getById(id);
 
 			const file = await dialog.showOpenDialog(
@@ -75,7 +76,7 @@ class Projects implements Collection {
 				p.save();
 			}
 		});
-		ipcMain.on('electron-project-remove-logo', async (_event, id: number) => {
+		ipcMain.on(BackgroundEvens.ProjectRemoveLogo, async (_event, id: number) => {
 			const p = this.getById(id);
 			if (p) {
 				await p.removeLogo();
@@ -83,11 +84,11 @@ class Projects implements Collection {
 			}
 		});
 
-		ipcMain.on('electron-project-remove', async (_event, id) => {
+		ipcMain.on(BackgroundEvens.ProjectRemove, async (_event, id) => {
 			const p = this.getById(id);
 			await p.delete();
 		});
-		ipcMain.on('electron-project-delete', async (_event, id) => {
+		ipcMain.on(BackgroundEvens.ProjectDelete, async (_event, id) => {
 			const p = this.getById(id);
 			// const path = p.getVal('path');
 			// await trash(path, { glob: false });
@@ -122,6 +123,9 @@ class Projects implements Collection {
 
 	getById(id: number): Project {
 		const p = PM_Storage.getById<ItemType>(this.table, id);
+		if (!p) {
+			throw new Error('Project not found');
+		}
 		return new Project(p);
 	}
 

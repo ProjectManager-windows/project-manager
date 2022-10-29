@@ -1,26 +1,27 @@
-import { ipcMain }  from 'electron';
-import Collection   from '../Storage/Collection';
-import { Terminal } from './Terminal';
-import PM_Storage   from '../Storage/PM_Storage';
-import { ItemType } from '../Storage/Item';
-import cmds         from '../../components/Terminals';
-import Projects     from '../Projects/Projects';
-import Settings     from '../Settings';
+import { ipcMain }            from 'electron';
+import Collection             from '../Storage/Collection';
+import { Terminal }           from './Terminal';
+import PM_Storage, { Tables } from '../Storage/PM_Storage';
+import { ItemType }           from '../Storage/Item';
+import cmds                   from '../../components/Terminals';
+import Projects               from '../Projects/Projects';
+import Settings               from '../Settings';
+import { BackgroundEvens }    from '../../../utills/Enums';
 
 class Terminals implements Collection {
 	private static instance: Terminals;
 	item                             = Terminal;
-	table                            = 'terminals';
+	table                            = Tables.terminals;
 	items: { [p: string]: Terminal } = {};
 
 	private constructor() {
-		ipcMain.on('electron-terminal-getAll', async (event) => {
+		ipcMain.on(BackgroundEvens.TerminalGetAll, async (event) => {
 			event.returnValue = this.getAllRaw();
 		});
-		ipcMain.on('electron-terminal-getProject', async (event, id) => {
+		ipcMain.on(BackgroundEvens.TerminalGetProject, async (event, id) => {
 			event.returnValue = this.getById(id);
 		});
-		ipcMain.on('electron-terminal-execute', async (_event, projectId) => {
+		ipcMain.on(BackgroundEvens.TerminalExecute, async (_event, projectId) => {
 			const defaultTerminal = Number(Settings.get('defaultTerminal'));
 			const project         = Projects.getById(projectId);
 			let terminalsId: number;
@@ -61,6 +62,9 @@ class Terminals implements Collection {
 
 	getById(id: number): Terminal {
 		const data = PM_Storage.getById<ItemType>(this.table, id);
+		if (!data) {
+			throw new Error(`Terminal not found`);
+		}
 		// @ts-ignore
 		if (data.name && cmds[data.name] !== undefined) {
 			// @ts-ignore
@@ -83,7 +87,7 @@ class Terminals implements Collection {
 
 	public async init() {
 		PM_Storage.init(this.table);
-		console.log('Terminals INIT')
+		console.log('Terminals INIT');
 		for (const argumentsKey in cmds) {
 			// @ts-ignore
 			const terminal = new cmds[argumentsKey]({}) as Terminal;

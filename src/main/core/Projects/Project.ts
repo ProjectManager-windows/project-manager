@@ -9,9 +9,11 @@ import ignore                  from 'ignore';
 import { Item }                from '../Storage/Item';
 import PM_FileSystem, { file } from '../Utils/PM_FileSystem';
 import APP                     from '../../main';
+import { Tables }              from '../Storage/PM_Storage';
+import { BackgroundEvens }     from '../../../utills/Enums';
 
 export class Project extends Item {
-	public table: string = 'projects';
+	public table = Tables.projects;
 
 	public static externalProps = [
 		'ide',// string
@@ -101,7 +103,7 @@ export class Project extends Item {
 
 	save(): number {
 		const id = super.save();
-		APP.sendRenderEvent('electron-project-update');
+		APP.sendRenderEvent(BackgroundEvens.ProjectUpdate);
 		return id;
 
 	}
@@ -111,7 +113,7 @@ export class Project extends Item {
 		for (const dataKey in this.data) {
 			results[dataKey] = this.getVal(dataKey);
 		}
-		results['logo'] = this.getVal('logo');
+		results.logo = this.getVal('logo');
 		return results;
 	}
 
@@ -237,10 +239,10 @@ export class Project extends Item {
 	}
 
 	public async removeLogo() {
-		 const logo =this.getVal('logoBaseName');
+		const logo   = this.getVal('logoBaseName');
 		let confPath = path.join(this.getVal('path'), '.project-manager');
-		confPath = path.join(confPath, logo);
-		if(await PM_FileSystem.exists(confPath)){
+		confPath     = path.join(confPath, logo);
+		if (await PM_FileSystem.exists(confPath)) {
 			return fs.unlink(confPath);
 		}
 		return false;
@@ -250,6 +252,6 @@ export class Project extends Item {
 		const confPath = path.join(this.getVal('path'), '.project-manager');
 		super.delete();
 		await PM_FileSystem.removeFolder(confPath);
-		await APP.sendRenderEvent('electron-project-update');
+		await APP.sendRenderEvent(BackgroundEvens.ProjectUpdate);
 	}
 }

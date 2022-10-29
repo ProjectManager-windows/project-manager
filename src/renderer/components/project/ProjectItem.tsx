@@ -7,6 +7,7 @@ import '../../styles/projectItem.scss';
 import { ProjectContext }    from '../context/ProjectContext';
 
 
+// eslint-disable-next-line react/require-default-props
 const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.MutableRefObject<any>, defaultAction: (id: number) => void, contextProject: (value: ProjectType) => void, minimal?: boolean }) => {
 		  const { project, cm, defaultAction, contextProject, active, minimal } = props;
 		  const { selectProject, ides, terminals } = useContext(ProjectContext);

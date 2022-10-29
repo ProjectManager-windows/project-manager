@@ -1,4 +1,4 @@
-import PM_Storage from './PM_Storage';
+import PM_Storage, { Tables } from './PM_Storage';
 
 export type ItemType = {
 	id: number
@@ -7,7 +7,7 @@ export type ItemType = {
 
 export abstract class Item {
 	public data: ItemType = { id: 0 };
-	public table: string  = '';
+	public table: Tables  = Tables.empty;
 
 	public constructor(data: ItemType) {
 		this.init(data);

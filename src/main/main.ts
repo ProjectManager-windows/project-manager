@@ -9,6 +9,7 @@ import Projects                                                                 
 import events                                                                                      from './ipcMain';
 import IDEs                                                                                        from './core/IDEs/IDEs';
 import Terminals                                                                                   from './core/Terminals/Terminals';
+import { BackgroundEvens }                                                                         from '../utills/Enums';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -107,32 +108,32 @@ export class PM_App {
 	}
 
 	appEvents() {
-		ipcMain.on('electron-app-close', async () => {
+		ipcMain.on(BackgroundEvens.AppClose, async () => {
 			this.app.quit();
 		});
-		ipcMain.on('electron-app-toggleMinimize', async () => {
+		ipcMain.on(BackgroundEvens.AppToggleMinimize, async () => {
 			if (!this.mainWindow) return;
 			this.mainWindow.isMinimized() ? this.mainWindow.restore() : this.mainWindow.minimize();
 		});
-		ipcMain.on('electron-app-toggleMaximize', async () => {
+		ipcMain.on(BackgroundEvens.AppToggleMaximize, async () => {
 			if (!this.mainWindow) return;
 			this.mainWindow.isMaximized() ? this.mainWindow.unmaximize() : this.mainWindow.maximize();
 		});
 
-		ipcMain.on('electron-app-hide', async () => {
+		ipcMain.on(BackgroundEvens.AppHide, async () => {
 			if (!this.mainWindow) return;
 			this.mainWindow.hide();
 		});
-		ipcMain.on('electron-app-show', async () => {
+		ipcMain.on(BackgroundEvens.AppShow, async () => {
 			if (!this.mainWindow) return;
 			this.mainWindow.show();
 		});
-		ipcMain.on('electron-app-toggleShow', async () => {
+		ipcMain.on(BackgroundEvens.AppToggleShow, async () => {
 			if (!this.mainWindow) return;
 			this.mainWindow.isVisible() ? this.mainWindow.show() : this.mainWindow.hide();
 		});
 
-		ipcMain.on('electron-app-isMinimized', async (event) => {
+		ipcMain.on(BackgroundEvens.AppIsMinimized, async (event) => {
 			if (!this.mainWindow) {
 				event.returnValue = false;
 				return;
@@ -146,7 +147,7 @@ export class PM_App {
 			}
 			event.returnValue = this.mainWindow.isVisible();
 		});
-		ipcMain.on('electron-app-isMaximized', async (event) => {
+		ipcMain.on(BackgroundEvens.AppIsMaximized, async (event) => {
 			if (!this.mainWindow) {
 				event.returnValue = false;
 				return;
@@ -321,7 +322,7 @@ export class PM_App {
 				}
 			]
 		);
-		ipcMain.on('electron-close-tray', async () => {
+		ipcMain.on(BackgroundEvens.CloseTray, async () => {
 			this.windowTray?.close();
 		});
 		if (this.tray) {

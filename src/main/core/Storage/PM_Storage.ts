@@ -1,5 +1,14 @@
 import Store from 'electron-store';
 
+export enum Tables {
+	programs = 'programs',
+	terminals= 'terminals',
+	projects = 'projects',
+	settings = 'settings',
+	IDEs     = 'IDEs',
+	empty    = '',
+}
+
 class PM_Storage {
 	private static instance: PM_Storage;
 	private store: Store;
@@ -15,30 +24,30 @@ class PM_Storage {
 		return this.instance;
 	}
 
-	commit<T = number | string | { [p: string]: any }>(table: string, id: number | string, data: T): void {
+	commit<T = number | string | { [p: string]: any }>(table: Tables, id: number | string, data: T): void {
 		this.store.set(`${table}.${id}`, data);
 	}
 
-	getAll<T = number | string | { [p: string]: any }>(table: string): { [p: string]: T } {
-		return this.store.get(table) as { [p: string]: T };
+	getAll<T = number | string | { [p: string]: any }>(table: Tables): { [p: string]: T } | undefined {
+		return this.store.get(table) as { [p: string]: T } | undefined;
 	}
 
-	init(table: string) {
+	init(table: Tables) {
 		const projects = this.getAll(table);
 		if (!projects) {
 			this.store.set(table, {});
 		}
 	}
 
-	getById<T = number | string | { [p: string]: any }>(table: string, id: number | string): T {
-		return this.store.get(`${table}.${id}`) as T;
+	getById<T = number | string | { [p: string]: any }>(table: Tables, id: number | string): T | undefined {
+		return this.store.get(`${table}.${id}`) as T | undefined;
 	}
 
-	delAll(table: string): void {
+	delAll(table: Tables): void {
 		this.store.delete(`${table}`);
 	}
 
-	delById(table: string, id: number | string): void {
+	delById(table: Tables, id: number | string): void {
 		this.store.delete(`${table}.${id}`);
 	}
 
@@ -47,7 +56,7 @@ class PM_Storage {
 		this.store.clear();
 	}
 
-	getNextId(table: string): number {
+	getNextId(table: Tables): number {
 		const projects = this.getAll(table);
 		if (projects) {
 			const ids = Object.keys(projects).map((val) => parseInt(val, 10));

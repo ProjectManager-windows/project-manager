@@ -1,26 +1,27 @@
-import { ipcMain }  from 'electron';
-import Collection   from '../Storage/Collection';
-import { IDE }      from './IDE';
-import PM_Storage   from '../Storage/PM_Storage';
-import { ItemType } from '../Storage/Item';
-import editors      from '../../components/IDEs';
-import Projects     from '../Projects/Projects';
-import Settings     from '../Settings';
+import { ipcMain }            from 'electron';
+import Collection             from '../Storage/Collection';
+import { IDE }                from './IDE';
+import PM_Storage, { Tables } from '../Storage/PM_Storage';
+import { ItemType }           from '../Storage/Item';
+import editors                from '../../components/IDEs';
+import Projects               from '../Projects/Projects';
+import Settings               from '../Settings';
+import { BackgroundEvens }    from '../../../utills/Enums';
 
 class IDEs implements Collection {
 	private static instance: IDEs;
 	item                        = IDE;
-	table                       = 'IDEs';
+	table                       = Tables.IDEs;
 	items: { [p: string]: IDE } = {};
 
 	private constructor() {
-		ipcMain.on('electron-ide-getAll', async (event) => {
+		ipcMain.on(BackgroundEvens.IdeGetAll, async (event) => {
 			event.returnValue = this.getAllRaw();
 		});
-		ipcMain.on('electron-ide-getProject', async (event, id) => {
+		ipcMain.on(BackgroundEvens.IdeGetProject, async (event, id) => {
 			event.returnValue = this.getById(id);
 		});
-		ipcMain.on('electron-ide-execute', async (_event, projectId) => {
+		ipcMain.on(BackgroundEvens.IdeExecute, async (_event, projectId) => {
 			const defaultIde = Number(Settings.get('defaultIde'));
 			const project    = Projects.getById(projectId);
 			let ideId: number;
@@ -61,6 +62,9 @@ class IDEs implements Collection {
 
 	getById(id: number): IDE {
 		const data = PM_Storage.getById<ItemType>(this.table, id);
+		if (!data) {
+			throw new Error('ide not found');
+		}
 		// @ts-ignore
 		if (data.name && editors[data.name] !== undefined) {
 			// @ts-ignore
@@ -83,7 +87,7 @@ class IDEs implements Collection {
 
 	public async init() {
 		PM_Storage.init(this.table);
-		console.log('IDE INIT')
+		console.log('IDE INIT');
 		for (const argumentsKey in editors) {
 			// @ts-ignore
 			const ide = new editors[argumentsKey]({}) as IDE;

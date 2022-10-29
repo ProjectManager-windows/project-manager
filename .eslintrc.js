@@ -36,6 +36,7 @@ module.exports = {
 		'prettier/prettier'                              : 0,
 		'promise/always-return'                          : 0,
 		'promise/no-nesting'                             : 0,
+		'react/require-default-props'                    : 0,
 		'react/react-in-jsx-scope'                       : 0
 
 	},

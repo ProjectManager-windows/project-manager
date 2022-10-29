@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import log                                              from 'electron-log';
+import { BackgroundEvens }                              from '../utills/Enums';
 
 export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'electron-notification-update' | 'test';
 
@@ -24,44 +25,44 @@ export const bridge = {
 	},
 	store      : {
 		get(property: string) {
-			return ipcRenderer.sendSync('electron-store-get', property);
+			return ipcRenderer.sendSync(BackgroundEvens.StoreGet, property);
 		},
 		set(property: string, val: any) {
-			ipcRenderer.send('electron-store-set', property, val);
+			ipcRenderer.send(BackgroundEvens.StoreSet, property, val);
 		},
 		del(property: string) {
-			ipcRenderer.send('electron-store-del', property);
+			ipcRenderer.send(BackgroundEvens.StoreDel, property);
 		}
 		// Other method you want to add like has(), reset(), etc.
 	},
 	settings   : {
 		get(property: string) {
-			return ipcRenderer.sendSync('electron-store-get', `settings.${property}`);
+			return ipcRenderer.sendSync(BackgroundEvens.StoreGet, `settings.${property}`);
 		},
 		set(property: string, val: any) {
-			ipcRenderer.send('electron-store-set', `settings.${property}`, val);
+			ipcRenderer.send(BackgroundEvens.StoreSet, `settings.${property}`, val);
 		},
 		del(property: string) {
-			ipcRenderer.send('electron-store-del', `settings.${property}`);
+			ipcRenderer.send(BackgroundEvens.StoreDel, `settings.${property}`);
 		}
 		// Other method you want to add like has(), reset(), etc.
 	},
 	projects   : {
 		getAll() {
-			return ipcRenderer.sendSync('electron-project-getAll');
+			return ipcRenderer.sendSync(BackgroundEvens.ProjectGetAll);
 		},
 		getProject(id: number) {
-			ipcRenderer.send('electron-project-getProject', id);
+			ipcRenderer.send(BackgroundEvens.ProjectGetProject, id);
 		},
 		onUpdate(callback: () => void): () => void {
-			ipcRenderer.on('electron-project-update', callback);
-			return () => ipcRenderer.removeListener('electron-project-update', callback);
+			ipcRenderer.on(BackgroundEvens.ProjectUpdate, callback);
+			return () => ipcRenderer.removeListener(BackgroundEvens.ProjectUpdate, callback);
 		},
 		scan() {
-			ipcRenderer.send('electron-project-scan');
+			ipcRenderer.send(BackgroundEvens.ProjectScan);
 		},
 		add() {
-			ipcRenderer.send('electron-project-add');
+			ipcRenderer.send(BackgroundEvens.ProjectAdd);
 		},
 		open(id: number) {
 			bridge.ides.exec(id);
@@ -70,75 +71,75 @@ export const bridge = {
 			bridge.terminals.exec(id);
 		},
 		openFolder(id: number) {
-			ipcRenderer.send('electron-project-open-folder', id);
+			ipcRenderer.send(BackgroundEvens.ProjectOpenFolder, id);
 		},
 		config(id: number, key: string, value: any) {
-			ipcRenderer.send('electron-project-set', id, key, value);
+			ipcRenderer.send(BackgroundEvens.ProjectSet, id, key, value);
 		},
 		changeLogo(id: number) {
-			ipcRenderer.send('electron-project-change-logo', id);
+			ipcRenderer.send(BackgroundEvens.ProjectChangeLogo, id);
 		},
 		removeLogo(id: number) {
-			ipcRenderer.send('electron-project-remove-logo', id);
+			ipcRenderer.send(BackgroundEvens.ProjectRemoveLogo, id);
 		},
 		remove(id: number) {
-			ipcRenderer.send('electron-project-remove', id);
+			ipcRenderer.send(BackgroundEvens.ProjectRemove, id);
 		},
 		delete(id: number) {
-			ipcRenderer.send('electron-project-delete', id);
+			ipcRenderer.send(BackgroundEvens.ProjectDelete, id);
 		}
 	},
 	ides       : {
 		getAll() {
-			return ipcRenderer.sendSync('electron-ide-getAll');
+			return ipcRenderer.sendSync(BackgroundEvens.IdeGetAll);
 		},
 		onUpdate(callback: () => void): () => void {
-			ipcRenderer.on('electron-ide-update', callback);
-			return () => ipcRenderer.removeListener('electron-ide-update', callback);
+			ipcRenderer.on(BackgroundEvens.IdeUpdate, callback);
+			return () => ipcRenderer.removeListener(BackgroundEvens.IdeUpdate, callback);
 		},
 		add(property: string) {
-			ipcRenderer.send('electron-ide-add', property);
+			ipcRenderer.send(BackgroundEvens.IdeAdd, property);
 		},
 		exec(id: number) {
-			ipcRenderer.send('electron-ide-execute', id);
+			ipcRenderer.send(BackgroundEvens.IdeExecute, id);
 
 		}
 	},
 	terminals  : {
 		getAll() {
-			return ipcRenderer.sendSync('electron-terminal-getAll');
+			return ipcRenderer.sendSync(BackgroundEvens.TerminalGetAll);
 		},
 		onUpdate(callback: () => void): () => void {
-			ipcRenderer.on('electron-ide-update', callback);
+			ipcRenderer.on(BackgroundEvens.IdeUpdate, callback);
 			return () => ipcRenderer.removeListener('electron-terminal-update', callback);
 		},
 		add(property: string) {
 			ipcRenderer.send('electron-terminal-add', property);
 		},
 		exec(id: number) {
-			ipcRenderer.send('electron-terminal-execute', id);
+			ipcRenderer.send(BackgroundEvens.TerminalExecute, id);
 		}
 	},
 	tray       : {
 		close() {
-			ipcRenderer.send('electron-close-tray');
+			ipcRenderer.send(BackgroundEvens.CloseTray);
 		}
 	},
 	app        : {
 		quit() {
-			ipcRenderer.send('electron-app-close');
+			ipcRenderer.send(BackgroundEvens.AppClose);
 		},
 		toggleMinimize() {
-			ipcRenderer.send('electron-app-toggleMinimize');
+			ipcRenderer.send(BackgroundEvens.AppToggleMinimize);
 		},
 		toggleMaximize() {
-			ipcRenderer.send('electron-app-toggleMaximize');
+			ipcRenderer.send(BackgroundEvens.AppToggleMaximize);
 		},
 		hide() {
-			ipcRenderer.send('electron-app-hide');
+			ipcRenderer.send(BackgroundEvens.AppHide);
 		},
 		show() {
-			ipcRenderer.send('electron-app-show');
+			ipcRenderer.send(BackgroundEvens.AppShow);
 		},
 		onChangeState(func: (...args: any[]) => void): () => void {
 			const subscription = (_event: IpcRendererEvent, ...args: unknown[]) => func(...args);

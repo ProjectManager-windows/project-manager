@@ -1,6 +1,7 @@
-import ProgressUnit from './ProgressUnit';
+import ProgressUnit        from './ProgressUnit';
 // eslint-disable-next-line import/no-cycle
-import APP          from '../../main';
+import APP                 from '../../main';
+import { BackgroundEvens } from '../../../utills/Enums';
 
 export class ProgressBar {
 	private current: number = 0;
@@ -55,7 +56,7 @@ export class ProgressBar {
 	}
 
 	private sendUpdate() {
-		APP.sendRenderEvent('electron-progressbar-update', this.toArray());
+		APP.sendRenderEvent(BackgroundEvens.ProgressbarUpdate, this.toArray());
 	}
 }
 

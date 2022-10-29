@@ -3,9 +3,10 @@ import os          from 'os';
 import { exec }    from 'child_process';
 import { Item }    from '../Storage/Item';
 import { Project } from '../Projects/Project';
+import { Tables } from '../Storage/PM_Storage';
 
 export class Terminal extends Item {
-	public table: string = 'terminals';
+	public table = Tables.terminals;
 
 	init() {
 		this.setVal('logo', '');

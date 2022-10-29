@@ -1,5 +1,6 @@
 import EventEmitter                  from 'events';
 import { NotificationItemInterface } from './Notifications';
+import { BackgroundEvens }           from '../../utills/Enums';
 
 type ProgressBarType = {
 	total: number
@@ -74,7 +75,7 @@ export class ProgressBars extends EventEmitter {
 
 	private constructor() {
 		super();
-		window.electron.ipcRenderer.on('electron-progressbar-update', (message: ProgressBarType) => {
+		window.electron.ipcRenderer.on(BackgroundEvens.ProgressbarUpdate, (message: ProgressBarType) => {
 			if (this.bars[message.key] === undefined) {
 				this.bars[message.key] = new ProgressBar(message.key, message.name, message.total);
 			}

@@ -4,9 +4,10 @@ import { exec }    from 'child_process';
 import { shell }   from 'electron';
 import { Item }    from '../Storage/Item';
 import { Project } from '../Projects/Project';
+import { Tables }  from '../Storage/PM_Storage';
 
 export class IDE extends Item {
-	public table: string = 'IDEs';
+	public table = Tables.IDEs;
 
 	init() {
 		this.setVal('logo', '');
