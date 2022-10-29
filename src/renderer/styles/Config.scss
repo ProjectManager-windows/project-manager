@@ -28,5 +28,14 @@
 		.p-input-icon-right{
 			width: calc(100% - 35px);
 		}
+		&.logos-buttons{
+			width: calc(100% - 35px);
+			display: flex;
+			justify-content: space-between;
+			align-items: stretch;
+			align-content: center;
+			flex-direction: row;
+			flex-wrap: nowrap;
+		}
 	}
 }

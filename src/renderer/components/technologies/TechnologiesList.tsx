@@ -11,14 +11,14 @@ const TechnologiesList = () => {
 			let element = (<h1>{technology} - {selectedProject?.name}</h1>);
 			switch (technology) {
 				case 'config':
-					element = (<Config />);
+					element = (<Config selectedProject={selectedProject} />);
 					break;
 				default:
 					break;
 			}
 			if (setView) setView(element);
 		}
-	}, [selectedProject, technology]);
+	}, [selectedProject, setView, technology]);
 	const select = (name: string) => {
 		if (setTechnology) setTechnology(name);
 	};
@@ -26,14 +26,14 @@ const TechnologiesList = () => {
 		return (
 			<div className='TechnologiesList'>
 				<ul className='list'>
-					<TechnologyItem active={technology === 'config'} onSelect={select} name="config" icon={window.icons.gear} color='#ffffff' />
+					<TechnologyItem active={technology === 'config'} onSelect={select} name='config' icon={window.icons.gear} color='#ffffff' />
 				</ul>
 			</div>
 		);
 	}
 	return (
 		<div className='TechnologiesList'>
-			<ul className='list'/>
+			<ul className='list' />
 		</div>
 	);
 };

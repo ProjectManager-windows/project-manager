@@ -1,16 +1,14 @@
-import { app, BrowserWindow, BrowserWindowConstructorOptions, ipcMain, Menu, protocol, screen, shell, Tray } from 'electron';
-import Store               from 'electron-store';
-import path                from 'path';
-import { autoUpdater }     from 'electron-updater';
-import log                 from 'electron-log';
-import * as url            from 'url';
-import MenuBuilder         from './menu';
-import { resolveHtmlPath } from './util';
-import Projects            from './core/Projects/Projects';
-import events              from './ipcMain';
-import IDEs                from './core/IDEs/IDEs';
-import { minmax }          from '../utills/PM_Math';
-import Terminals           from './core/Terminals/Terminals';
+import { app, BrowserWindow, BrowserWindowConstructorOptions, ipcMain, Menu, screen, shell, Tray } from 'electron';
+import Store                                                                                       from 'electron-store';
+import path                                                                                        from 'path';
+import { autoUpdater }                                                                             from 'electron-updater';
+import log                                                                                         from 'electron-log';
+import MenuBuilder                                                                                 from './menu';
+import { resolveHtmlPath }                                                                         from './util';
+import Projects                                                                                    from './core/Projects/Projects';
+import events                                                                                      from './ipcMain';
+import IDEs                                                                                        from './core/IDEs/IDEs';
+import Terminals                                                                                   from './core/Terminals/Terminals';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -20,8 +18,8 @@ export class PM_App {
 	public tray: Tray | null                = null;
 	public windowTray: BrowserWindow | null = null;
 	public app: typeof app;
-	private TrayWindowWidth: number         = 300;
-	private TrayWindowHeight: number        = 600;
+	private TrayWindowWidth: number         = 440;
+	private TrayWindowHeight: number        = 700;
 
 	private constructor() {
 		this.isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
@@ -45,12 +43,12 @@ export class PM_App {
 		this.app
 			.whenReady()
 			.then(() => {
-				const screenBounds    = screen.getPrimaryDisplay();
-				const widthRatio      = 4;
-				const heightRatio     = 1.6;
-				this.TrayWindowWidth  = Math.round(minmax(screenBounds.workAreaSize.width / widthRatio, 1280 / widthRatio, 2560 / widthRatio));
-				this.TrayWindowHeight = Math.round(minmax(screenBounds.workAreaSize.height / heightRatio, 720 / heightRatio, 1440 / heightRatio));
-				const store           = new Store();
+				// const screenBounds    = screen.getPrimaryDisplay();
+				// const widthRatio      = 4;
+				// const heightRatio     = 1.6;
+				// this.TrayWindowWidth  = Math.round(minmax(screenBounds.workAreaSize.width / widthRatio, 1280 / widthRatio, 2560 / widthRatio));
+				// this.TrayWindowHeight = Math.round(minmax(screenBounds.workAreaSize.height / heightRatio, 720 / heightRatio, 1440 / heightRatio));
+				const store = new Store();
 				if (!store.get('settings.locale')) {
 					store.set('settings.locale', app.getLocale());
 				}

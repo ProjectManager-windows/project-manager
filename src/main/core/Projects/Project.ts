@@ -236,6 +236,16 @@ export class Project extends Item {
 		return name;
 	}
 
+	public async removeLogo() {
+		 const logo =this.getVal('logoBaseName');
+		let confPath = path.join(this.getVal('path'), '.project-manager');
+		confPath = path.join(confPath, logo);
+		if(await PM_FileSystem.exists(confPath)){
+			return fs.unlink(confPath);
+		}
+		return false;
+	}
+
 	async delete() {
 		const confPath = path.join(this.getVal('path'), '.project-manager');
 		super.delete();

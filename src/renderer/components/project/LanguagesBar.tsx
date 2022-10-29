@@ -63,7 +63,7 @@ const LanguagesBar = (props: { stats?: { [key: string]: number }, className?: st
 		// eslint-disable-next-line react/jsx-props-no-spreading
 		<div {...args}>
 			<div className='progress'>
-				{elements}
+				{elements.map((element) =>element)}
 			</div>
 		</div>
 	);

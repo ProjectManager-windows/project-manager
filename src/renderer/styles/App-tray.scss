@@ -31,13 +31,17 @@
 				width : 100%;
 			}
 		}
+
+		&.tray-header {
+			background-color : var(--header-color)
+		}
 	}
 
 	.body {
 		margin-left   : 20px;
 		margin-bottom : 20px;
 		width         : calc(100% - 20px);
-		height        : calc(100vh - 100px);
+		height        : calc(100vh - 65px);
 
 		.ProjectList {
 			max-height : 100vh;

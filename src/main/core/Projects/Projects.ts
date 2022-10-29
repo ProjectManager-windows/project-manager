@@ -75,6 +75,13 @@ class Projects implements Collection {
 				p.save();
 			}
 		});
+		ipcMain.on('electron-project-remove-logo', async (_event, id: number) => {
+			const p = this.getById(id);
+			if (p) {
+				await p.removeLogo();
+				p.save();
+			}
+		});
 
 		ipcMain.on('electron-project-remove', async (_event, id) => {
 			const p = this.getById(id);

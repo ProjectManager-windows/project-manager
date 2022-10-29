@@ -3,15 +3,14 @@ import { Button }         from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ColorPicker }    from 'primereact/colorpicker';
 import { InputText }      from 'primereact/inputtext';
-import { useContext }     from 'react';
 import SelectIde          from '../ui/SelectIde';
 import useCommit          from '../hooks/useCommit';
-import { ProjectContext } from '../context/ProjectContext';
 import SelectTerminal     from '../ui/SelectTerminal';
 import LanguagesBar       from '../project/LanguagesBar';
+import { ProjectType }    from '../../../types/project';
 
-const Config = () => {
-	const { selectedProject }                                                    = useContext(ProjectContext);
+const Config = (props: { selectedProject: ProjectType }) => {
+	const { selectedProject }                                                    = props;
 	const { t }                                                                  = useTranslation();
 	const [name, setName, commitName, isChangedName]                             = useCommit(selectedProject.name, (value) => {
 		window.electron.projects.config(selectedProject.id, 'name', value);
@@ -23,7 +22,9 @@ const Config = () => {
 	const [color, setColor, commitColor, isChangedColor]                         = useCommit(selectedProject.color, (value) => {
 		window.electron.projects.config(selectedProject.id, 'color', value);
 	});
-
+	if (!selectedProject) {
+		return <></>;
+	}
 	return (
 		<div className='Config'>
 			<div className='header'>
@@ -110,14 +111,23 @@ const Config = () => {
 					<td className='name-column'>
 						{t('logo')}
 					</td>
-					<td className='value-column'>
+					<td className='value-column logos-buttons'>
 						<Button
-							style={{ width: 'calc(100% - 35px)' }}
+							style={{ width: 'calc(50% - 5px)' }}
 							onClick={() => {
 								window.electron.projects.changeLogo(selectedProject.id);
 							}}
 						>
 							{t('logo')}
+						</Button>
+						<Button
+							style={{ width: 'calc(50% - 5px)' }}
+							onClick={() => {
+								window.electron.projects.removeLogo(selectedProject.id);
+							}}
+							disabled={!selectedProject.logo}
+						>
+							{t('remove logo')}
 						</Button>
 					</td>
 				</tr>

@@ -190,7 +190,7 @@ class PM_FileSystem {
 	}
 
 	static async readFolder(path: string): Promise<Dirent[]> {
-		return await fs.readdir(path, { withFileTypes: true });
+		return fs.readdir(path, { withFileTypes: true });
 	}
 
 	static async removeFolder(folder: string, stat?: Dirent | Stats): Promise<boolean> {

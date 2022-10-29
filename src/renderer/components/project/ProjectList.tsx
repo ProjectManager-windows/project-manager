@@ -9,7 +9,9 @@ import { ProjectType }                                  from '../../../types/pro
 import { ProjectContext }                               from '../context/ProjectContext';
 import { AppContext }                                   from '../context/AppContext';
 
-const ProjectList = () => {
+const ProjectList = (props: { minimal: boolean }) => {
+		  let { minimal } = props;
+		  if (!minimal) minimal = false;
 		  const { projects, selectedProject }       = useContext(ProjectContext);
 		  const { toast }                           = useContext(AppContext);
 		  const { t }                               = useTranslation();
@@ -89,7 +91,7 @@ const ProjectList = () => {
 					  <ul className='list'>
 						  {forSort.map((project) => <ProjectItem
 							  active={selectedProject?.id === project.id} key={project.id} project={project} contextProject={setContextProject} cm={cm}
-							  defaultAction={defaultAction}
+							  defaultAction={defaultAction} minimal={minimal}
 						  />)}
 					  </ul>
 				  </div>

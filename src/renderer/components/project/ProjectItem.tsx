@@ -6,24 +6,25 @@ import useLogo               from '../hooks/useLogo';
 import '../../styles/projectItem.scss';
 import { ProjectContext }    from '../context/ProjectContext';
 
-const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.MutableRefObject<any>, defaultAction: (id: number) => void, contextProject: (value: ProjectType) => void }) => {
-		  const { selectProject, ides, terminals }                     = useContext(ProjectContext);
-		  const { project, cm, defaultAction, contextProject, active } = props;
-		  const logo                                                   = useLogo(
+
+const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.MutableRefObject<any>, defaultAction: (id: number) => void, contextProject: (value: ProjectType) => void, minimal?: boolean }) => {
+		  const { project, cm, defaultAction, contextProject, active, minimal } = props;
+		  const { selectProject, ides, terminals } = useContext(ProjectContext);
+		  const logo                               = useLogo(
 			  {
 				  type : 'project',
 				  name : project.name,
 				  color: project?.color,
 				  logo : project?.logo
 			  });
-		  const ideLogo                                                = useLogo(
+		  const ideLogo                            = useLogo(
 			  {
 				  type : 'ide',
 				  name : project.ide && ides ? ides[project.ide].name : '',
 				  color: project.ide && ides ? ides[project.ide]?.color : '',
 				  logo : project.ide && ides ? ides[project.ide]?.logo : ''
 			  });
-		  const terminalLogo                                           = useLogo(
+		  const terminalLogo                       = useLogo(
 			  {
 				  type : 'terminal',
 				  name : project.terminal && terminals ? terminals[project.terminal].name : '',
@@ -54,7 +55,11 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.M
 								  {project.ide ? <div className='tp ' data-pr-tooltip={ides && ides[project.ide].name}>{ideLogo}</div> : ''}
 								  {project.terminal ? <div className='tp' data-pr-tooltip={terminals && terminals[project.terminal].name}>{terminalLogo}</div> : ''}
 							  </div>
-							  <LanguagesBar className='languageBar' stats={project.stats} />
+							  {minimal ? <pre style={{fontSize:'12px',opacity:0.5,overflow:'hidden',wordBreak:'keep-all',display:'flex'}}>
+										   {project.path}
+									   </pre> :
+							   <LanguagesBar className='languageBar' stats={project.stats} />
+							  }
 						  </div>
 					  </div>
 				  </li>

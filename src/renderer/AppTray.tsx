@@ -17,7 +17,7 @@ export default function AppTray() {
 	const [view, setView]                  = useState((<div />));
 	const [selectedProject, selectProject] = useState<ProjectType>();
 	const [technology, setTechnology]      = useState<string>('');
-	
+
 	const [searchString, setSearch] = useState('');
 	useEffect(() => {
 		return window.electron.projects.onUpdate(() => {
@@ -33,7 +33,7 @@ export default function AppTray() {
 			<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
 			<ProjectContext.Provider value={{ projects: projectList, setProjects, selectedProject, selectProject, view, setView, technology, setTechnology, ides, terminals }}>
 				<FontAwesomeIcon className='close' icon={faClose} onClick={() => closeTray()} />
-				<div className='header'>
+				<div className='header tray-header'>
 					<div className='search'>
 						 <span className='p-input-icon-left'>
 							<i className='pi pi-search' />
@@ -42,7 +42,7 @@ export default function AppTray() {
 					</div>
 				</div>
 				<div className='body'>
-					<ProjectList />
+					<ProjectList minimal/>
 				</div>
 				<div className='footer' />
 			</ProjectContext.Provider>
