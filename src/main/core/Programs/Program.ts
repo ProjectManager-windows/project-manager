@@ -92,20 +92,21 @@ export class Program implements ProgramFields {
 		return PM_FileSystem.fileExists(this.executePath);
 	}
 
-	fromId(id: number) {
-		const data = PM_Storage.getById<ProgramFields>(this.table, id);
+	static fromId(id: number) {
+		const data = PM_Storage.getById<ProgramFields>(Tables.programs, id);
 		if (!data) {
 			throw new Error('Invalid program id');
 		}
-		this.id             = id;
-		this.executePath    = data.executePath;
-		this.executeCommand = data.executeCommand;
-		this.setColor(data.color);
-		this.setName(data.name);
-		this.setLabel(data.label);
-		this.setLogo(data.logo);
-		this.isNew = false;
-		return this;
+		const p          = new Program(data.type);
+		p.id             = id;
+		p.executePath    = data.executePath;
+		p.executeCommand = data.executeCommand;
+		p.setColor(data.color);
+		p.setName(data.name);
+		p.setLabel(data.label);
+		p.setLogo(data.logo);
+		p.isNew = false;
+		return p;
 	}
 
 	save() {

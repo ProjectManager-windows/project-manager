@@ -1,5 +1,6 @@
-import EventEmitter from 'events';
-import ProgressBars from './ProgressBars';
+import EventEmitter        from 'events';
+import ProgressBars        from './ProgressBars';
+import { BackgroundEvens } from '../../utills/Enums';
 
 
 export interface NotificationItemInterface {
