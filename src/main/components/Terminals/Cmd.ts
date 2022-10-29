@@ -6,7 +6,7 @@ export class Cmd extends Terminal {
 
 	afterInit(data: { [x: string]: any; id?: number; logo?: any; }) {
 		if (!data.logo) {
-			this.setVal('logo', 'icons/terminals/cmd.svg');
+			this.setVal('logo', 'cmd');
 			this.setVal('color', 'transparent');
 		}
 		this.setVal('name', 'Cmd');

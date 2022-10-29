@@ -7,7 +7,7 @@ import { Project } from '../../core/Projects/Project';
 export class VsCode extends IDE {
 	afterInit(data: { [x: string]: any; id?: number; logo?: any; }) {
 		if (!data.logo) {
-			this.setVal('logo', 'icons/ides/vscode.svg');
+			this.setVal('logo', 'vscode');
 			this.setVal('color', 'transparent');
 		}
 		this.setVal('name', 'VsCode');

@@ -16,7 +16,6 @@ const ProjectList = () => {
 		  const cm                                  = useRef(null);
 		  const [contextProject, setContextProject] = useState<ProjectType>();
 		  let forSort                               = [];
-		  const list                                = [];
 		  const items                               = [
 			  {
 				  label  : t('open in ide').ucfirst(),
@@ -83,18 +82,15 @@ const ProjectList = () => {
 		  forSort = forSort.sort((a, b) => {
 			  return a.name.localeCompare(b.name);
 		  });
-		  for (const project of forSort) {
-			  list.push(<ProjectItem
-				  active={selectedProject?.id === project.id} key={project.id} project={project} contextProject={setContextProject} cm={cm}
-				  defaultAction={defaultAction}
-			  />);
-		  }
-		  if (list.length > 0) {
+		  if (forSort.length > 0) {
 			  return (
 				  <div className='ProjectList'>
 					  <ContextMenu model={items} ref={cm} />
 					  <ul className='list'>
-						  {list}
+						  {forSort.map((project) => <ProjectItem
+							  active={selectedProject?.id === project.id} key={project.id} project={project} contextProject={setContextProject} cm={cm}
+							  defaultAction={defaultAction}
+						  />)}
 					  </ul>
 				  </div>
 			  );

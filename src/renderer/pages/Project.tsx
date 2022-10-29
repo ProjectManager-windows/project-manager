@@ -1,12 +1,12 @@
 import '../styles/project.scss';
 import { useEffect, useState } from 'react';
-import { Tooltip }             from 'primereact/tooltip';
-import ProjectList             from '../components/project/ProjectList';
-import { ProjectType }         from '../../types/project';
-import TechnologiesList        from '../components/technologies/TechnologiesList';
-import { ProjectContext }      from '../components/context/ProjectContext';
-import { InputText }           from 'primereact/inputtext';
-import useSearch               from '../components/hooks/useSearch';
+import { Tooltip }                    from 'primereact/tooltip';
+import { InputText }                  from 'primereact/inputtext';
+import ProjectList                    from '../components/project/ProjectList';
+import { ProjectType }                from '../../types/project';
+import TechnologiesList               from '../components/technologies/TechnologiesList';
+import { ProjectContext }             from '../components/context/ProjectContext';
+import useSearch                      from '../components/hooks/useSearch';
 
 const Project = () => {
 	const [projects, setProjects]          = useState(window.electron.projects.getAll());

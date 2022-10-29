@@ -8,9 +8,16 @@ import { faClose }             from '@fortawesome/free-solid-svg-icons';
 import ProjectList             from './components/project/ProjectList';
 import { ProjectContext }      from './components/context/ProjectContext';
 import useSearch               from './components/hooks/useSearch';
+import { ProjectType }         from '../types/project';
 
 export default function AppTray() {
-	const [projects, setProjects]   = useState(window.electron.projects.getAll());
+	const [projects, setProjects]          = useState(window.electron.projects.getAll());
+	const [ides]                           = useState(window.electron.ides.getAll());
+	const [terminals]                      = useState(window.electron.terminals.getAll());
+	const [view, setView]                  = useState((<div />));
+	const [selectedProject, selectProject] = useState<ProjectType>();
+	const [technology, setTechnology]      = useState<string>('');
+	
 	const [searchString, setSearch] = useState('');
 	useEffect(() => {
 		return window.electron.projects.onUpdate(() => {
@@ -18,13 +25,13 @@ export default function AppTray() {
 		});
 	}, []);
 	const projectList = useSearch({ projects, searchString });
-	const closeTray = () => {
+	const closeTray   = () => {
 		window.electron.tray.close();
 	};
 	return (
 		<div className='App-tray'>
 			<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
-			<ProjectContext.Provider value={{ projects: projectList }}>
+			<ProjectContext.Provider value={{ projects: projectList, setProjects, selectedProject, selectProject, view, setView, technology, setTechnology, ides, terminals }}>
 				<FontAwesomeIcon className='close' icon={faClose} onClick={() => closeTray()} />
 				<div className='header'>
 					<div className='search'>

@@ -7,7 +7,7 @@ export class GitBash extends Terminal {
 
 	afterInit(data: { [x: string]: any; id?: number; logo?: any; }) {
 		if (!data.logo) {
-			this.setVal('logo', 'icons/terminals/git.svg');
+			this.setVal('logo', 'git');
 			this.setVal('color', 'transparent');
 		}
 		this.setVal('name', 'GitBash');

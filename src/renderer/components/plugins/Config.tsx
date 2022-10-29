@@ -8,6 +8,7 @@ import SelectIde          from '../ui/SelectIde';
 import useCommit          from '../hooks/useCommit';
 import { ProjectContext } from '../context/ProjectContext';
 import SelectTerminal     from '../ui/SelectTerminal';
+import LanguagesBar       from '../project/LanguagesBar';
 
 const Config = () => {
 	const { selectedProject }                                                    = useContext(ProjectContext);
@@ -123,6 +124,8 @@ const Config = () => {
 
 				</tbody>
 			</table>
+			<hr />
+			<LanguagesBar className='languageBar' stats={selectedProject.stats} />
 		</div>
 	);
 };
