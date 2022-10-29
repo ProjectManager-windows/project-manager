@@ -40,6 +40,13 @@
 					line-height   : 1.3em;
 					margin-bottom : 5px;
 				}
+				.path{
+					font-size:12px;
+					opacity:0.5;
+					overflow:hidden;
+					word-break:keep-all;
+					line-height:14px
+				}
 
 				.notDefaultElems {
 					display  : flex;

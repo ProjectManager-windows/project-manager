@@ -55,7 +55,7 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.M
 								  {project.ide ? <div className='tp ' data-pr-tooltip={ides && ides[project.ide].name}>{ideLogo}</div> : ''}
 								  {project.terminal ? <div className='tp' data-pr-tooltip={terminals && terminals[project.terminal].name}>{terminalLogo}</div> : ''}
 							  </div>
-							  {minimal ? <pre style={{fontSize:'12px',opacity:0.5,overflow:'hidden',wordBreak:'keep-all',display:'flex'}}>
+							  {minimal ? <pre className="path">
 										   {project.path}
 									   </pre> :
 							   <LanguagesBar className='languageBar' stats={project.stats} />
