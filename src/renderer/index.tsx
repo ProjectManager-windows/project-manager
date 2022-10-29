@@ -13,6 +13,7 @@ import './styles/reset.scss';
 import LanguagesExtensions               from '../../assets/Programming_Languages_Extensions.json';
 import languagesColors                   from '../../assets/Programming_Languages_colors.json';
 import AppTray                           from './AppTray';
+import icons                             from './icons/icons';
 
 PrimeReact.ripple     = true;
 PrimeReact.inputStyle = 'filled';
@@ -30,6 +31,7 @@ window.Notifications       = Notifications;
 window.LanguagesExtensions = LanguagesExtensions;
 window.languagesColors     = languagesColors;
 window.ImageCache          = {};
+window.icons               = icons;
 window.pixel               = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const container            = document.getElementById('root')!;

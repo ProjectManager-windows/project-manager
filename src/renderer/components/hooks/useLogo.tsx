@@ -25,6 +25,10 @@ export const useLogo = (props: { type: 'ide' | 'project' | 'technology'|'termina
 			newColor = color;
 		}
 		if (logo) {
+			const icons = new Set(Object.keys(window.icons))
+			if(icons.has(logo)) {
+				return { background: `${newColor} url(${window.icons[logo]}) no-repeat scroll 50% 50% `, ...newStyle };
+			}
 			return { background: `${newColor} url(${logo}) no-repeat scroll 50% 50% `, ...newStyle };
 		}
 		// const color = backgroundColors[random.int(0, backgroundColors.length)];

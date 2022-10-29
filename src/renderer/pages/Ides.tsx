@@ -1,8 +1,8 @@
 import '../styles/ides.scss';
 import { useNavigate }                from 'react-router-dom';
-import IdeList                        from '../components/Ides/IdeList';
 import React, { useEffect, useState } from 'react';
 import { Tooltip }                    from 'primereact/tooltip';
+import IdeList                        from '../components/Ides/IdeList';
 import { IDEType }                    from '../../types/project';
 import IdeEditor                      from '../components/Ides/IdeEditor';
 
@@ -22,9 +22,12 @@ const Ides = () => {
 	return (
 		<div className='Ides'>
 			<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
-			<i onClick={() => navigate(-1)} className='back-link iBtn pi pi-arrow-left'></i>
-			<IdeList Ides={ides} onSelect={select}></IdeList>
-			<IdeEditor ide={selectedIde} />
+			<i onClick={() => navigate(-1)} className='back-link iBtn pi pi-arrow-left' />
+			<IdeList Ides={ides} onSelect={select} />
+			{selectedIde ?
+			 <IdeEditor ide={selectedIde} />
+						 :
+			 <div className='IdeEditor' />}
 		</div>
 	);
 };

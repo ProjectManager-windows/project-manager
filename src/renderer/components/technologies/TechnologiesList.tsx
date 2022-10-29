@@ -1,7 +1,6 @@
 import '../../styles/TechnologiesList.scss';
 import { useContext, useEffect } from 'react';
 import TechnologyItem            from './TechnologyItem';
-import gear                      from '../../../../assets/icons/svg/gear.svg';
 import Config                    from '../plugins/Config';
 import { ProjectContext }        from '../context/ProjectContext';
 
@@ -12,7 +11,7 @@ const TechnologiesList = () => {
 			let element = (<h1>{technology} - {selectedProject?.name}</h1>);
 			switch (technology) {
 				case 'config':
-					element = (<Config project={selectedProject} />);
+					element = (<Config />);
 					break;
 				default:
 					break;
@@ -27,7 +26,7 @@ const TechnologiesList = () => {
 		return (
 			<div className='TechnologiesList'>
 				<ul className='list'>
-					<TechnologyItem active={technology === 'config'} onSelect={select} name={'config'} icon={gear} color='#ffffff'></TechnologyItem>
+					<TechnologyItem active={technology === 'config'} onSelect={select} name="config" icon={window.icons.gear} color='#ffffff' />
 				</ul>
 			</div>
 		);

@@ -8,10 +8,7 @@ export class PhpStorm extends IDE {
 
 	afterInit(data: { [x: string]: any; id?: number; logo?: any; }) {
 		if (!data.logo) {
-			let p = `file://${Path.join(__dirname,'..','..','..', '..', 'assets','icons','ides','phpstorm.svg')}`
-			p =p.replaceAll("\\",'/')
-			console.log(p)
-			this.setVal('logo', p);
+			this.setVal('logo', 'phpstorm');
 			this.setVal('color', 'transparent');
 		}
 		this.setVal('name', 'PhpStorm');
