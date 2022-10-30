@@ -1,5 +1,4 @@
 import '../../styles/Config.scss';
-import { Button }         from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ColorPicker }    from 'primereact/colorpicker';
 import { InputText }      from 'primereact/inputtext';
@@ -8,6 +7,7 @@ import useCommit          from '../hooks/useCommit';
 import SelectTerminal     from '../ui/SelectTerminal';
 import LanguagesBar       from '../project/LanguagesBar';
 import { ProjectType }    from '../../../types/project';
+import { Button } from 'primereact/button';
 
 const Config = (props: { selectedProject: ProjectType }) => {
 	const { selectedProject }                                                    = props;
@@ -113,21 +113,22 @@ const Config = (props: { selectedProject: ProjectType }) => {
 					</td>
 					<td className='value-column logos-buttons'>
 						<Button
+							label={t('set logo')}
 							style={{ width: 'calc(50% - 5px)' }}
 							onClick={() => {
 								window.electron.projects.changeLogo(selectedProject.id);
 							}}
 						>
-							{t('logo')}
 						</Button>
 						<Button
+							className={'p-button-danger'}
+							label={t('remove logo')}
 							style={{ width: 'calc(50% - 5px)' }}
 							onClick={() => {
 								window.electron.projects.removeLogo(selectedProject.id);
 							}}
 							disabled={!selectedProject.logo}
 						>
-							{t('remove logo')}
 						</Button>
 					</td>
 				</tr>

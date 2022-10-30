@@ -20,7 +20,7 @@ const ProgramItem = (props: { program: ProgramFields, onSelect: (e: React.MouseE
 				<div>
 					{logo}
 					<div className='info'>
-						<div className='tp name' data-pr-tooltip={program.name}>{program.name}</div>
+						<div className='tp name' data-pr-tooltip={program.name}>{program.label}</div>
 					</div>
 				</div>
 			</li>

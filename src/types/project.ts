@@ -52,9 +52,8 @@ export enum ProgramType {
 	other    = 'other',
 }
 
-
 export interface ProgramFields {
-	id?: number;
+	id: number;
 	executePath: string;
 	executeCommand: string;
 	name: string;
@@ -63,4 +62,4 @@ export interface ProgramFields {
 	color: string;
 	type: ProgramType;
 }
-
+export type ProgramFieldsKeys = keyof ProgramFields

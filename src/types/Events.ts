@@ -41,4 +41,5 @@ export enum BackgroundEvents {
 	TerminalAdd        = 'electron-terminal-add',
 	inputFile          = 'electron-input-file',
 	appIsHide          = 'electron-app-isHide',
+	ProgramDelete      = 'electron-program-delete',
 }

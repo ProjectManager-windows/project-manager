@@ -36,7 +36,7 @@ const ProgramEditor = () => {
 		<hr />
 		<ul>
 			<li className='value-column'>
-				<Dropdown style={{ width: '100%' }} value={type} options={cities} onChange={e => setType(e.value)} optionLabel='name' />
+				<Dropdown style={{ width: '100%' }} value={type} options={cities} onChange={e => setType(e.value.code)} optionLabel='name' />
 			</li>
 			<li className='value-column'>
 				<Button style={{ width: '100%' }} disabled={!type} onClick={chooseFile}>{btn}</Button>

@@ -2,30 +2,36 @@
 	padding          : 5px;
 	background-color : var(--primary-color-text);
 
-	li{
-		padding-bottom: 10px;
+	li {
+		padding-bottom : 10px;
 	}
 
-	.name-column {
-		width     : 30%;
-		min-width : 150px;
-	}
+	table {
+		border-collapse : separate;
+		border-spacing  : 0 1em;
 
-	.value-column {
-		width : 250px;
-
-		.p-input-icon-right {
-			width : calc(100% - 35px);
+		.name-column {
+			width     : 30%;
+			min-width : 150px;
 		}
 
-		&.logos-buttons {
-			width           : calc(100% - 35px);
-			display         : flex;
-			justify-content : space-between;
-			align-items     : stretch;
-			align-content   : center;
-			flex-direction  : row;
-			flex-wrap       : nowrap;
+
+		.value-column {
+			width : 250px;
+
+			.p-input-icon-right,button {
+				width : calc(100% - 35px);
+			}
+
+			&.logos-buttons {
+				width           : calc(100% - 35px);
+				display         : flex;
+				justify-content : space-between;
+				align-items     : stretch;
+				align-content   : center;
+				flex-direction  : row;
+				flex-wrap       : nowrap;
+			}
 		}
 	}
 }

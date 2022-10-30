@@ -9,7 +9,7 @@ import { ProgramFields, ProgramType } from '../../../types/project';
 
 export class Program implements ProgramFields {
 	readonly table                = Tables.programs;
-	public id: number | undefined;
+	public id: number             = 0;
 	public executePath: string    = '';
 	public executeCommand: string = '';
 	public name: string           = ''; // unique identifier
@@ -152,6 +152,7 @@ export class Program implements ProgramFields {
 			this.logo = logoPath;
 		}
 		PM_Storage.commit<ProgramFields>(this.table, this.id, {
+			id            : this.id,
 			executePath   : this.executePath,
 			executeCommand: this.executeCommand,
 			name          : this.name,
@@ -159,7 +160,7 @@ export class Program implements ProgramFields {
 			logo          : this.logo,
 			color         : this.color,
 			type          : this.type
-		});
+		},['name']);
 		return this;
 	}
 }
