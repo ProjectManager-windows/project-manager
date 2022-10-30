@@ -1,6 +1,6 @@
 import EventEmitter                  from 'events';
 import { NotificationItemInterface } from './Notifications';
-import { BackgroundEvens }           from '../../utills/Enums';
+import { BackgroundEvens }           from '../../types/Enums';
 
 type ProgressBarType = {
 	total: number

@@ -1,10 +1,12 @@
 import { exec }               from 'child_process';
 import PM_Storage, { Tables } from '../Storage/PM_Storage';
 import PM_FileSystem          from '../Utils/PM_FileSystem';
+import { Project }            from '../Projects/Project';
 
 export enum ProgramType {
 	ide       = 'Ide',
 	terminals = 'Terminals',
+	other     = 'other',
 }
 
 export interface ProgramFields {
@@ -29,6 +31,7 @@ export class Program implements ProgramFields {
 	public color: string          = ''; // background color for icon
 	public isNew: boolean         = true;
 	public type: ProgramType;
+	public project?: Project;
 
 	constructor(type: ProgramType) {
 		this.type = type;
@@ -50,6 +53,10 @@ export class Program implements ProgramFields {
 	setLabel(value: string) {
 		this.label = value;
 		return this;
+	}
+
+	setProject(project: Project) {
+		this.project = project;
 	}
 
 	getLogo(): string {

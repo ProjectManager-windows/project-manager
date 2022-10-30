@@ -1,6 +1,6 @@
 import { ipcMain }         from 'electron';
 import Store               from 'electron-store';
-import { BackgroundEvens } from '../../utills/Enums';
+import { BackgroundEvens } from '../../types/Enums';
 
 
 export default {

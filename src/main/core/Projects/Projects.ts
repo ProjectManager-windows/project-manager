@@ -8,7 +8,7 @@ import { ItemType }               from '../Storage/Item';
 import ProgressBar                from '../ProgressBar/ProgressBar';
 import PM_FileSystem              from '../Utils/PM_FileSystem';
 import { t }                      from '../Utils/i18n';
-import { BackgroundEvens }        from '../../../utills/Enums';
+import { BackgroundEvens }        from '../../../types/Enums';
 
 export type ProjectsScheme = {
 	id: string

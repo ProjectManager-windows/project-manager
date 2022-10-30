@@ -9,7 +9,7 @@ import Projects                                                                 
 import events                                                                                      from './ipcMain';
 import IDEs                                                                                        from './core/IDEs/IDEs';
 import Terminals                                                                                   from './core/Terminals/Terminals';
-import { BackgroundEvens }                                                                         from '../utills/Enums';
+import { BackgroundEvens }                                                                         from '../types/Enums';
 
 export class PM_App {
 	private static instance: PM_App;

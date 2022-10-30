@@ -10,7 +10,7 @@ import { Item }                from '../Storage/Item';
 import PM_FileSystem, { file } from '../Utils/PM_FileSystem';
 import APP                     from '../../main';
 import { Tables }              from '../Storage/PM_Storage';
-import { BackgroundEvens }     from '../../../utills/Enums';
+import { BackgroundEvens }     from '../../../types/Enums';
 
 export class Project extends Item {
 	public table = Tables.projects;
@@ -83,8 +83,8 @@ export class Project extends Item {
 	getVal<T = any>(key: string): T {
 		if (key === 'logo') {
 			if (this.getVal('logoBaseName')) {
-				const confPath = path.join(super.getVal('path'), '.project-manager', this.getVal('logoBaseName'));
-				return (PM_FileSystem.logoToBase64(confPath)) as unknown as T;
+				const confPath = path.join(super.getVal('path'), '.project-manager', this.getVal('logoBaseName')).replaceAll('\\', '/');
+				return `file://${confPath}` as unknown as T;
 			}
 			return '' as unknown as T;
 		}
@@ -103,7 +103,9 @@ export class Project extends Item {
 
 	save(): number {
 		const id = super.save();
-		APP.sendRenderEvent(BackgroundEvens.ProjectUpdate);
+		APP.sendRenderEvent(BackgroundEvens.ProjectUpdate).then(() => null).catch(() => {
+			throw new Error('Error saving project');
+		});
 		return id;
 
 	}
@@ -116,7 +118,6 @@ export class Project extends Item {
 		results.logo = this.getVal('logo');
 		return results;
 	}
-
 
 	public async statLanguages() {
 		const localPath          = this.getVal<string>('path');
@@ -242,6 +243,7 @@ export class Project extends Item {
 		const logo   = this.getVal('logoBaseName');
 		let confPath = path.join(this.getVal('path'), '.project-manager');
 		confPath     = path.join(confPath, logo);
+		this.setVal('logoBaseName',null)
 		if (await PM_FileSystem.exists(confPath)) {
 			return fs.unlink(confPath);
 		}

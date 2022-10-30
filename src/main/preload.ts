@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import log                                              from 'electron-log';
-import { BackgroundEvens }                              from '../utills/Enums';
+import { BackgroundEvens }                              from '../types/Enums';
 
 export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'electron-notification-update' | 'test';
 

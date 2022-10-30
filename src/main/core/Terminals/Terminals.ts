@@ -6,7 +6,7 @@ import { ItemType }           from '../Storage/Item';
 import cmds                   from '../../components/Terminals';
 import Projects               from '../Projects/Projects';
 import Settings               from '../Settings';
-import { BackgroundEvens }    from '../../../utills/Enums';
+import { BackgroundEvens }    from '../../../types/Enums';
 
 class Terminals implements Collection {
 	private static instance: Terminals;

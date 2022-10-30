@@ -6,7 +6,7 @@ import { ItemType }           from '../Storage/Item';
 import editors                from '../../components/IDEs';
 import Projects               from '../Projects/Projects';
 import Settings               from '../Settings';
-import { BackgroundEvens }    from '../../../utills/Enums';
+import { BackgroundEvens }    from '../../../types/Enums';
 
 class IDEs implements Collection {
 	private static instance: IDEs;

@@ -1,7 +1,7 @@
 import ProgressUnit        from './ProgressUnit';
 // eslint-disable-next-line import/no-cycle
 import APP                 from '../../main';
-import { BackgroundEvens } from '../../../utills/Enums';
+import { BackgroundEvens } from '../../../types/Enums';
 
 export class ProgressBar {
 	private current: number = 0;

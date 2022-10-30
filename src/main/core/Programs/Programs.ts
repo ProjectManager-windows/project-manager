@@ -1,7 +1,7 @@
 import PM_Storage, { Tables }                  from '../Storage/PM_Storage';
 import { Program, ProgramFields, ProgramType } from './Program';
 import { ipcMain }                             from 'electron';
-import { BackgroundEvens }                     from '../../../utills/Enums';
+import { BackgroundEvens }                     from '../../../types/Enums';
 
 export class Programs {
 	public programsData: { [p: string]: ProgramFields } | undefined;
