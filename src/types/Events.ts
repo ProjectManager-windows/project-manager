@@ -39,4 +39,6 @@ export enum BackgroundEvents {
 	TerminalUpdate     = 'electron-terminal-update',
 	ProgramUpdate      = 'electron-program-update',
 	TerminalAdd        = 'electron-terminal-add',
+	inputFile          = 'electron-input-file',
+	appIsHide          = 'electron-app-isHide',
 }

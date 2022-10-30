@@ -1,9 +1,9 @@
-import { exec }               from 'child_process';
-import { app }                from 'electron';
-import Path                   from 'path';
-import path                   from 'path';
-import PM_Storage, { Tables } from '../Storage/PM_Storage';
-import PM_FileSystem          from '../Utils/PM_FileSystem';
+import { exec }                       from 'child_process';
+import { app }                        from 'electron';
+import Path                           from 'path';
+import path                           from 'path';
+import PM_Storage, { Tables }         from '../Storage/PM_Storage';
+import PM_FileSystem                  from '../Utils/PM_FileSystem';
 import { Project }                    from '../Projects/Project';
 import { ProgramFields, ProgramType } from '../../../types/project';
 
@@ -122,7 +122,7 @@ export class Program implements ProgramFields {
 		}
 		const p       = new Program(type);
 		p.executePath = path;
-		p.setName(Path.basename(path));
+		p.setName(Path.basename(path, Path.extname(path)));
 		p.isNew = false;
 		return p;
 	}
@@ -144,11 +144,12 @@ export class Program implements ProgramFields {
 			this.color = 'transparent';
 		}
 		if (!this.logo) {
-			const logoPath = path.join(app.getPath('userData'), 'programs', `${this.name}.ico`);
+			const logoPath = path.join(app.getPath('userData'), 'programs', `${this.name}.ico`).replaceAll('\\', '/');
 			if (!await PM_FileSystem.exists(logoPath)) {
 				const data = await PM_FileSystem.getIconByFile(this.executePath);
 				await PM_FileSystem.writeFile(logoPath, data, 'base64');
 			}
+			this.logo = logoPath;
 		}
 		PM_Storage.commit<ProgramFields>(this.table, this.id, {
 			executePath   : this.executePath,

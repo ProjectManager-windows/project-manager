@@ -1,4 +1,31 @@
 .ProgramEditor {
-	padding: 5px;
-	background-color: var(--primary-color-text);
+	padding          : 5px;
+	background-color : var(--primary-color-text);
+
+	li{
+		padding-bottom: 10px;
+	}
+
+	.name-column {
+		width     : 30%;
+		min-width : 150px;
+	}
+
+	.value-column {
+		width : 250px;
+
+		.p-input-icon-right {
+			width : calc(100% - 35px);
+		}
+
+		&.logos-buttons {
+			width           : calc(100% - 35px);
+			display         : flex;
+			justify-content : space-between;
+			align-items     : stretch;
+			align-content   : center;
+			flex-direction  : row;
+			flex-wrap       : nowrap;
+		}
+	}
 }

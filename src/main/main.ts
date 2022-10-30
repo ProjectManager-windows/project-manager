@@ -1,16 +1,16 @@
-import { app, BrowserWindow, BrowserWindowConstructorOptions, ipcMain, Menu, screen, shell, Tray } from 'electron';
-import Store                                                                                       from 'electron-store';
-import path                                                                                        from 'path';
-import { autoUpdater }                                                                             from 'electron-updater';
-import log                                                                                         from 'electron-log';
-import MenuBuilder                                                                                 from './menu';
-import { resolveHtmlPath }                                                                         from './util';
-import Projects                                                                                    from './core/Projects/Projects';
-import events                                                                                      from './ipcMain';
-import IDEs                                                                                        from './core/IDEs/IDEs';
-import Terminals                                                                                   from './core/Terminals/Terminals';
-import { BackgroundEvents }                                                                        from '../types/Events';
-import Programs                                                                                    from './core/Programs/Programs';
+import { app, BrowserWindow, BrowserWindowConstructorOptions, dialog, ipcMain, Menu, screen, shell, Tray } from 'electron';
+import Store                                                                                               from 'electron-store';
+import path                                                                                                from 'path';
+import { autoUpdater }                                                                                     from 'electron-updater';
+import log                                                                                                 from 'electron-log';
+import MenuBuilder                                                                                         from './menu';
+import { resolveHtmlPath }                                                                                 from './util';
+import Projects                                                                                            from './core/Projects/Projects';
+import events                                                                                              from './ipcMain';
+import IDEs                                                                                                from './core/IDEs/IDEs';
+import Terminals                                                                                           from './core/Terminals/Terminals';
+import { BackgroundEvents }                                                                                from '../types/Events';
+import Programs                                                                                            from './core/Programs/Programs';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -141,7 +141,7 @@ export class PM_App {
 			}
 			event.returnValue = this.mainWindow.isVisible();
 		});
-		ipcMain.on('electron-app-isHide', async (event) => {
+		ipcMain.on(BackgroundEvents.appIsHide, async (event) => {
 			if (!this.mainWindow) {
 				event.returnValue = false;
 				return;
@@ -154,6 +154,23 @@ export class PM_App {
 				return;
 			}
 			event.returnValue = this.mainWindow.isVisible();
+		});
+
+		ipcMain.on(BackgroundEvents.inputFile, async (event, extensions = []) => {
+			const file      = await dialog.showOpenDialog(
+				{
+					properties: ['openFile'],
+					filters   : [
+						{
+							name      : '',
+							extensions: extensions
+						}]
+				});
+			let returnValue = '';
+			if (!file.canceled) {
+				[returnValue] = file.filePaths;
+			}
+			event.returnValue = returnValue;
 		});
 	}
 
@@ -177,11 +194,10 @@ export class PM_App {
 		return path.join(RESOURCES_PATH, ...paths);
 	};
 
-	async sendRenderEvent(channel: string, ...args: any[]) {
-
+	async sendRenderEvent(channel: BackgroundEvents, ...args: any[]) {
 		return Promise.all([
 							   new Promise<void>((resolve, reject) => {
-								   const send = (channel: string, ...args: any[]) => {
+								   const send = (channel: BackgroundEvents, ...args: any[]) => {
 									   if (this.mainWindow) {
 										   this.mainWindow.webContents.send(channel, ...args);
 										   resolve();
@@ -203,7 +219,7 @@ export class PM_App {
 								   }
 							   }),
 							   new Promise<void>((resolve, reject) => {
-								   const send = (channel: string, ...args: any[]) => {
+								   const send = (channel: BackgroundEvents, ...args: any[]) => {
 									   if (this.windowTray) {
 										   this.windowTray.webContents.send(channel, ...args);
 										   resolve();
@@ -224,13 +240,12 @@ export class PM_App {
 									   }, 200);
 								   }
 							   })
-						   ]
-		);
+						   ]);
 	}
 
 	public async createWindow() {
 		if (this.isDebug) {
-			await this.installExtensions();
+			// await this.installExtensions();
 		}
 		this.mainWindow = new BrowserWindow(
 			{
@@ -287,6 +302,7 @@ export class PM_App {
 		return true;
 	}
 
+	// @ts-ignore
 	private async installExtensions() {
 		// eslint-disable-next-line global-require
 		const installer     = require('electron-devtools-installer');

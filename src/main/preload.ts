@@ -1,11 +1,16 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import log                                              from 'electron-log';
-import { BackgroundEvents }           from '../types/Events';
-import { ProgramFields, ProgramType } from '../types/project';
+import path                                             from 'path';
+import { BackgroundEvents }                             from '../types/Events';
+import { ProgramFields, ProgramType }                   from '../types/project';
 
 export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'electron-notification-update' | 'test';
 
 export const bridge = {
+	inputFile() {
+		return ipcRenderer.sendSync(BackgroundEvents.inputFile);
+	},
+	path       : path,
 	ipcRenderer: {
 		sendMessage(channel: Channels, args: unknown[]) {
 			ipcRenderer.send(channel, args);

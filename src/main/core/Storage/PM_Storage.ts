@@ -1,12 +1,12 @@
 import Store from 'electron-store';
 
 export enum Tables {
-	programs = 'programs',
-	terminals= 'terminals',
-	projects = 'projects',
-	settings = 'settings',
-	IDEs     = 'IDEs',
-	empty    = '',
+	programs  = 'programs',
+	terminals = 'terminals',
+	projects  = 'projects',
+	settings  = 'settings',
+	IDEs      = 'IDEs',
+	empty     = '',
 }
 
 class PM_Storage {
@@ -24,8 +24,26 @@ class PM_Storage {
 		return this.instance;
 	}
 
-	commit<T = number | string | { [p: string]: any }>(table: Tables, id: number | string, data: T): void {
+	commit<T = number | string | { [p: string]: any }>(table: Tables, id: number | string, data: T, uniqueFields: string[] = []): void {
+		if (typeof data === 'number' || typeof data === 'string') {
+			this.store.set(`${table}.${id}`, data);
+			return;
+		}
+		if (uniqueFields.length > 0) {
+			const data2 = data as { [p: string]: any }
+			const tableData = this.getAll<T>(table) as { [p: string]: { [p: string]: any } };
+			const isUnique  = uniqueFields.every((field: string) => {
+				return !Object.entries(tableData).some(([_id, item]) => {
+					if (id === _id) return false;
+					return item[field] === data2[field];
+				});
+			});
+			if (!isUnique) {
+				throw new Error('is not unique');
+			}
+		}
 		this.store.set(`${table}.${id}`, data);
+
 	}
 
 	getAll<T = number | string | { [p: string]: any }>(table: Tables): { [p: string]: T } | undefined {

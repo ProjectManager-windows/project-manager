@@ -3,10 +3,10 @@ import * as fss                                  from 'node:fs';
 import { Mode, ObjectEncodingOptions, OpenMode } from 'node:fs';
 import path                                      from 'node:path';
 import { Dirent, Stats }                         from 'fs';
-import fii                                       from 'file-icon-info';
 import { Abortable }                             from 'events';
 import Path                                      from 'path';
 import plugins                                   from '../../components/plugins';
+import { getIcon }                               from '../../components/iconExtractor';
 
 export type file = {
 	path: string,
@@ -218,11 +218,7 @@ class PM_FileSystem {
 	}
 
 	static async getIconByFile(path: string) {
-		return new Promise((resolve) => {
-			fii.getIcon(path, data => {
-				resolve(data);
-			});
-		});
+		return getIcon(path);
 	}
 
 	static async writeFile(path: string, data: any, type: | (ObjectEncodingOptions & { mode?: Mode | undefined; flag?: OpenMode | undefined; } & Abortable) | BufferEncoding | null = null) {

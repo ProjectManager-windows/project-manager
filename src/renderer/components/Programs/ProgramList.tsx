@@ -22,7 +22,7 @@ const ProgramList = (props: {
 	});
 	const logo = useLogo({
 							 type : 'program',
-							 name : 'New',
+							 name : '+',
 							 color: 'transparent',
 							 logo : ''
 						 });
