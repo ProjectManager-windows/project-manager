@@ -70,7 +70,7 @@ const Menu = () => {
 			label  : t('terminals').ucfirst(),
 			icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faTerminal} />,
 			command: () => {
-				if (location.pathname !== '/terminals') navigate('/terminals');
+				if (location.pathname !== '/terminal') navigate('/terminal');
 			}
 		},
 		{

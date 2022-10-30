@@ -36,7 +36,7 @@ export default function App() {
 							<Route path='/' element={<Project />} />
 							<Route path='/settings' element={<Settings />} />
 							<Route path='/ides' element={<Ides />} />
-							<Route path='/terminals' element={<Terminals />} />
+							<Route path='/terminal' element={<Terminals />} />
 							<Route path='/programs' element={<Programs />} />
 						</Routes>
 					</div>

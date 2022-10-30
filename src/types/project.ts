@@ -47,9 +47,9 @@ export interface ProjectType {
 }
 
 export enum ProgramType {
-	ide       = 'Ide',
-	terminals = 'Terminals',
-	other     = 'other',
+	ide      = 'Ide',
+	terminal = 'Terminal',
+	other    = 'other',
 }
 
 

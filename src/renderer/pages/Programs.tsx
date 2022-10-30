@@ -5,6 +5,7 @@ import { Tooltip }                    from 'primereact/tooltip';
 import ProgramList                    from '../components/Programs/ProgramList';
 import ProgramEditor                  from '../components/Programs/ProgramEditor';
 import { ProgramFields, ProgramType } from '../../types/project';
+import ProgramCreate                  from '../components/Programs/ProgramCreate';
 
 const Programs = () => {
 	const navigate                         = useNavigate();
@@ -28,7 +29,11 @@ const Programs = () => {
 			<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
 			<i onClick={() => navigate(-1)} className='back-link iBtn pi pi-arrow-left' />
 			<ProgramList Programs={programs} onSelect={select} createProgram={createProgram} />
-			<ProgramEditor Program={selectedProgram} />
+			{selectedProgram && selectedProgram.id && selectedProgram.id > 0 ?
+			 <ProgramEditor Program={selectedProgram} />
+																			 :
+			 <ProgramCreate />
+			}
 		</div>
 	);
 };
