@@ -5,8 +5,8 @@ import PM_Storage, { Tables } from '../Storage/PM_Storage';
 import { ItemType }           from '../Storage/Item';
 import cmds                   from '../../components/Terminals';
 import Projects               from '../Projects/Projects';
-import Settings               from '../Settings';
-import { BackgroundEvens }    from '../../../types/Enums';
+import Settings             from '../Settings';
+import { BackgroundEvents } from '../../../types/Events';
 
 class Terminals implements Collection {
 	private static instance: Terminals;
@@ -15,13 +15,13 @@ class Terminals implements Collection {
 	items: { [p: string]: Terminal } = {};
 
 	private constructor() {
-		ipcMain.on(BackgroundEvens.TerminalGetAll, async (event) => {
+		ipcMain.on(BackgroundEvents.TerminalGetAll, async (event) => {
 			event.returnValue = this.getAllRaw();
 		});
-		ipcMain.on(BackgroundEvens.TerminalGetProject, async (event, id) => {
+		ipcMain.on(BackgroundEvents.TerminalGetProject, async (event, id) => {
 			event.returnValue = this.getById(id);
 		});
-		ipcMain.on(BackgroundEvens.TerminalExecute, async (_event, projectId) => {
+		ipcMain.on(BackgroundEvents.TerminalExecute, async (_event, projectId) => {
 			const defaultTerminal = Number(Settings.get('defaultTerminal'));
 			const project         = Projects.getById(projectId);
 			let terminalsId: number;

@@ -27,11 +27,9 @@ export interface TechnologyType {
 	data: any;
 	root: string;
 }
-
 export interface PublisherType extends TechnologyType {
 	publish: (Project: ProjectType) => void;
 }
-
 export interface ProjectType {
 	logo?: string;
 	color?: string;
@@ -47,3 +45,22 @@ export interface ProjectType {
 	publisher?: PublisherType; // prod-deployment //TODO v1
 	deployment?: PublisherType; // dev-deployment //TODO v2
 }
+
+export enum ProgramType {
+	ide       = 'Ide',
+	terminals = 'Terminals',
+	other     = 'other',
+}
+
+
+export interface ProgramFields {
+	id?: number;
+	executePath: string;
+	executeCommand: string;
+	name: string;
+	label: string;
+	logo: string;
+	color: string;
+	type: ProgramType;
+}
+

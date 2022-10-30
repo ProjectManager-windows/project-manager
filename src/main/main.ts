@@ -9,7 +9,8 @@ import Projects                                                                 
 import events                                                                                      from './ipcMain';
 import IDEs                                                                                        from './core/IDEs/IDEs';
 import Terminals                                                                                   from './core/Terminals/Terminals';
-import { BackgroundEvens }                                                                         from '../types/Enums';
+import { BackgroundEvents }                                                                        from '../types/Events';
+import Programs                                                                                    from './core/Programs/Programs';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -108,32 +109,32 @@ export class PM_App {
 	}
 
 	appEvents() {
-		ipcMain.on(BackgroundEvens.AppClose, async () => {
+		ipcMain.on(BackgroundEvents.AppClose, async () => {
 			this.app.quit();
 		});
-		ipcMain.on(BackgroundEvens.AppToggleMinimize, async () => {
+		ipcMain.on(BackgroundEvents.AppToggleMinimize, async () => {
 			if (!this.mainWindow) return;
 			this.mainWindow.isMinimized() ? this.mainWindow.restore() : this.mainWindow.minimize();
 		});
-		ipcMain.on(BackgroundEvens.AppToggleMaximize, async () => {
+		ipcMain.on(BackgroundEvents.AppToggleMaximize, async () => {
 			if (!this.mainWindow) return;
 			this.mainWindow.isMaximized() ? this.mainWindow.unmaximize() : this.mainWindow.maximize();
 		});
 
-		ipcMain.on(BackgroundEvens.AppHide, async () => {
+		ipcMain.on(BackgroundEvents.AppHide, async () => {
 			if (!this.mainWindow) return;
 			this.mainWindow.hide();
 		});
-		ipcMain.on(BackgroundEvens.AppShow, async () => {
+		ipcMain.on(BackgroundEvents.AppShow, async () => {
 			if (!this.mainWindow) return;
 			this.mainWindow.show();
 		});
-		ipcMain.on(BackgroundEvens.AppToggleShow, async () => {
+		ipcMain.on(BackgroundEvents.AppToggleShow, async () => {
 			if (!this.mainWindow) return;
 			this.mainWindow.isVisible() ? this.mainWindow.show() : this.mainWindow.hide();
 		});
 
-		ipcMain.on(BackgroundEvens.AppIsMinimized, async (event) => {
+		ipcMain.on(BackgroundEvents.AppIsMinimized, async (event) => {
 			if (!this.mainWindow) {
 				event.returnValue = false;
 				return;
@@ -147,7 +148,7 @@ export class PM_App {
 			}
 			event.returnValue = this.mainWindow.isVisible();
 		});
-		ipcMain.on(BackgroundEvens.AppIsMaximized, async (event) => {
+		ipcMain.on(BackgroundEvents.AppIsMaximized, async (event) => {
 			if (!this.mainWindow) {
 				event.returnValue = false;
 				return;
@@ -166,6 +167,7 @@ export class PM_App {
 		IDEs.init().then(r => console.log(r)).catch(r => console.log(r));
 		// eslint-disable-next-line no-console
 		Terminals.init().then(r => console.log(r)).catch(r => console.log(r));
+		Programs.init().then(r => console.log(r)).catch(r => console.log(r));
 	}
 
 	getAssetPath(...paths: string[]): string {
@@ -322,7 +324,7 @@ export class PM_App {
 				}
 			]
 		);
-		ipcMain.on(BackgroundEvens.CloseTray, async () => {
+		ipcMain.on(BackgroundEvents.CloseTray, async () => {
 			this.windowTray?.close();
 		});
 		if (this.tray) {

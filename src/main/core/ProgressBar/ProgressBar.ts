@@ -1,7 +1,7 @@
 import ProgressUnit        from './ProgressUnit';
 // eslint-disable-next-line import/no-cycle
-import APP                 from '../../main';
-import { BackgroundEvens } from '../../../types/Enums';
+import APP                  from '../../main';
+import { BackgroundEvents } from '../../../types/Events';
 
 export class ProgressBar {
 	private current: number = 0;
@@ -56,7 +56,7 @@ export class ProgressBar {
 	}
 
 	private sendUpdate() {
-		APP.sendRenderEvent(BackgroundEvens.ProgressbarUpdate, this.toArray());
+		APP.sendRenderEvent(BackgroundEvents.ProgressbarUpdate, this.toArray());
 	}
 }
 

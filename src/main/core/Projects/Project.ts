@@ -9,8 +9,8 @@ import ignore                  from 'ignore';
 import { Item }                from '../Storage/Item';
 import PM_FileSystem, { file } from '../Utils/PM_FileSystem';
 import APP                     from '../../main';
-import { Tables }              from '../Storage/PM_Storage';
-import { BackgroundEvens }     from '../../../types/Enums';
+import { Tables }           from '../Storage/PM_Storage';
+import { BackgroundEvents } from '../../../types/Events';
 
 export class Project extends Item {
 	public table = Tables.projects;
@@ -103,7 +103,7 @@ export class Project extends Item {
 
 	save(): number {
 		const id = super.save();
-		APP.sendRenderEvent(BackgroundEvens.ProjectUpdate).then(() => null).catch(() => {
+		APP.sendRenderEvent(BackgroundEvents.ProjectUpdate).then(() => null).catch(() => {
 			throw new Error('Error saving project');
 		});
 		return id;
@@ -254,6 +254,6 @@ export class Project extends Item {
 		const confPath = path.join(this.getVal('path'), '.project-manager');
 		super.delete();
 		await PM_FileSystem.removeFolder(confPath);
-		await APP.sendRenderEvent(BackgroundEvens.ProjectUpdate);
+		await APP.sendRenderEvent(BackgroundEvents.ProjectUpdate);
 	}
 }

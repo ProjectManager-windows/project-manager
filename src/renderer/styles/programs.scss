@@ -1,0 +1,28 @@
+.Programs {
+	height: 100%;
+	max-height: 100%;
+	position: relative;
+	background-color: var(--text-secondary-color);
+	display: grid;
+	grid-template-columns: minmax(60px, 0.81fr) 2fr;
+	grid-template-rows: 1fr;
+	gap: 0 0;
+	grid-auto-flow: row;
+	grid-template-areas: 'list editor';
+
+	.back-link {
+		position: absolute;
+		right: 5px;
+		top: 5px;
+	}
+
+	.editor {
+		grid-area: editor;
+		background-color: var(--primary-color-text);
+	}
+
+	.list {
+		grid-area: list;
+		padding: 5px;
+	}
+}

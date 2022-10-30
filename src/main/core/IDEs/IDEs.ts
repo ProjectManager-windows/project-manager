@@ -5,8 +5,8 @@ import PM_Storage, { Tables } from '../Storage/PM_Storage';
 import { ItemType }           from '../Storage/Item';
 import editors                from '../../components/IDEs';
 import Projects               from '../Projects/Projects';
-import Settings               from '../Settings';
-import { BackgroundEvens }    from '../../../types/Enums';
+import Settings             from '../Settings';
+import { BackgroundEvents } from '../../../types/Events';
 
 class IDEs implements Collection {
 	private static instance: IDEs;
@@ -15,13 +15,13 @@ class IDEs implements Collection {
 	items: { [p: string]: IDE } = {};
 
 	private constructor() {
-		ipcMain.on(BackgroundEvens.IdeGetAll, async (event) => {
+		ipcMain.on(BackgroundEvents.IdeGetAll, async (event) => {
 			event.returnValue = this.getAllRaw();
 		});
-		ipcMain.on(BackgroundEvens.IdeGetProject, async (event, id) => {
+		ipcMain.on(BackgroundEvents.IdeGetProject, async (event, id) => {
 			event.returnValue = this.getById(id);
 		});
-		ipcMain.on(BackgroundEvens.IdeExecute, async (_event, projectId) => {
+		ipcMain.on(BackgroundEvents.IdeExecute, async (_event, projectId) => {
 			const defaultIde = Number(Settings.get('defaultIde'));
 			const project    = Projects.getById(projectId);
 			let ideId: number;

@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import log                                              from 'electron-log';
-import { BackgroundEvens }                              from '../types/Enums';
+import { BackgroundEvents }           from '../types/Events';
+import { ProgramFields, ProgramType } from '../types/project';
 
 export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'electron-notification-update' | 'test';
 
@@ -25,44 +26,44 @@ export const bridge = {
 	},
 	store      : {
 		get(property: string) {
-			return ipcRenderer.sendSync(BackgroundEvens.StoreGet, property);
+			return ipcRenderer.sendSync(BackgroundEvents.StoreGet, property);
 		},
 		set(property: string, val: any) {
-			ipcRenderer.send(BackgroundEvens.StoreSet, property, val);
+			ipcRenderer.send(BackgroundEvents.StoreSet, property, val);
 		},
 		del(property: string) {
-			ipcRenderer.send(BackgroundEvens.StoreDel, property);
+			ipcRenderer.send(BackgroundEvents.StoreDel, property);
 		}
 		// Other method you want to add like has(), reset(), etc.
 	},
 	settings   : {
 		get(property: string) {
-			return ipcRenderer.sendSync(BackgroundEvens.StoreGet, `settings.${property}`);
+			return ipcRenderer.sendSync(BackgroundEvents.StoreGet, `settings.${property}`);
 		},
 		set(property: string, val: any) {
-			ipcRenderer.send(BackgroundEvens.StoreSet, `settings.${property}`, val);
+			ipcRenderer.send(BackgroundEvents.StoreSet, `settings.${property}`, val);
 		},
 		del(property: string) {
-			ipcRenderer.send(BackgroundEvens.StoreDel, `settings.${property}`);
+			ipcRenderer.send(BackgroundEvents.StoreDel, `settings.${property}`);
 		}
 		// Other method you want to add like has(), reset(), etc.
 	},
 	projects   : {
 		getAll() {
-			return ipcRenderer.sendSync(BackgroundEvens.ProjectGetAll);
+			return ipcRenderer.sendSync(BackgroundEvents.ProjectGetAll);
 		},
 		getProject(id: number) {
-			ipcRenderer.send(BackgroundEvens.ProjectGetProject, id);
+			ipcRenderer.send(BackgroundEvents.ProjectGetProject, id);
 		},
 		onUpdate(callback: () => void): () => void {
-			ipcRenderer.on(BackgroundEvens.ProjectUpdate, callback);
-			return () => ipcRenderer.removeListener(BackgroundEvens.ProjectUpdate, callback);
+			ipcRenderer.on(BackgroundEvents.ProjectUpdate, callback);
+			return () => ipcRenderer.removeListener(BackgroundEvents.ProjectUpdate, callback);
 		},
 		scan() {
-			ipcRenderer.send(BackgroundEvens.ProjectScan);
+			ipcRenderer.send(BackgroundEvents.ProjectScan);
 		},
 		add() {
-			ipcRenderer.send(BackgroundEvens.ProjectAdd);
+			ipcRenderer.send(BackgroundEvents.ProjectAdd);
 		},
 		open(id: number) {
 			bridge.ides.exec(id);
@@ -71,75 +72,90 @@ export const bridge = {
 			bridge.terminals.exec(id);
 		},
 		openFolder(id: number) {
-			ipcRenderer.send(BackgroundEvens.ProjectOpenFolder, id);
+			ipcRenderer.send(BackgroundEvents.ProjectOpenFolder, id);
 		},
 		config(id: number, key: string, value: any) {
-			ipcRenderer.send(BackgroundEvens.ProjectSet, id, key, value);
+			ipcRenderer.send(BackgroundEvents.ProjectSet, id, key, value);
 		},
 		changeLogo(id: number) {
-			ipcRenderer.send(BackgroundEvens.ProjectChangeLogo, id);
+			ipcRenderer.send(BackgroundEvents.ProjectChangeLogo, id);
 		},
 		removeLogo(id: number) {
-			ipcRenderer.send(BackgroundEvens.ProjectRemoveLogo, id);
+			ipcRenderer.send(BackgroundEvents.ProjectRemoveLogo, id);
 		},
 		remove(id: number) {
-			ipcRenderer.send(BackgroundEvens.ProjectRemove, id);
+			ipcRenderer.send(BackgroundEvents.ProjectRemove, id);
 		},
 		delete(id: number) {
-			ipcRenderer.send(BackgroundEvens.ProjectDelete, id);
+			ipcRenderer.send(BackgroundEvents.ProjectDelete, id);
 		}
 	},
 	ides       : {
 		getAll() {
-			return ipcRenderer.sendSync(BackgroundEvens.IdeGetAll);
+			return ipcRenderer.sendSync(BackgroundEvents.IdeGetAll);
 		},
 		onUpdate(callback: () => void): () => void {
-			ipcRenderer.on(BackgroundEvens.IdeUpdate, callback);
-			return () => ipcRenderer.removeListener(BackgroundEvens.IdeUpdate, callback);
+			ipcRenderer.on(BackgroundEvents.IdeUpdate, callback);
+			return () => ipcRenderer.removeListener(BackgroundEvents.IdeUpdate, callback);
 		},
 		add(property: string) {
-			ipcRenderer.send(BackgroundEvens.IdeAdd, property);
+			ipcRenderer.send(BackgroundEvents.IdeAdd, property);
 		},
 		exec(id: number) {
-			ipcRenderer.send(BackgroundEvens.IdeExecute, id);
+			ipcRenderer.send(BackgroundEvents.IdeExecute, id);
 
 		}
 	},
 	terminals  : {
 		getAll() {
-			return ipcRenderer.sendSync(BackgroundEvens.TerminalGetAll);
+			return ipcRenderer.sendSync(BackgroundEvents.TerminalGetAll);
 		},
 		onUpdate(callback: () => void): () => void {
-			ipcRenderer.on(BackgroundEvens.IdeUpdate, callback);
-			return () => ipcRenderer.removeListener('electron-terminal-update', callback);
+			ipcRenderer.on(BackgroundEvents.IdeUpdate, callback);
+			return () => ipcRenderer.removeListener(BackgroundEvents.TerminalUpdate, callback);
 		},
 		add(property: string) {
-			ipcRenderer.send('electron-terminal-add', property);
+			ipcRenderer.send(BackgroundEvents.TerminalAdd, property);
 		},
 		exec(id: number) {
-			ipcRenderer.send(BackgroundEvens.TerminalExecute, id);
+			ipcRenderer.send(BackgroundEvents.TerminalExecute, id);
+		}
+	},
+	programs   : {
+		getAll(type?: ProgramType): { [key: string]: ProgramFields } {
+			return ipcRenderer.sendSync(BackgroundEvents.ProgramsGetAll, type);
+		},
+		onUpdate(callback: () => void): () => void {
+			ipcRenderer.on(BackgroundEvents.ProgramUpdate, callback);
+			return () => ipcRenderer.removeListener(BackgroundEvents.ProgramUpdate, callback);
+		},
+		create(property: { path: string, type: ProgramType }) {
+			ipcRenderer.send(BackgroundEvents.ProgramCreate, property);
+		},
+		edit(property: ProgramFields) {
+			ipcRenderer.send(BackgroundEvents.ProgramEdit, property);
 		}
 	},
 	tray       : {
 		close() {
-			ipcRenderer.send(BackgroundEvens.CloseTray);
+			ipcRenderer.send(BackgroundEvents.CloseTray);
 		}
 	},
 	app        : {
 		quit() {
-			ipcRenderer.send(BackgroundEvens.AppClose);
+			ipcRenderer.send(BackgroundEvents.AppClose);
 		},
 		toggleMinimize() {
-			ipcRenderer.send(BackgroundEvens.AppToggleMinimize);
+			ipcRenderer.send(BackgroundEvents.AppToggleMinimize);
 		},
 		toggleMaximize() {
-			ipcRenderer.send(BackgroundEvens.AppToggleMaximize);
+			ipcRenderer.send(BackgroundEvents.AppToggleMaximize);
 		},
 		hide() {
-			ipcRenderer.send(BackgroundEvens.AppHide);
+			ipcRenderer.send(BackgroundEvents.AppHide);
 		},
 		show() {
-			ipcRenderer.send(BackgroundEvens.AppShow);
+			ipcRenderer.send(BackgroundEvents.AppShow);
 		},
 		onChangeState(func: (...args: any[]) => void): () => void {
 			const subscription = (_event: IpcRendererEvent, ...args: unknown[]) => func(...args);

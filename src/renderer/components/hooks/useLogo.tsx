@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import rng         from 'seedrandom';
 
-export const useLogo = (props: { type: 'ide' | 'project' | 'technology'|'terminal', name: string, color?: string, logo?: string, style?: any, className?: string }) => {
+export const useLogo = (props: { type: 'ide' | 'project' | 'technology'|'terminal'|'program', name: string, color?: string, logo?: string, style?: any, className?: string }) => {
 	const {
 			  type, name, color, logo, style, className
 		  }     = props;

@@ -7,8 +7,8 @@ import PM_Storage, { Tables }     from '../Storage/PM_Storage';
 import { ItemType }               from '../Storage/Item';
 import ProgressBar                from '../ProgressBar/ProgressBar';
 import PM_FileSystem              from '../Utils/PM_FileSystem';
-import { t }                      from '../Utils/i18n';
-import { BackgroundEvens }        from '../../../types/Enums';
+import { t }                from '../Utils/i18n';
+import { BackgroundEvents } from '../../../types/Events';
 
 export type ProjectsScheme = {
 	id: string
@@ -29,35 +29,35 @@ class Projects implements Collection {
 	items: { [p: string]: Project } = {};
 
 	private constructor() {
-		ipcMain.on(BackgroundEvens.ProjectGetAll, async (event) => {
+		ipcMain.on(BackgroundEvents.ProjectGetAll, async (event) => {
 			this.init();
 			event.returnValue = this.getAllRaw();
 		});
-		ipcMain.on(BackgroundEvens.ProjectGetProject, async (event, id) => {
+		ipcMain.on(BackgroundEvents.ProjectGetProject, async (event, id) => {
 			this.init();
 			event.returnValue = this.getById(id);
 		});
-		ipcMain.on(BackgroundEvens.ProjectScan, async (event) => {
+		ipcMain.on(BackgroundEvents.ProjectScan, async (event) => {
 			this.init();
 			await this.scan();
 			event.returnValue = 'ok';
 		});
-		ipcMain.on(BackgroundEvens.ProjectAdd, async (event) => {
+		ipcMain.on(BackgroundEvents.ProjectAdd, async (event) => {
 			this.init();
 			await this.addFolder();
 			event.returnValue = 'ok';
 		});
-		ipcMain.on(BackgroundEvens.ProjectSet, async (_event, id, key, value) => {
+		ipcMain.on(BackgroundEvents.ProjectSet, async (_event, id, key, value) => {
 			const p = this.getById(id);
 			p.setVal(key, value);
 			p.save();
 		});
-		ipcMain.on(BackgroundEvens.ProjectOpenFolder, async (_event, id) => {
+		ipcMain.on(BackgroundEvents.ProjectOpenFolder, async (_event, id) => {
 			const p    = this.getById(id);
 			const path = p.getVal('path');
 			await shell.openPath(path);
 		});
-		ipcMain.on(BackgroundEvens.ProjectChangeLogo, async (_event, id: number) => {
+		ipcMain.on(BackgroundEvents.ProjectChangeLogo, async (_event, id: number) => {
 			const p = this.getById(id);
 
 			const file = await dialog.showOpenDialog(
@@ -76,7 +76,7 @@ class Projects implements Collection {
 				p.save();
 			}
 		});
-		ipcMain.on(BackgroundEvens.ProjectRemoveLogo, async (_event, id: number) => {
+		ipcMain.on(BackgroundEvents.ProjectRemoveLogo, async (_event, id: number) => {
 			const p = this.getById(id);
 			if (p) {
 				await p.removeLogo();
@@ -84,11 +84,11 @@ class Projects implements Collection {
 			}
 		});
 
-		ipcMain.on(BackgroundEvens.ProjectRemove, async (_event, id) => {
+		ipcMain.on(BackgroundEvents.ProjectRemove, async (_event, id) => {
 			const p = this.getById(id);
 			await p.delete();
 		});
-		ipcMain.on(BackgroundEvens.ProjectDelete, async (_event, id) => {
+		ipcMain.on(BackgroundEvents.ProjectDelete, async (_event, id) => {
 			const p = this.getById(id);
 			// const path = p.getVal('path');
 			// await trash(path, { glob: false });

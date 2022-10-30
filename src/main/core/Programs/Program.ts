@@ -1,24 +1,11 @@
 import { exec }               from 'child_process';
+import { app }                from 'electron';
+import Path                   from 'path';
+import path                   from 'path';
 import PM_Storage, { Tables } from '../Storage/PM_Storage';
 import PM_FileSystem          from '../Utils/PM_FileSystem';
-import { Project }            from '../Projects/Project';
-
-export enum ProgramType {
-	ide       = 'Ide',
-	terminals = 'Terminals',
-	other     = 'other',
-}
-
-export interface ProgramFields {
-	id?: number;
-	executePath: string;
-	executeCommand: string;
-	name: string;
-	label: string;
-	logo: string;
-	color: string;
-	type: ProgramType;
-}
+import { Project }                    from '../Projects/Project';
+import { ProgramFields, ProgramType } from '../../../types/project';
 
 export class Program implements ProgramFields {
 	readonly table                = Tables.programs;
@@ -99,6 +86,19 @@ export class Program implements ProgramFields {
 		return PM_FileSystem.fileExists(this.executePath);
 	}
 
+	toObject(): ProgramFields {
+		return {
+			executePath   : this.executePath,
+			type          : this.type,
+			id            : this.id,
+			color         : this.color,
+			logo          : this.logo,
+			name          : this.name,
+			label         : this.label,
+			executeCommand: this.executeCommand
+		};
+	}
+
 	static fromId(id: number) {
 		const data = PM_Storage.getById<ProgramFields>(Tables.programs, id);
 		if (!data) {
@@ -116,9 +116,39 @@ export class Program implements ProgramFields {
 		return p;
 	}
 
-	save() {
+	static async fromPath(path: string, type: ProgramType) {
+		if (!await PM_FileSystem.fileExists(path)) {
+			throw new Error('Invalid path');
+		}
+		const p       = new Program(type);
+		p.executePath = path;
+		p.setName(Path.basename(path));
+		p.isNew = false;
+		return p;
+	}
+
+	async save() {
 		if (!this.id) {
 			this.id = PM_Storage.getNextId(this.table);
+		}
+		if (!this.name) {
+			throw new Error('Invalid program name');
+		}
+		if (!this.label) {
+			this.label = this.name;
+		}
+		if (!this.executePath) {
+			throw new Error('Invalid program executePath');
+		}
+		if (!this.color) {
+			this.color = 'transparent';
+		}
+		if (!this.logo) {
+			const logoPath = path.join(app.getPath('userData'), 'programs', `${this.name}.ico`);
+			if (!await PM_FileSystem.exists(logoPath)) {
+				const data = await PM_FileSystem.getIconByFile(this.executePath);
+				await PM_FileSystem.writeFile(logoPath, data, 'base64');
+			}
 		}
 		PM_Storage.commit<ProgramFields>(this.table, this.id, {
 			executePath   : this.executePath,
@@ -129,7 +159,7 @@ export class Program implements ProgramFields {
 			color         : this.color,
 			type          : this.type
 		});
-		return this.id;
+		return this;
 	}
 }
 

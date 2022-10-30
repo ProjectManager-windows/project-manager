@@ -74,6 +74,13 @@ const Menu = () => {
 			}
 		},
 		{
+			label  : t('programs').ucfirst(),
+			icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faTerminal} />,
+			command: () => {
+				if (location.pathname !== '/programs') navigate('/programs');
+			}
+		},
+		{
 			label  : 'Close',
 			icon   : 'pi pi-fw pi-power-off',
 			command: () => {

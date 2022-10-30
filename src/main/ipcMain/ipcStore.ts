@@ -1,6 +1,6 @@
 import { ipcMain }         from 'electron';
-import Store               from 'electron-store';
-import { BackgroundEvens } from '../../types/Enums';
+import Store                from 'electron-store';
+import { BackgroundEvents } from '../../types/Events';
 
 
 export default {
@@ -9,13 +9,13 @@ export default {
 		if (!store.get('projects')) {
 			store.set('settings', {});
 		}
-		ipcMain.on(BackgroundEvens.StoreGet, async (event, val) => {
+		ipcMain.on(BackgroundEvents.StoreGet, async (event, val) => {
 			event.returnValue = store.get(val);
 		});
-		ipcMain.on(BackgroundEvens.StoreSet, async (_event, key, val) => {
+		ipcMain.on(BackgroundEvents.StoreSet, async (_event, key, val) => {
 			store.set(key, val);
 		});
-		ipcMain.on(BackgroundEvens.StoreDel, async (_event, key) => {
+		ipcMain.on(BackgroundEvents.StoreDel, async (_event, key) => {
 			store.delete(key);
 		});
 	}

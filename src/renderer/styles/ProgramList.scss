@@ -1,0 +1,15 @@
+.ProgramList {
+	font-family: var(--font-family);
+
+	.header {
+		margin-bottom: 10px;
+	}
+
+	.list {
+		.item {
+			display: block;
+			padding: 5px;
+			margin-bottom: 5px;
+		}
+	}
+}

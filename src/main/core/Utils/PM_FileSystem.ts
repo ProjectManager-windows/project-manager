@@ -1,8 +1,12 @@
-import * as fs           from 'node:fs/promises';
-import * as fss          from 'node:fs';
-import path              from 'node:path';
-import plugins           from '../../components/plugins';
-import { Dirent, Stats } from 'fs';
+import * as fs                                   from 'node:fs/promises';
+import * as fss                                  from 'node:fs';
+import { Mode, ObjectEncodingOptions, OpenMode } from 'node:fs';
+import path                                      from 'node:path';
+import { Dirent, Stats }                         from 'fs';
+import fii                                       from 'file-icon-info';
+import { Abortable }                             from 'events';
+import Path                                      from 'path';
+import plugins                                   from '../../components/plugins';
 
 export type file = {
 	path: string,
@@ -212,6 +216,22 @@ class PM_FileSystem {
 		await fs.rmdir(folder);
 		return true;
 	}
+
+	static async getIconByFile(path: string) {
+		return new Promise((resolve) => {
+			fii.getIcon(path, data => {
+				resolve(data);
+			});
+		});
+	}
+
+	static async writeFile(path: string, data: any, type: | (ObjectEncodingOptions & { mode?: Mode | undefined; flag?: OpenMode | undefined; } & Abortable) | BufferEncoding | null = null) {
+		if (!await PM_FileSystem.folderExists(Path.dirname(path))) {
+			await fs.mkdir(Path.dirname(path), { recursive: true });
+		}
+		return fs.writeFile(path, data, type);
+	}
+
 }
 
 export default PM_FileSystem;
