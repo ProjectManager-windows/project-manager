@@ -9,6 +9,7 @@ export const useSearch = (props: { projects: { [key: string]: ProjectType }, sea
 	const search = useMemo(() => {
 		const search = new JsSearch.Search('id');
 		search.addIndex('name');
+		search.addIndex('path');
 		search.addIndex('description');
 		search.addDocuments(projectList);
 		return search;

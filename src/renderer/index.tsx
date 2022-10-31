@@ -10,6 +10,7 @@ import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/bootstrap4-dark-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import './styles/reset.scss';
+import './styles/index.scss';
 import LanguagesExtensions               from '../../assets/Programming_Languages_Extensions.json';
 import languagesColors                   from '../../assets/Programming_Languages_colors.json';
 import AppTray                           from './AppTray';

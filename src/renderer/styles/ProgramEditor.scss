@@ -5,33 +5,4 @@
 	li {
 		padding-bottom : 10px;
 	}
-
-	table {
-		border-collapse : separate;
-		border-spacing  : 0 1em;
-
-		.name-column {
-			width     : 30%;
-			min-width : 150px;
-		}
-
-
-		.value-column {
-			width : 250px;
-
-			.p-input-icon-right,button {
-				width : calc(100% - 35px);
-			}
-
-			&.logos-buttons {
-				width           : calc(100% - 35px);
-				display         : flex;
-				justify-content : space-between;
-				align-items     : stretch;
-				align-content   : center;
-				flex-direction  : row;
-				flex-wrap       : nowrap;
-			}
-		}
-	}
 }

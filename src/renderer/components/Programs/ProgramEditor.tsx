@@ -25,7 +25,7 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 	return (
 		<div className={`ProgramEditor ${Program.name}`}>
 			<div className='header'>
-				<h3 className='name'>[{Program.type}] {Program.label}</h3>
+				<h3 className='name'>[{t(Program.type).ucfirst()}] {Program.label}</h3>
 				<div className='description'>{Program.executePath}</div>
 			</div>
 			<hr />
@@ -76,7 +76,7 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 							window.electron.settings.set('defaultProgram', Program.id);
 							setDefaultProgram(true);
 						}}
-						></Button>
+						 />
 					</td>
 				</tr>
 				<tr>
@@ -85,12 +85,12 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 					</td>
 					<td className='value-column'>
 						<Button
-							className={'p-button-danger'}
+							className="p-button-danger"
 							label={t('delete').ucfirst()}
 							onClick={() => {
 								window.electron.programs.delete(Program.id);
 							}}
-						></Button>
+						 />
 					</td>
 				</tr>
 				</tbody>

@@ -99,7 +99,6 @@ const ProjectList = (props: { minimal: boolean }) => {
 		  }
 		  return (
 			  <div className='ProjectList'>
-				  <ContextMenu model={items} ref={cm} />
 				  <ul className='list'>
 					  {t('projects not founded')}
 				  </ul>
