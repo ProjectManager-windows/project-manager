@@ -1,5 +1,6 @@
 import { dialog, ipcMain, shell } from 'electron';
 import path                       from 'path';
+import hidefile                   from 'hidefile';
 import fs                         from 'fs/promises';
 import Collection                 from '../Storage/Collection';
 import { Project }                from './Project';
@@ -7,8 +8,8 @@ import PM_Storage, { Tables }     from '../Storage/PM_Storage';
 import { ItemType }               from '../Storage/Item';
 import ProgressBar                from '../ProgressBar/ProgressBar';
 import PM_FileSystem              from '../Utils/PM_FileSystem';
-import { t }                from '../Utils/i18n';
-import { BackgroundEvents } from '../../../types/Events';
+import { t }                      from '../Utils/i18n';
+import { BackgroundEvents }       from '../../../types/Events';
 
 export type ProjectsScheme = {
 	id: string
@@ -211,7 +212,19 @@ class Projects implements Collection {
 		if (!await PM_FileSystem.folderExists(configFolder)) {
 			await fs.mkdir(configFolder, { recursive: true, mode: 0o777 });
 		}
-		const configFile = path.join(folder, '.project-manager', 'config.json');
+		const gitIgnore = path.join(folder, '.gitignore');
+		if (await PM_FileSystem.fileExists(gitIgnore)) {
+			let content = (await fs.readFile(gitIgnore)).toString();
+			if (!content.includes('.project-manager')) {
+				content += '\n.project-manager/';
+			}
+			await fs.writeFile(gitIgnore, content, 'utf8');
+		}
+		if (!await PM_FileSystem.fileExists(configFolder)) {
+			await fs.mkdir(configFolder, { recursive: true, mode: 0o777 });
+		}
+		hidefile.hideSync(configFolder);
+		const configFile = path.join(configFolder, 'config.json');
 		if (!await PM_FileSystem.fileExists(configFile)) {
 			await fs.writeFile(configFile, '{}', { encoding: 'utf8', mode: 0o777 });
 		}

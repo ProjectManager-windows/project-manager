@@ -3,7 +3,6 @@ import { execFile }  from 'child_process';
 import PM_FileSystem from '../../core/Utils/PM_FileSystem';
 
 export async function getIcon(f: string) {
-	debugger
 	const exe = path.join(__dirname, 'IconExtractor.exe');
 	if (await PM_FileSystem.exists(exe)) {
 		return new Promise((resolve) => {

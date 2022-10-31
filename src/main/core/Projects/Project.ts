@@ -9,8 +9,8 @@ import ignore                  from 'ignore';
 import { Item }                from '../Storage/Item';
 import PM_FileSystem, { file } from '../Utils/PM_FileSystem';
 import APP                     from '../../main';
-import { Tables }           from '../Storage/PM_Storage';
-import { BackgroundEvents } from '../../../types/Events';
+import { Tables }              from '../Storage/PM_Storage';
+import { BackgroundEvents }    from '../../../types/Events';
 
 export class Project extends Item {
 	public table = Tables.projects;
@@ -222,6 +222,13 @@ export class Project extends Item {
 		if (newIcons.length > 0) {
 			const logoPath = newIcons.pop()?.path;
 			if (logoPath) {
+				await this.setLogo(logoPath);
+			} else {
+				const logoBaseName = 'logo.ico';
+				this.setVal('logoBaseName', logoBaseName);
+				const logoPath = path.join(this.getVal('path'), '.project-manager', logoBaseName);
+				const data     = await PM_FileSystem.getIconByFile(this.getVal('path'));
+				await PM_FileSystem.writeFile(logoPath, data, 'base64');
 				await this.setLogo(logoPath);
 			}
 		}
