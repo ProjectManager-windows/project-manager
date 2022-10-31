@@ -1,11 +1,13 @@
-import { useTranslation } from 'react-i18next';
-import { useState }       from 'react';
+import { useTranslation }    from 'react-i18next';
+import { useMemo, useState } from 'react';
 import '../../styles/ProgramEditor.scss';
-import { ProgramFields }  from '../../../types/project';
-import useCommit          from '../hooks/useCommit';
-import { InputText }      from 'primereact/inputtext';
-import { Button }         from 'primereact/button';
-import { InputTextarea }  from 'primereact/inputtextarea';
+import { ProgramFields }     from '../../../types/project';
+import useCommit             from '../hooks/useCommit';
+import { InputText }         from 'primereact/inputtext';
+import { Button }            from 'primereact/button';
+import { InputTextarea }     from 'primereact/inputtextarea';
+import { Help }              from '../ui/Help';
+import { ListBox }           from 'primereact/listbox';
 
 
 const ProgramEditor = (props: { Program: ProgramFields }) => {
@@ -13,15 +15,35 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 	const { Program }                           = props;
 	const [isDefaultProgram, setDefaultProgram] = useState(false);
 
-	const [name, setName, commitName, isChangedName]     = useCommit(Program.name, (value) => {
+	const [name, setName, commitName, isChangedName]                                         = useCommit(Program.name, (value) => {
 		window.electron.programs.edit(Program.id, 'name', value);
 	});
-	const [label, setLabel, commitLabel, isChangedLabel] = useCommit(Program.label, (value) => {
+	const [label, setLabel, commitLabel, isChangedLabel]                                     = useCommit(Program.label, (value) => {
 		window.electron.programs.edit(Program.id, 'label', value);
 	});
 	const [executeCommand, setExecuteCommand, commitExecuteCommand, isChangedExecuteCommand] = useCommit(Program.executeCommand, (value) => {
 		window.electron.programs.edit(Program.id, 'executeCommand', value);
 	});
+	const commandVars                                                                        = useMemo(() => {
+		const data = window.electron.programs.getCommandVars(Program.id);
+		const keys = Object.keys(data).sort((a, b) => {
+			if (a.startsWith('PROGRAM_') || a.startsWith('PROJECT_') && (!b.startsWith('PROGRAM_') && !b.startsWith('PROJECT_'))) {
+				return -1;
+			}
+			if (b.startsWith('PROGRAM_') || b.startsWith('PROJECT_') && (!a.startsWith('PROGRAM_') && !a.startsWith('PROJECT_'))) {
+				return 1;
+			}
+			return a[0].localeCompare(b[0]);
+
+		});
+		keys.filter((key) => {
+			return !key.startsWith('npm_');
+		});
+		keys.map((key) => {
+			return { name: t(key), value: key };
+		});
+		return keys;
+	}, [Program.id, t]);
 	return (
 		<div className={`ProgramEditor ${Program.name}`}>
 			<div className='header'>
@@ -59,10 +81,25 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 						{t('executeCommand')}
 					</td>
 					<td className='value-column'>
-						 <span className='p-input-icon-right'>
-                    		<i className={`pi ${isChangedExecuteCommand ? 'pi-spin pi-spinner' : 'pi-check'}`} />
-							<InputTextarea  style={{ width: '100%' }} value={executeCommand || ''} onChange={e => setExecuteCommand(e.target.value)} onBlur={e => commitExecuteCommand(e.target.value)} />
-						 </span>
+						<div className='p-inputgroup'>
+							<InputTextarea
+								rows={5} cols={25} autoResize
+								style={{ width: '100%' }} value={executeCommand || ''} onChange={e => setExecuteCommand(e.target.value)} onBlur={e => commitExecuteCommand(e.target.value)}
+							/>
+
+							<span className='p-inputgroup-addon'>
+								<i className={`pi ${isChangedExecuteCommand ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+							</span>
+							<span className='p-inputgroup-addon'>
+								<Help label='?'>
+									<ListBox
+										options={commandVars} onChange={(e) => {
+										console.log(e.value);
+									}}
+									/>
+								</Help>
+							</span>
+						</div>
 					</td>
 				</tr>
 				<tr>

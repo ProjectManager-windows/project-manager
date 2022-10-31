@@ -1,8 +1,8 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent }  from 'electron';
 import log                                               from 'electron-log';
 import path                                              from 'path';
-import { BackgroundEvents }                              from '../types/Events';
-import { ProgramFields, ProgramFieldsKeys, ProgramType } from '../types/project';
+import { BackgroundEvents }                                                  from '../types/Events';
+import { ProgramCommandVars, ProgramFields, ProgramFieldsKeys, ProgramType } from '../types/project';
 
 export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'electron-notification-update' | 'test';
 
@@ -142,6 +142,9 @@ export const bridge = {
 		},
 		delete(id: number) {
 			ipcRenderer.send(BackgroundEvents.ProgramDelete, id);
+		},
+		getCommandVars(id: number):ProgramCommandVars {
+			return ipcRenderer.sendSync(BackgroundEvents.ProgramGetCommandVars, id);
 		}
 	},
 	tray       : {

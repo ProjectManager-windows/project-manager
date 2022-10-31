@@ -62,4 +62,10 @@ export interface ProgramFields {
 	color: string;
 	type: ProgramType;
 }
+
 export type ProgramFieldsKeys = keyof ProgramFields
+
+
+export type ProgramCommandVars = {
+	[p: `PROJECT_${string}` | `PROGRAM_${string}` | keyof typeof process.env]: string|undefined
+}

@@ -1,11 +1,11 @@
-import { ipcMain }                    from 'electron';
-import PM_Storage, { Tables }         from '../Storage/PM_Storage';
-import { Program }                    from './Program';
+import { ipcMain }                                       from 'electron';
+import PM_Storage, { Tables }                            from '../Storage/PM_Storage';
+import { Program }                                       from './Program';
 import { BackgroundEvents }                              from '../../../types/Events';
 import { ProgramFields, ProgramFieldsKeys, ProgramType } from '../../../types/project';
 import APP                                               from '../../main';
-import PM_FileSystem                  from '../Utils/PM_FileSystem';
-import fs                             from 'fs/promises';
+import PM_FileSystem                                     from '../Utils/PM_FileSystem';
+import fs                                                from 'fs/promises';
 
 export class Programs {
 	private static instance: Programs;
@@ -58,6 +58,9 @@ export class Programs {
 			setTimeout(() => {
 				APP.sendRenderEvent(BackgroundEvents.ProgramUpdate);
 			}, 200);
+		});
+		ipcMain.on(BackgroundEvents.ProgramGetCommandVars, async (event, id: number) => {
+			event.returnValue = JSON.parse(JSON.stringify(Program.getVars(Program.fromId(id))));
 		});
 	}
 

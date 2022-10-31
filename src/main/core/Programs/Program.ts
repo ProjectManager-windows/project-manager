@@ -1,11 +1,12 @@
-import { exec }                       from 'child_process';
-import { app }                        from 'electron';
-import Path                           from 'path';
-import path                           from 'path';
-import PM_Storage, { Tables }         from '../Storage/PM_Storage';
-import PM_FileSystem                  from '../Utils/PM_FileSystem';
-import { Project }                    from '../Projects/Project';
-import { ProgramFields, ProgramType } from '../../../types/project';
+import { exec }                                           from 'child_process';
+import { app }                                            from 'electron';
+import Path                                               from 'path';
+import path                                               from 'path';
+import ejs                                                from 'ejs';
+import PM_Storage, { Tables }                             from '../Storage/PM_Storage';
+import PM_FileSystem                                      from '../Utils/PM_FileSystem';
+import { Project }                                        from '../Projects/Project';
+import { ProgramCommandVars, ProgramFields, ProgramType } from '../../../types/project';
 
 export class Program implements ProgramFields {
 	readonly table                = Tables.programs;
@@ -75,8 +76,24 @@ export class Program implements ProgramFields {
 		exec(this.execParse());
 	}
 
+	static getVars(program: Program, project?: Project): ProgramCommandVars {
+		const projectData: { [p: `PROJECT_${string}`]: string | undefined } = {};
+		if (project) {
+			projectData.PROJECT_NAME = project.getVal<string>('name');
+			projectData.PROJECT_PATH = project.getVal<string>('path');
+		} else {
+			projectData.PROJECT_NAME = undefined;
+			projectData.PROJECT_PATH = undefined;
+		}
+		const ProgramData: { [p: `PROGRAM_${string}`]: string | undefined } = {};
+		ProgramData.PROGRAM_PATH                                            = program.executePath;
+		ProgramData.PROGRAM_NAME                                            = program.name;
+		ProgramData.PROGRAM_TYPE                                            = program.type;
+		return Object.assign(process.env, projectData, ProgramData);
+	}
+
 	private execParse(): string {
-		return this.executeCommand;
+		return ejs.render(this.executeCommand, Program.getVars(this, this.project));
 	}
 
 	async check(): Promise<boolean> {
