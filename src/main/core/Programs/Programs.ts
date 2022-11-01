@@ -88,9 +88,8 @@ export class Programs {
 			}
 			if (project && program) {
 				program.setProject(project);
-				event.returnValue = program.execParse();
+				program.run();
 			}
-
 			// event.returnValue = Program.fromId(data.projectId).setProject()
 		});
 	}
