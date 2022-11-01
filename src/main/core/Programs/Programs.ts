@@ -30,17 +30,23 @@ export class Programs {
 			const program = Program.fromId(data.id);
 			switch (data.key) {
 				case 'color':
+					if (program.getColor() === data.value) return;
 					program.setColor(data.value);
 					break;
 				case 'name':
+					if (program.getName() === data.value) return;
 					program.setName(data.value);
 					break;
 				case 'label':
+					if (program.getLabel() === data.value) return;
 					program.setLabel(data.value);
 					break;
 				case 'logo':
+					if (program.getLogo() === data.value) return;
 					program.setLogo(data.value);
 					break;
+				default:
+					return;
 			}
 			await program.save();
 			setTimeout(() => {

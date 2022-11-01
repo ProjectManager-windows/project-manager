@@ -59,10 +59,12 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 						{t('name')}
 					</td>
 					<td className='value-column'>
-						 <span className='p-input-icon-right'>
-                    		<i className={`pi ${isChangedName ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+						<div className='p-inputgroup'>
 							<InputText style={{ width: '100%' }} value={name || ''} onChange={e => setName(e.target.value)} onBlur={e => commitName(e.target.value)} />
-						 </span>
+							<span className='p-inputgroup-addon'>
+								<i className={`pi ${isChangedName ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+							</span>
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -70,10 +72,12 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 						{t('label')}
 					</td>
 					<td className='value-column'>
-						 <span className='p-input-icon-right'>
-                    		<i className={`pi ${isChangedLabel ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+						<div className='p-inputgroup'>
 							<InputText style={{ width: '100%' }} value={label || ''} onChange={e => setLabel(e.target.value)} onBlur={e => commitLabel(e.target.value)} />
-						 </span>
+							<span className='p-inputgroup-addon'>
+								<i className={`pi ${isChangedLabel ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+							</span>
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -86,10 +90,6 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 								rows={5} cols={25} autoResize
 								style={{ width: '100%' }} value={executeCommand || ''} onChange={e => setExecuteCommand(e.target.value)} onBlur={e => commitExecuteCommand(e.target.value)}
 							/>
-
-							<span className='p-inputgroup-addon'>
-								<i className={`pi ${isChangedExecuteCommand ? 'pi-spin pi-spinner' : 'pi-check'}`} />
-							</span>
 							<span className='p-inputgroup-addon'>
 								<Help label='?'>
 									<ListBox
@@ -98,6 +98,9 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 									}}
 									/>
 								</Help>
+							</span>
+							<span className='p-inputgroup-addon'>
+								<i className={`pi ${isChangedExecuteCommand ? 'pi-spin pi-spinner' : 'pi-check'}`} />
 							</span>
 						</div>
 					</td>

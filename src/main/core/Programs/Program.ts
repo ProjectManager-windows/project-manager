@@ -177,7 +177,7 @@ export class Program implements ProgramFields {
 			logo          : this.logo,
 			color         : this.color,
 			type          : this.type
-		},['name']);
+		}, ['name', 'id']);
 		return this;
 	}
 }

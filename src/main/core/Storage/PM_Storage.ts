@@ -34,7 +34,7 @@ class PM_Storage {
 			const tableData = this.getAll<T>(table) as { [p: string]: { [p: string]: any } };
 			const isUnique  = uniqueFields.every((field: string) => {
 				return !Object.entries(tableData).some(([_id, item]) => {
-					if (id === _id) return false;
+					if (parseInt(<string>id, 10) === parseInt(_id, 10)) return false;
 					return item[field] === data2[field];
 				});
 			});
