@@ -1,7 +1,7 @@
 import '../styles/programs.scss';
-import { useNavigate }                from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
-import { Tooltip }                    from 'primereact/tooltip';
+import { useNavigate }                             from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Tooltip }                                 from 'primereact/tooltip';
 import ProgramList                    from '../components/Programs/ProgramList';
 import ProgramEditor                  from '../components/Programs/ProgramEditor';
 import { ProgramFields, ProgramType } from '../../types/project';
@@ -24,13 +24,21 @@ const Programs = () => {
 		e.preventDefault();
 		selectProgram({ color: '', executeCommand: '', executePath: '', id: -1, label: '', logo: '', name: '', type: ProgramType.other });
 	};
+	const deleteProgram = useCallback((Program:ProgramFields) => {
+		if (Program.id == window.electron.settings.get(`default.${Program.type}`)) {
+			window.electron.settings.del(`default.${Program.type}`);
+		}
+		window.electron.programs.delete(Program.id);
+		selectProgram(undefined)
+
+	}, []);
 	return (
 		<div className='Programs'>
 			<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
 			<i onClick={() => navigate(-1)} className='back-link iBtn pi pi-arrow-left' />
 			<ProgramList Programs={programs} onSelect={select} createProgram={createProgram} />
 			{selectedProgram && selectedProgram.id && selectedProgram.id > 0 ?
-			 <ProgramEditor Program={selectedProgram} />
+			 <ProgramEditor Program={selectedProgram} deleteProgram={deleteProgram} />
 																			 :
 			 <ProgramCreate />
 			}

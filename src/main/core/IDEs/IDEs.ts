@@ -4,10 +4,7 @@ import { IDE }                from './IDE';
 import PM_Storage, { Tables } from '../Storage/PM_Storage';
 import { ItemType }           from '../Storage/Item';
 import editors                from '../../components/IDEs';
-import Projects               from '../Projects/Projects';
-import Settings               from '../Settings';
 import { BackgroundEvents }   from '../../../types/Events';
-import { ProgramType }        from '../../../types/project';
 
 class IDEs implements Collection {
 	private static instance: IDEs;
@@ -21,18 +18,6 @@ class IDEs implements Collection {
 		});
 		ipcMain.on(BackgroundEvents.IdeGetProject, async (event, id) => {
 			event.returnValue = this.getById(id);
-		});
-		ipcMain.on(BackgroundEvents.IdeExecute, async (_event, projectId) => {
-			const defaultIde = Number(Settings.get('defaultIde'));
-			const project    = Projects.getById(projectId);
-			let ideId: number;
-			if (project.getVal(ProgramType.ide)) {
-				ideId = project.getVal(ProgramType.ide);
-			} else {
-				ideId = defaultIde || 1;
-			}
-			const ide          = this.getById(ideId);
-			_event.returnValue = await ide.execute(project);
 		});
 	}
 

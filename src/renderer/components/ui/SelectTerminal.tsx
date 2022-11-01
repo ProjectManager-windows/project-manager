@@ -1,46 +1,47 @@
-import { Dropdown }            from 'primereact/dropdown';
+import { Dropdown }                         from 'primereact/dropdown';
 import '../../styles/SelectTerminal.scss';
-import { useEffect, useState } from 'react';
-import useLogo                 from '../hooks/useLogo';
-import { ProgramType }         from '../../../types/project';
+import { useCallback, useEffect, useState } from 'react';
+import useLogo                              from '../hooks/useLogo';
+import { ProgramType }                      from '../../../types/project';
+import { useTranslation }                   from 'react-i18next';
 
 const SelectTerminal = (props: { id: any, value?: any, setVal?: (value: any) => void }) => {
+	const { t }                   = useTranslation();
 	const { value, setVal, id }   = props;
 	const [newValue, setNewValue] = useState<any>();
 	useEffect(() => {
 		setNewValue(value);
 	}, [value, id]);
-	const data         = window.electron.programs.getAll(ProgramType.terminal);
-	const programs              = Object.values(data);
-	const defaultTerminalId = window.electron.settings.get('defaultTerminal');
-
+	const data              = window.electron.programs.getAll(ProgramType.terminal);
+	const programs          = Object.values(data);
+	const defaultTerminalId = window.electron.settings.get<string>(`default.${ProgramType.terminal}`);
 	if (defaultTerminalId && data[defaultTerminalId] !== undefined) {
 		programs.unshift({
-						 executeCommand: data[defaultTerminalId].executeCommand,
-						 executePath   : data[defaultTerminalId].executePath,
-						 type          : ProgramType.terminal,
-						 id            : 0,
-						 name          : `${data[defaultTerminalId].name} (default)`,
-						 label         : `${data[defaultTerminalId].name} (default)`,
-						 logo          : data[defaultTerminalId].logo,
-						 color         : data[defaultTerminalId].color
-					 });
+							 executeCommand: data[defaultTerminalId].executeCommand,
+							 executePath   : data[defaultTerminalId].executePath,
+							 type          : ProgramType.terminal,
+							 id            : 0,
+							 name          : `${data[defaultTerminalId].name} (${t('default')})`,
+							 label         : `${data[defaultTerminalId].name} (${t('default')})`,
+							 logo          : data[defaultTerminalId].logo,
+							 color         : data[defaultTerminalId].color
+						 });
 	} else {
 		programs.unshift({
-						 executeCommand: '',
-						 executePath   : '',
-						 type          : ProgramType.terminal,
-						 id            : 0,
-						 name          : `(default)`,
-						 label         : `(default)`,
-						 logo          : window.pixel,
-						 color         : 'transparent'
-					 });
+							 executeCommand: '',
+							 executePath   : '',
+							 type          : ProgramType.terminal,
+							 id            : 0,
+							 name          : `(${t('default')})`,
+							 label         : `(${t('default')})`,
+							 logo          : window.pixel,
+							 color         : 'transparent'
+						 });
 	}
-	const selectedCountryTemplate = (option: any) => {
+	const selectedCountryTemplate = useCallback((option: any) => {
 		if (option) {
 			const logo = useLogo({
-									 type : 'terminal',
+									 type : ProgramType.terminal,
 									 name : option.name,
 									 logo : option.logo,
 									 color: option.color
@@ -54,20 +55,20 @@ const SelectTerminal = (props: { id: any, value?: any, setVal?: (value: any) => 
 		}
 		if (defaultTerminalId && data[defaultTerminalId] !== undefined) {
 			const logo = useLogo({
-									 type : 'terminal',
-									 name : `${data[defaultTerminalId].name} (default)`,
+									 type : ProgramType.terminal,
+									 name : `${data[defaultTerminalId].name} (${t('default')})`,
 									 logo : data[defaultTerminalId].logo,
 									 color: data[defaultTerminalId].color
 								 });
 			return (
 				<div className='terminal-item terminal-item-value'>
 					{logo}
-					<div>{`${data[defaultTerminalId].name} (default)`}</div>
+					<div>{`${data[defaultTerminalId].name} (${t('default')})`}</div>
 				</div>
 			);
 		} else {
 			const logo = useLogo({
-									 type : 'terminal',
+									 type : ProgramType.terminal,
 									 name : 'default',
 									 logo : window.pixel,
 									 color: 'transparent'
@@ -75,15 +76,14 @@ const SelectTerminal = (props: { id: any, value?: any, setVal?: (value: any) => 
 			return (
 				<div className='terminal-item terminal-item-value'>
 					{logo}
-					<div>(default)</div>
+					<div>(${t('default')})</div>
 				</div>
 			);
 		}
-
-	};
-	const countryOptionTemplate   = (option: any) => {
+	}, []);
+	const countryOptionTemplate   = useCallback((option: any) => {
 		const logo = useLogo({
-								 type : 'terminal',
+								 type : ProgramType.terminal,
 								 name : option.name,
 								 logo : option.logo,
 								 color: option.color
@@ -94,7 +94,7 @@ const SelectTerminal = (props: { id: any, value?: any, setVal?: (value: any) => 
 				<div>{option.name}</div>
 			</div>
 		);
-	};
+	}, []);
 	const setValue                = (e: any) => {
 		setNewValue(e.value);
 		if (setVal) setVal(e.value);
@@ -111,8 +111,9 @@ const SelectTerminal = (props: { id: any, value?: any, setVal?: (value: any) => 
 				filter
 				// showClear
 				filterBy='name'
-				placeholder='Select a Country'
-				valueTemplate={selectedCountryTemplate} itemTemplate={countryOptionTemplate}
+				placeholder={t('Select terminal')}
+				valueTemplate={selectedCountryTemplate}
+				itemTemplate={countryOptionTemplate}
 			/>
 		</div>
 	);

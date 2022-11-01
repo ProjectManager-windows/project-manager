@@ -1,14 +1,14 @@
 import React       from 'react';
 import { Ripple }  from 'primereact/ripple';
 import '../../styles/TerminalItem.scss';
-import { TerminalType } from '../../../types/project';
-import useLogo     from '../hooks/useLogo';
+import { ProgramType, TerminalType } from '../../../types/project';
+import useLogo                       from '../hooks/useLogo';
 
 
 const TerminalItem = (props: { terminal: TerminalType, onSelect: (e: React.MouseEvent<HTMLDivElement>, terminal: TerminalType) => void }) => {
 	const { terminal, onSelect } = props;
 	const logo                   = useLogo({
-											   type : 'terminal',
+											   type : ProgramType.terminal,
 											   name : terminal.name,
 											   color: terminal?.color,
 											   logo : terminal?.logo

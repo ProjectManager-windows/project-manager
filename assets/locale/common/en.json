@@ -1,14 +1,19 @@
 {
 	"add"           :"added",
 	"add project"   :"add project",
+	"default"       :"default",
+	"delete"        :"delete",
 	"error"         :"error",
 	"file"          :"file",
 	"founded"       :"founded",
+	"ide"           :"editor",
 	"notification"  :"notification",
 	"notifications" :"notifications",
 	"ok"            :"ok",
+	"other"         :"other",
 	"projects"      :"projects",
 	"scan"          :"scan",
 	"select folder" :"select folder",
-	"set as default":"set as default"
+	"set as default":"set as default",
+	"terminal"      :"terminal"
 }

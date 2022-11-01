@@ -7,6 +7,7 @@ import APP                                               from '../../main';
 import PM_FileSystem                                     from '../Utils/PM_FileSystem';
 import fs                                                from 'fs/promises';
 import Projects                                          from '../Projects/Projects';
+import Settings                                          from '../Settings';
 
 export class Programs {
 	private static instance: Programs;
@@ -91,6 +92,40 @@ export class Programs {
 				program.run();
 			}
 			// event.returnValue = Program.fromId(data.projectId).setProject()
+		});
+		ipcMain.on(BackgroundEvents.IdeExecute, async (_event, projectId) => {
+			const defaultIde = Number(Settings.get(`default.${ProgramType.ide}`));
+			const project    = Projects.getById(projectId);
+			let ideId: number;
+			if (project.getVal(ProgramType.ide)) {
+				ideId = project.getVal(ProgramType.ide);
+			} else {
+				ideId = defaultIde || 1;
+			}
+			try {
+				const ide = Program.fromId(ideId);
+				ide.setProject(project);
+				_event.returnValue = await ide.run();
+			} catch (e) {
+				_event.returnValue = false;
+			}
+		});
+		ipcMain.on(BackgroundEvents.TerminalExecute, async (_event, projectId) => {
+			const defaultTerminal = Number(Settings.get(`default.${ProgramType.terminal}`));
+			const project         = Projects.getById(projectId);
+			let terminalsId: number;
+			if (project.getVal('terminal')) {
+				terminalsId = project.getVal('terminal');
+			} else {
+				terminalsId = defaultTerminal || 1;
+			}
+			try {
+				const ide = Program.fromId(terminalsId);
+				ide.setProject(project);
+				_event.returnValue = await ide.run();
+			} catch (e) {
+				_event.returnValue = false;
+			}
 		});
 	}
 

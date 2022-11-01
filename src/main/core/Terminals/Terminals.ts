@@ -4,9 +4,7 @@ import { Terminal }           from './Terminal';
 import PM_Storage, { Tables } from '../Storage/PM_Storage';
 import { ItemType }           from '../Storage/Item';
 import cmds                   from '../../components/Terminals';
-import Projects               from '../Projects/Projects';
-import Settings             from '../Settings';
-import { BackgroundEvents } from '../../../types/Events';
+import { BackgroundEvents }   from '../../../types/Events';
 
 class Terminals implements Collection {
 	private static instance: Terminals;
@@ -20,18 +18,6 @@ class Terminals implements Collection {
 		});
 		ipcMain.on(BackgroundEvents.TerminalGetProject, async (event, id) => {
 			event.returnValue = this.getById(id);
-		});
-		ipcMain.on(BackgroundEvents.TerminalExecute, async (_event, projectId) => {
-			const defaultTerminal = Number(Settings.get('defaultTerminal'));
-			const project         = Projects.getById(projectId);
-			let terminalsId: number;
-			if (project.getVal('terminal')) {
-				terminalsId = project.getVal('terminal');
-			} else {
-				terminalsId = defaultTerminal || 1;
-			}
-			const terminals    = this.getById(terminalsId);
-			_event.returnValue = await terminals.execute(project);
 		});
 	}
 

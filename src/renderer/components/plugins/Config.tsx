@@ -101,10 +101,10 @@ const Config = (props: { selectedProject: ProjectType }) => {
 				</tr>
 				<tr>
 					<td>
-						{t('terminal')}
+						{t(ProgramType.terminal)}
 					</td>
 					<td className='value-column'>
-						<SelectTerminal id={selectedProject?.id} value={selectedProject?.terminal} setVal={(v) => window.electron.projects.config(selectedProject.id, 'terminal', v)} />
+						<SelectTerminal id={selectedProject?.id} value={selectedProject?.terminal} setVal={(v) => window.electron.projects.config(selectedProject.id, ProgramType.terminal, v)} />
 					</td>
 				</tr>
 				<tr>

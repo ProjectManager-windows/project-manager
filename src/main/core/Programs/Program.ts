@@ -1,4 +1,4 @@
-import { exec }                                           from 'child_process';
+import { exec, ExecOptions }                              from 'child_process';
 import { app }                                            from 'electron';
 import Path                                               from 'path';
 import path                                               from 'path';
@@ -72,8 +72,20 @@ export class Program implements ProgramFields {
 		return this;
 	}
 
-	run() {
-		exec(this.execParse());
+	async run() {
+		return new Promise((resolve, reject) => {
+			const options: ExecOptions = {};
+			if (this.project && this.project.getVal('path')) {
+				options.cwd = this.project.getVal('path');
+			}
+			exec(this.execParse(), options, (error, stdout, stderr) => {
+				if (error) {
+					resolve(stdout);
+				} else {
+					reject(stderr);
+				}
+			});
+		});
 	}
 
 	static getVars(program: Program, project?: Project): ProgramCommandVars {

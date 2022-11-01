@@ -3,38 +3,40 @@ import '../../styles/SelectIde.scss';
 import { useEffect, useState } from 'react';
 import useLogo                 from '../hooks/useLogo';
 import { ProgramType }         from '../../../types/project';
+import { useTranslation }      from 'react-i18next';
 
 const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void }) => {
+	const { t }                   = useTranslation();
 	const { value, setVal, id }   = props;
 	const [newValue, setNewValue] = useState<any>();
 	useEffect(() => {
 		setNewValue(value);
 	}, [value, id]);
 	const data         = window.electron.programs.getAll(ProgramType.ide);
-	const programs         = Object.values(data);
+	const programs     = Object.values(data);
 	const defaultIdeId = window.electron.settings.get<string>(`default.${ProgramType.ide}`);
 	if (defaultIdeId && data[defaultIdeId] !== undefined) {
 		programs.unshift({
-						 executeCommand: data[defaultIdeId].executeCommand,
-						 executePath   : data[defaultIdeId].executePath,
-						 type          : ProgramType.ide,
-						 id            : 0,
-						 name          : `${data[defaultIdeId].name} (default)`,
-						 label         : `${data[defaultIdeId].name} (default)`,
-						 logo          : data[defaultIdeId].logo,
-						 color         : data[defaultIdeId].color
-					 });
+							 executeCommand: data[defaultIdeId].executeCommand,
+							 executePath   : data[defaultIdeId].executePath,
+							 type          : ProgramType.ide,
+							 id            : 0,
+							 name          : `${data[defaultIdeId].name} (${t('default')})`,
+							 label         : `${data[defaultIdeId].name} (${t('default')})`,
+							 logo          : data[defaultIdeId].logo,
+							 color         : data[defaultIdeId].color
+						 });
 	} else {
 		programs.unshift({
-						 executeCommand: '',
-						 executePath   : '',
-						 type          : ProgramType.ide,
-						 id            : 0,
-						 name          : `(default)`,
-						 label         : `(default)`,
-						 logo          : window.pixel,
-						 color         : 'transparent'
-					 });
+							 executeCommand: '',
+							 executePath   : '',
+							 type          : ProgramType.ide,
+							 id            : 0,
+							 name          : `(${t('default')})`,
+							 label         : `(${t('default')})`,
+							 logo          : window.pixel,
+							 color         : 'transparent'
+						 });
 	}
 	const selectedCountryTemplate = (option: any) => {
 		if (option) {
@@ -54,14 +56,14 @@ const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void 
 		if (defaultIdeId && data[defaultIdeId] !== undefined) {
 			const logo = useLogo({
 									 type : ProgramType.ide,
-									 name : `${data[defaultIdeId].name} (default)`,
+									 name : `${data[defaultIdeId].name} (${t('default')})`,
 									 logo : data[defaultIdeId].logo,
 									 color: data[defaultIdeId].color
 								 });
 			return (
 				<div className='ide-item ide-item-value'>
 					{logo}
-					<div>{`${data[defaultIdeId].name} (default)`}</div>
+					<div>{`${data[defaultIdeId].name} (${t('default')})`}</div>
 				</div>
 			);
 		} else {
@@ -74,7 +76,7 @@ const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void 
 			return (
 				<div className='ide-item ide-item-value'>
 					{logo}
-					<div>(default)</div>
+					<div>(${t('default')})</div>
 				</div>
 			);
 		}

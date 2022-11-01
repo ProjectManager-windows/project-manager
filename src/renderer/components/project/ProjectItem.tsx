@@ -27,16 +27,16 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.M
 		  const ideLogo                                                         = useLogo(
 			  {
 				  type : ProgramType.ide,
-				  name : project.ide && ides ? ides[project.ide].name : '',
-				  color: project.ide && ides ? ides[project.ide]?.color : '',
-				  logo : project.ide && ides ? ides[project.ide]?.logo : ''
+				  name : project.ide && ides && ides[project.ide] ? ides[project.ide].name : '',
+				  color: project.ide && ides && ides[project.ide] ? ides[project.ide]?.color : '',
+				  logo : project.ide && ides && ides[project.ide] ? ides[project.ide]?.logo : ''
 			  });
 		  const terminalLogo                                                    = useLogo(
 			  {
-				  type : 'terminal',
-				  name : project.terminal && terminals ? terminals[project.terminal].name : '',
-				  color: project.terminal && terminals ? terminals[project.terminal]?.color : '',
-				  logo : project.terminal && terminals ? terminals[project.terminal]?.logo : ''
+				  type : ProgramType.terminal,
+				  name : project.terminal && terminals && terminals[project.terminal] ? terminals[project.terminal].name : '',
+				  color: project.terminal && terminals && terminals[project.terminal] ? terminals[project.terminal]?.color : '',
+				  logo : project.terminal && terminals && terminals[project.terminal] ? terminals[project.terminal]?.logo : ''
 			  });
 		  return (
 			  <div className='projectItem ' id={`project-item-${project.id}`}>
@@ -59,8 +59,8 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.M
 						  <div className='info'>
 							  <div className='tp name' data-pr-tooltip={project.name}>{project.name}</div>
 							  <div className='notDefaultElems'>
-								  {project.ide ? <div className='tp ' data-pr-tooltip={ides && ides[project.ide].name}>{ideLogo}</div> : ''}
-								  {project.terminal ? <div className='tp' data-pr-tooltip={terminals && terminals[project.terminal].name}>{terminalLogo}</div> : ''}
+								  {project.ide ? <div className='tp ' data-pr-tooltip={ides && ides[project.ide]?.name}>{ideLogo}</div> : ''}
+								  {project.terminal ? <div className='tp' data-pr-tooltip={terminals && terminals[project.terminal]?.name}>{terminalLogo}</div> : ''}
 							  </div>
 							  {minimal ? <pre className='path'>{project.path}</pre> : <LanguagesBar className='languageBar' stats={project.stats} />}
 						  </div>

@@ -1,19 +1,20 @@
 import '../../styles/ProgramEditor.scss';
-import { useTranslation }    from 'react-i18next';
-import { useMemo, useState } from 'react';
-import { InputText }         from 'primereact/inputtext';
-import { Button }            from 'primereact/button';
-import { InputTextarea }     from 'primereact/inputtextarea';
-import { ListBox }           from 'primereact/listbox';
-import useCommit             from '../hooks/useCommit';
-import { ProgramFields }     from '../../../types/project';
-import { Help }              from '../ui/Help';
+import { useTranslation }                           from 'react-i18next';
+import { useEffect, useMemo, useReducer, useState } from 'react';
+import { InputText }                                from 'primereact/inputtext';
+import { Button }                                   from 'primereact/button';
+import { InputTextarea }                            from 'primereact/inputtextarea';
+import { ListBox }                                  from 'primereact/listbox';
+import useCommit                                    from '../hooks/useCommit';
+import { ProgramFields }                            from '../../../types/project';
+import { Help }                                     from '../ui/Help';
 
 
-const ProgramEditor = (props: { Program: ProgramFields }) => {
+const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program: ProgramFields) => void }) => {
 	const { t }                                 = useTranslation();
-	const { Program }                           = props;
+	const { Program, deleteProgram }            = props;
 	const [isDefaultProgram, setDefaultProgram] = useState(false);
+	const [_, forceUpdate]                      = useReducer(x => x + 1, 1);
 
 	const [name, setName, commitName, isChangedName]                                         = useCommit(Program.name, (value) => {
 		window.electron.programs.edit(Program.id, 'name', value);
@@ -44,6 +45,17 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 		});
 		return keys;
 	}, [Program.id, t]);
+
+
+	useEffect(() => {
+		const def = parseInt(window.electron.settings.get<string>(`default.${Program.type}`), 10);
+		if (def === parseInt(String(Program.id), 10)) {
+			setDefaultProgram(true);
+		} else {
+			setDefaultProgram(false);
+		}
+	}, [Program]);
+
 	return (
 		<div className={`ProgramEditor ${Program.name}`}>
 			<div className='header'>
@@ -117,7 +129,7 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 							label={t('set as default').ucfirst()}
 							disabled={isDefaultProgram} onClick={() => {
 							window.electron.settings.set(`default.${Program.type}`, Program.id);
-							setDefaultProgram(true);
+							forceUpdate();
 						}}
 						/>
 					</td>
@@ -130,9 +142,7 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 						<Button
 							className='p-button-danger'
 							label={t('delete').ucfirst()}
-							onClick={() => {
-								window.electron.programs.delete(Program.id);
-							}}
+							onClick={() => deleteProgram(Program)}
 						/>
 					</td>
 				</tr>
