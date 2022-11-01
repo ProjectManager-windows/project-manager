@@ -73,7 +73,7 @@ export class Programs {
 		ipcMain.on(BackgroundEvents.ProgramGetCommandVars, async (event, id: number) => {
 			event.returnValue = JSON.parse(JSON.stringify(Program.getVars(Program.fromId(id))));
 		});
-		ipcMain.on(BackgroundEvents.ProgramRunWithProject, async (event, data: { programId: number | string, projectId: number | string }) => {
+		ipcMain.on(BackgroundEvents.ProgramRunWithProject, async (_event, data: { programId: number | string, projectId: number | string }) => {
 			let project;
 			let program;
 			if (typeof data.projectId === 'string') {

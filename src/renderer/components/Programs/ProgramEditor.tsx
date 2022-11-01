@@ -97,7 +97,7 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 								<Help label='?'>
 									<ListBox
 										options={commandVars} onChange={(e) => {
-										setExecuteCommand(`${executeCommand}<%=${e.value}%>`);
+										setExecuteCommand(`${executeCommand}<%-${e.value}%>`);
 									}}
 									/>
 								</Help>
