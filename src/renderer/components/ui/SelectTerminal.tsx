@@ -2,6 +2,7 @@ import { Dropdown }            from 'primereact/dropdown';
 import '../../styles/SelectTerminal.scss';
 import { useEffect, useState } from 'react';
 import useLogo                 from '../hooks/useLogo';
+import { ProgramType }         from '../../../types/project';
 
 const SelectTerminal = (props: { id: any, value?: any, setVal?: (value: any) => void }) => {
 	const { value, setVal, id }   = props;
@@ -9,23 +10,31 @@ const SelectTerminal = (props: { id: any, value?: any, setVal?: (value: any) => 
 	useEffect(() => {
 		setNewValue(value);
 	}, [value, id]);
-	const data              = window.electron.terminals.getAll();
-	const IDEs              = Object.values(data);
+	const data         = window.electron.programs.getAll(ProgramType.terminal);
+	const programs              = Object.values(data);
 	const defaultTerminalId = window.electron.settings.get('defaultTerminal');
 
-	if (defaultTerminalId) {
-		IDEs.unshift({
-						 id   : 0,
-						 name : `${data[defaultTerminalId].name} (default)`,
-						 logo : data[defaultTerminalId].logo,
-						 color: data[defaultTerminalId].color
+	if (defaultTerminalId && data[defaultTerminalId] !== undefined) {
+		programs.unshift({
+						 executeCommand: data[defaultTerminalId].executeCommand,
+						 executePath   : data[defaultTerminalId].executePath,
+						 type          : ProgramType.terminal,
+						 id            : 0,
+						 name          : `${data[defaultTerminalId].name} (default)`,
+						 label         : `${data[defaultTerminalId].name} (default)`,
+						 logo          : data[defaultTerminalId].logo,
+						 color         : data[defaultTerminalId].color
 					 });
 	} else {
-		IDEs.unshift({
-						 id   : 0,
-						 name : `(default)`,
-						 logo : window.pixel,
-						 color: 'transparent'
+		programs.unshift({
+						 executeCommand: '',
+						 executePath   : '',
+						 type          : ProgramType.terminal,
+						 id            : 0,
+						 name          : `(default)`,
+						 label         : `(default)`,
+						 logo          : window.pixel,
+						 color         : 'transparent'
 					 });
 	}
 	const selectedCountryTemplate = (option: any) => {
@@ -43,7 +52,7 @@ const SelectTerminal = (props: { id: any, value?: any, setVal?: (value: any) => 
 				</div>
 			);
 		}
-		if (defaultTerminalId) {
+		if (defaultTerminalId && data[defaultTerminalId] !== undefined) {
 			const logo = useLogo({
 									 type : 'terminal',
 									 name : `${data[defaultTerminalId].name} (default)`,
@@ -94,7 +103,7 @@ const SelectTerminal = (props: { id: any, value?: any, setVal?: (value: any) => 
 		<div className='SelectTerminal'>
 			<Dropdown
 				style={{ width: 'calc(100% - 35px)' }}
-				options={IDEs}
+				options={programs}
 				optionLabel='name'
 				value={newValue}
 				optionValue='id'

@@ -5,8 +5,9 @@ import PM_Storage, { Tables } from '../Storage/PM_Storage';
 import { ItemType }           from '../Storage/Item';
 import editors                from '../../components/IDEs';
 import Projects               from '../Projects/Projects';
-import Settings             from '../Settings';
-import { BackgroundEvents } from '../../../types/Events';
+import Settings               from '../Settings';
+import { BackgroundEvents }   from '../../../types/Events';
+import { ProgramType }        from '../../../types/project';
 
 class IDEs implements Collection {
 	private static instance: IDEs;
@@ -25,8 +26,8 @@ class IDEs implements Collection {
 			const defaultIde = Number(Settings.get('defaultIde'));
 			const project    = Projects.getById(projectId);
 			let ideId: number;
-			if (project.getVal('ide')) {
-				ideId = project.getVal('ide');
+			if (project.getVal(ProgramType.ide)) {
+				ideId = project.getVal(ProgramType.ide);
 			} else {
 				ideId = defaultIde || 1;
 			}

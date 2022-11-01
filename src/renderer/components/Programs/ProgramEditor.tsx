@@ -116,7 +116,7 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 						<Button
 							label={t('set as default').ucfirst()}
 							disabled={isDefaultProgram} onClick={() => {
-							window.electron.settings.set('defaultProgram', Program.id);
+							window.electron.settings.set(`default.${Program.type}`, Program.id);
 							setDefaultProgram(true);
 						}}
 						/>
@@ -128,7 +128,7 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 					</td>
 					<td className='value-column'>
 						<Button
-							className="p-button-danger"
+							className='p-button-danger'
 							label={t('delete').ucfirst()}
 							onClick={() => {
 								window.electron.programs.delete(Program.id);

@@ -5,10 +5,8 @@ import Footer                                    from './components/Footer';
 import Project                                   from './pages/Project';
 import Settings                                  from './pages/Settings';
 import './styles/App.scss';
-import Ides                                      from './pages/Ides';
 import Menu                                      from './components/Menu';
 import { AppContext }                            from './components/context/AppContext';
-import Terminals                                 from './pages/Teminals';
 import { NotificationItemInterface }             from './classes/Notifications';
 import Programs                                  from './pages/Programs';
 
@@ -35,8 +33,8 @@ export default function App() {
 						<Routes>
 							<Route path='/' element={<Project />} />
 							<Route path='/settings' element={<Settings />} />
-							<Route path='/ides' element={<Ides />} />
-							<Route path='/terminal' element={<Terminals />} />
+							{/* <Route path='/ides' element={<Ides />} /> */}
+							{/* <Route path='/terminal' element={<Terminals />} /> */}
 							<Route path='/programs' element={<Programs />} />
 						</Routes>
 					</div>

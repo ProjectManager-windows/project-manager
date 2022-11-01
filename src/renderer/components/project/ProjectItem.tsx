@@ -1,16 +1,22 @@
-import React, { useContext } from 'react';
-import { Ripple }            from 'primereact/ripple';
-import { ProjectType }       from '../../../types/project';
-import LanguagesBar          from './LanguagesBar';
-import useLogo               from '../hooks/useLogo';
+import React, { useContext, useMemo } from 'react';
+import { Ripple }                     from 'primereact/ripple';
+import { ProgramType, ProjectType }   from '../../../types/project';
+import LanguagesBar                   from './LanguagesBar';
+import useLogo                        from '../hooks/useLogo';
 import '../../styles/projectItem.scss';
-import { ProjectContext }    from '../context/ProjectContext';
+import { ProjectContext }             from '../context/ProjectContext';
 
 
 // eslint-disable-next-line react/require-default-props
 const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.MutableRefObject<any>, defaultAction: (id: number) => void, contextProject: (value: ProjectType) => void, minimal?: boolean }) => {
 		  const { project, cm, defaultAction, contextProject, active, minimal } = props;
-		  const { selectProject, ides, terminals }                              = useContext(ProjectContext);
+		  const { selectProject }                                               = useContext(ProjectContext);
+		  const ides                                                            = useMemo(() => {
+			  return window.electron.programs.getAll(ProgramType.ide);
+		  }, []);
+		  const terminals                                                       = useMemo(() => {
+			  return window.electron.programs.getAll(ProgramType.terminal);
+		  }, []);
 		  const logo                                                            = useLogo(
 			  {
 				  type : 'project',
@@ -20,7 +26,7 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.M
 			  });
 		  const ideLogo                                                         = useLogo(
 			  {
-				  type : 'ide',
+				  type : ProgramType.ide,
 				  name : project.ide && ides ? ides[project.ide].name : '',
 				  color: project.ide && ides ? ides[project.ide]?.color : '',
 				  logo : project.ide && ides ? ides[project.ide]?.logo : ''

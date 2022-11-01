@@ -42,10 +42,10 @@ export const bridge = {
 		// Other method you want to add like has(), reset(), etc.
 	},
 	settings   : {
-		get(property: string) {
+		get<T = any>(property: string):T {
 			return ipcRenderer.sendSync(BackgroundEvents.StoreGet, `settings.${property}`);
 		},
-		set(property: string, val: any) {
+		set<T = any>(property: string, val: T) {
 			ipcRenderer.send(BackgroundEvents.StoreSet, `settings.${property}`, val);
 		},
 		del(property: string) {

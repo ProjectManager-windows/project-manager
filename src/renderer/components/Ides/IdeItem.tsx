@@ -1,14 +1,14 @@
 import React       from 'react';
 import { Ripple }  from 'primereact/ripple';
 import '../../styles/IdeItem.scss';
-import { IDEType } from '../../../types/project';
-import useLogo     from '../hooks/useLogo';
+import { IDEType, ProgramType } from '../../../types/project';
+import useLogo                  from '../hooks/useLogo';
 
 
 const IdeItem = (props: { Ide: IDEType, onSelect: (e: React.MouseEvent<HTMLDivElement>, Ide: IDEType) => void }) => {
 	const { Ide, onSelect } = props;
 	const logo              = useLogo({
-										  type : 'ide',
+										  type : ProgramType.ide,
 										  name : Ide.name,
 										  color: Ide?.color,
 										  logo : Ide?.logo,

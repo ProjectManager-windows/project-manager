@@ -5,9 +5,9 @@ import { InputText }      from 'primereact/inputtext';
 import SelectIde          from '../ui/SelectIde';
 import useCommit          from '../hooks/useCommit';
 import SelectTerminal     from '../ui/SelectTerminal';
-import LanguagesBar       from '../project/LanguagesBar';
-import { ProjectType }    from '../../../types/project';
-import { Button } from 'primereact/button';
+import LanguagesBar                 from '../project/LanguagesBar';
+import { ProgramType, ProjectType } from '../../../types/project';
+import { Button }                   from 'primereact/button';
 
 const Config = (props: { selectedProject: ProjectType }) => {
 	const { selectedProject }                                                    = props;
@@ -93,7 +93,7 @@ const Config = (props: { selectedProject: ProjectType }) => {
 				</tr>
 				<tr>
 					<td className='name-column'>
-						{t('ide')}
+						{t(ProgramType.ide)}
 					</td>
 					<td className='value-column'>
 						<SelectIde id={selectedProject?.id} value={selectedProject?.ide} setVal={(v) => window.electron.projects.config(selectedProject.id, 'ide', v)} />
