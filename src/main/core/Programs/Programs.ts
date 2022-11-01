@@ -6,6 +6,7 @@ import { ProgramFields, ProgramFieldsKeys, ProgramType } from '../../../types/pr
 import APP                                               from '../../main';
 import PM_FileSystem                                     from '../Utils/PM_FileSystem';
 import fs                                                from 'fs/promises';
+import Projects                                          from '../Projects/Projects';
 
 export class Programs {
 	private static instance: Programs;
@@ -45,6 +46,10 @@ export class Programs {
 					if (program.getLogo() === data.value) return;
 					program.setLogo(data.value);
 					break;
+				case 'executeCommand':
+					if (program.executeCommand === data.value) return;
+					program.executeCommand = data.value;
+					break;
 				default:
 					return;
 			}
@@ -68,6 +73,30 @@ export class Programs {
 		ipcMain.on(BackgroundEvents.ProgramGetCommandVars, async (event, id: number) => {
 			event.returnValue = JSON.parse(JSON.stringify(Program.getVars(Program.fromId(id))));
 		});
+		ipcMain.on(BackgroundEvents.ProgramRunWithProject, async (event, data: { programId: number | string, projectId: number | string }) => {
+			let project;
+			let program;
+			if (typeof data.projectId === 'string') {
+				project = Projects.getById(parseInt(data.projectId, 10));
+			} else {
+				project = Projects.getById(data.projectId);
+			}
+			if (typeof data.programId === 'string') {
+				program = this.getById(parseInt(data.programId, 10));
+			} else {
+				program = this.getById(data.programId);
+			}
+			if (project && program) {
+				program.setProject(project);
+				event.returnValue = program.execParse();
+			}
+
+			// event.returnValue = Program.fromId(data.projectId).setProject()
+		});
+	}
+
+	public getById(projectId: number) {
+		return Program.fromId(projectId);
 	}
 
 	public async init() {

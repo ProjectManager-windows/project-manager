@@ -1,6 +1,6 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent }  from 'electron';
-import log                                               from 'electron-log';
-import path                                              from 'path';
+import { contextBridge, ipcRenderer, IpcRendererEvent }                      from 'electron';
+import log                                                                   from 'electron-log';
+import path                                                                  from 'path';
 import { BackgroundEvents }                                                  from '../types/Events';
 import { ProgramCommandVars, ProgramFields, ProgramFieldsKeys, ProgramType } from '../types/project';
 
@@ -137,14 +137,17 @@ export const bridge = {
 		create(property: { path: string, type: ProgramType }) {
 			ipcRenderer.send(BackgroundEvents.ProgramCreate, property);
 		},
-		edit(id:number, key: ProgramFieldsKeys, value: any) {
+		edit(id: number, key: ProgramFieldsKeys, value: any) {
 			ipcRenderer.send(BackgroundEvents.ProgramEdit, { id, key, value });
 		},
 		delete(id: number) {
 			ipcRenderer.send(BackgroundEvents.ProgramDelete, id);
 		},
-		getCommandVars(id: number):ProgramCommandVars {
+		getCommandVars(id: number): ProgramCommandVars {
 			return ipcRenderer.sendSync(BackgroundEvents.ProgramGetCommandVars, id);
+		},
+		runWithProject(programId: number, projectId: number) {
+			return ipcRenderer.sendSync(BackgroundEvents.ProgramRunWithProject, { programId, projectId });
 		}
 	},
 	tray       : {

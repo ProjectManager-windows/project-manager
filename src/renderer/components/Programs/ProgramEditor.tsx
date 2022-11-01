@@ -1,13 +1,13 @@
+import '../../styles/ProgramEditor.scss';
 import { useTranslation }    from 'react-i18next';
 import { useMemo, useState } from 'react';
-import '../../styles/ProgramEditor.scss';
-import { ProgramFields }     from '../../../types/project';
-import useCommit             from '../hooks/useCommit';
 import { InputText }         from 'primereact/inputtext';
 import { Button }            from 'primereact/button';
 import { InputTextarea }     from 'primereact/inputtextarea';
-import { Help }              from '../ui/Help';
 import { ListBox }           from 'primereact/listbox';
+import useCommit             from '../hooks/useCommit';
+import { ProgramFields }     from '../../../types/project';
+import { Help }              from '../ui/Help';
 
 
 const ProgramEditor = (props: { Program: ProgramFields }) => {
@@ -88,13 +88,16 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 						<div className='p-inputgroup'>
 							<InputTextarea
 								rows={5} cols={25} autoResize
-								style={{ width: '100%' }} value={executeCommand || ''} onChange={e => setExecuteCommand(e.target.value)} onBlur={e => commitExecuteCommand(e.target.value)}
+								style={{ width: '100%' }}
+								value={executeCommand || ''}
+								onChange={e => setExecuteCommand(e.target.value)}
+								onBlur={e => commitExecuteCommand(e.target.value)}
 							/>
 							<span className='p-inputgroup-addon'>
 								<Help label='?'>
 									<ListBox
 										options={commandVars} onChange={(e) => {
-										console.log(e.value);
+										setExecuteCommand(`${executeCommand}<%=${e.value}%>`);
 									}}
 									/>
 								</Help>
@@ -116,7 +119,7 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 							window.electron.settings.set('defaultProgram', Program.id);
 							setDefaultProgram(true);
 						}}
-						 />
+						/>
 					</td>
 				</tr>
 				<tr>
@@ -130,7 +133,7 @@ const ProgramEditor = (props: { Program: ProgramFields }) => {
 							onClick={() => {
 								window.electron.programs.delete(Program.id);
 							}}
-						 />
+						/>
 					</td>
 				</tr>
 				</tbody>

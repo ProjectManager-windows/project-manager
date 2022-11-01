@@ -92,7 +92,7 @@ export class Program implements ProgramFields {
 		return Object.assign(process.env, projectData, ProgramData);
 	}
 
-	private execParse(): string {
+	public execParse(): string {
 		return ejs.render(this.executeCommand, Program.getVars(this, this.project));
 	}
 
