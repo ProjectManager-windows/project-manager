@@ -1,9 +1,9 @@
-import { Dropdown }            from 'primereact/dropdown';
+import { Dropdown }                         from 'primereact/dropdown';
 import '../../styles/SelectIde.scss';
-import { useEffect, useState } from 'react';
-import useLogo                 from '../hooks/useLogo';
-import { ProgramType }         from '../../../types/project';
-import { useTranslation }      from 'react-i18next';
+import { useCallback, useEffect, useState } from 'react';
+import useLogo                              from '../hooks/useLogo';
+import { ProgramType }                      from '../../../types/project';
+import { useTranslation }                   from 'react-i18next';
 
 const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void }) => {
 	const { t }                   = useTranslation();
@@ -38,7 +38,7 @@ const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void 
 							 color         : 'transparent'
 						 });
 	}
-	const selectedCountryTemplate = (option: any) => {
+	const selectedCountryTemplate = useCallback((option: any) => {
 		if (option) {
 			const logo = useLogo({
 									 type : ProgramType.ide,
@@ -81,8 +81,8 @@ const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void 
 			);
 		}
 
-	};
-	const countryOptionTemplate   = (option: any) => {
+	}, []);
+	const countryOptionTemplate   = useCallback((option: any) => {
 		const logo = useLogo({
 								 type : ProgramType.ide,
 								 name : option.name,
@@ -95,7 +95,7 @@ const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void 
 				<div>{option.name}</div>
 			</div>
 		);
-	};
+	}, []);
 	const setValue                = (e: any) => {
 		setNewValue(e.value);
 		if (setVal) setVal(e.value);
