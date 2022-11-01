@@ -1,6 +1,5 @@
 import { dialog, ipcMain, shell } from 'electron';
 import path                       from 'path';
-import hidefile                   from 'hidefile';
 import fs                         from 'fs/promises';
 import Collection                 from '../Storage/Collection';
 import { Project }                from './Project';
@@ -223,7 +222,7 @@ class Projects implements Collection {
 		if (!await PM_FileSystem.fileExists(configFolder)) {
 			await fs.mkdir(configFolder, { recursive: true, mode: 0o777 });
 		}
-		hidefile.hideSync(configFolder);
+		// hidefile.hideSync(configFolder);
 		const configFile = path.join(configFolder, 'config.json');
 		if (!await PM_FileSystem.fileExists(configFile)) {
 			await fs.writeFile(configFile, '{}', { encoding: 'utf8', mode: 0o777 });
