@@ -1,9 +1,9 @@
-import path          from 'path';
 import { execFile }  from 'child_process';
 import PM_FileSystem from '../../core/Utils/PM_FileSystem';
+import App           from '../../main';
 
 export async function getIcon(f: string) {
-	const exe = path.join(__dirname, 'IconExtractor.exe');
+	const exe = App.getAssetPath('exe', 'IconExtractor.exe');
 	if (await PM_FileSystem.exists(exe)) {
 		return new Promise((resolve) => {
 			execFile(exe, [f], (error, stdout) => {

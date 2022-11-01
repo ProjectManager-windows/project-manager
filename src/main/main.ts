@@ -187,7 +187,7 @@ export class PM_App {
 		Programs.init().then(r => console.log(r)).catch(r => console.log(r));
 	}
 
-	getAssetPath(...paths: string[]): string {
+	public getAssetPath(...paths: string[]): string {
 		const RESOURCES_PATH = app.isPackaged
 							   ? path.join(process.resourcesPath, 'assets')
 							   : path.join(__dirname, '../../assets');
