@@ -25,7 +25,7 @@ const Programs = () => {
 		selectProgram({ color: '', executeCommand: '', executePath: '', id: -1, label: '', logo: '', name: '', type: ProgramType.other });
 	};
 	const deleteProgram = useCallback((Program:ProgramFields) => {
-		if (Program.id == window.electron.settings.get(`default.${Program.type}`)) {
+		if (parseInt(String(Program.id), 10) === parseInt(window.electron.settings.get(`default.${Program.type}`), 10)) {
 			window.electron.settings.del(`default.${Program.type}`);
 		}
 		window.electron.programs.delete(Program.id);

@@ -71,10 +71,10 @@ export const bridge = {
 			ipcRenderer.send(BackgroundEvents.ProjectAdd);
 		},
 		open(id: number) {
-			bridge.ides.exec(id);
+			ipcRenderer.send(BackgroundEvents.IdeExecute, id);
 		},
 		openInTerminal(id: number) {
-			bridge.terminals.exec(id);
+			ipcRenderer.send(BackgroundEvents.TerminalExecute, id);
 		},
 		openFolder(id: number) {
 			ipcRenderer.send(BackgroundEvents.ProjectOpenFolder, id);
@@ -93,37 +93,6 @@ export const bridge = {
 		},
 		delete(id: number) {
 			ipcRenderer.send(BackgroundEvents.ProjectDelete, id);
-		}
-	},
-	ides       : {
-		getAll() {
-			return ipcRenderer.sendSync(BackgroundEvents.IdeGetAll);
-		},
-		onUpdate(callback: () => void): () => void {
-			ipcRenderer.on(BackgroundEvents.IdeUpdate, callback);
-			return () => ipcRenderer.removeListener(BackgroundEvents.IdeUpdate, callback);
-		},
-		add(property: string) {
-			ipcRenderer.send(BackgroundEvents.IdeAdd, property);
-		},
-		exec(id: number) {
-			ipcRenderer.send(BackgroundEvents.IdeExecute, id);
-
-		}
-	},
-	terminals  : {
-		getAll() {
-			return ipcRenderer.sendSync(BackgroundEvents.TerminalGetAll);
-		},
-		onUpdate(callback: () => void): () => void {
-			ipcRenderer.on(BackgroundEvents.IdeUpdate, callback);
-			return () => ipcRenderer.removeListener(BackgroundEvents.TerminalUpdate, callback);
-		},
-		add(property: string) {
-			ipcRenderer.send(BackgroundEvents.TerminalAdd, property);
-		},
-		exec(id: number) {
-			ipcRenderer.send(BackgroundEvents.TerminalExecute, id);
 		}
 	},
 	programs   : {
