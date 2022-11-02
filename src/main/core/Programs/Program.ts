@@ -13,7 +13,7 @@ export class Program implements ProgramFields {
 	readonly table                = Tables.programs;
 	public id: number             = 0;
 	public executePath: string    = '';
-	public executeCommand: string = '"<%=PROGRAM_PATH%>" "<%=PROJECT_PATH%>"';
+	public executeCommand: string = '';
 	public name: string           = ''; // unique identifier
 	public label: string          = ''; // user-friendly program name or language key
 	public logo: string           = ''; // icon program
@@ -197,6 +197,9 @@ export class Program implements ProgramFields {
 		}
 		if (!this.executePath) {
 			throw new Error('Invalid program executePath');
+		}
+		if (!this.executeCommand) {
+			this.executeCommand = '"<%-PROGRAM_PATH%>" "<%-PROJECT_PATH%>"';
 		}
 		if (!this.color) {
 			this.color = 'transparent';
