@@ -68,12 +68,21 @@ export class Project extends Item {
 	setVal<T = any>(key: keyof ProjectAllProps, value: T, init = false) {
 		if (init) {
 			super.setVal(key, value);
-			return;
+			return this;
 		}
 		if (key === 'logo') {
 			const confPath = path.join(this.getVal('path'), '.project-manager', 'logo.base64');
 			fsSync.writeFileSync(confPath, String(value));
-			return;
+			return this;
+		}
+		if (key === 'env') {
+			try {
+				const confPath = path.join(super.getVal('path'), '.project-manager', 'env.toml');
+				fsSync.writeFileSync(confPath, String(value));
+			} catch (e) {
+				super.setVal(key, value);
+			}
+			return this;
 		}
 		if (Project.externalProps?.includes(key as keyof ProjectExternalProps)) {
 			try {
@@ -89,6 +98,7 @@ export class Project extends Item {
 			super.setVal(key, value);
 
 		}
+		return this;
 	}
 
 	getVal<T = any>(key: keyof ProjectAllProps): T {
@@ -98,6 +108,14 @@ export class Project extends Item {
 				return `file://${confPath}` as unknown as T;
 			}
 			return '' as unknown as T;
+		}
+		if (key === 'env') {
+			const confPath = path.join(super.getVal('path'), '.project-manager', 'env.toml');
+			try {
+				return fsSync.readFileSync(confPath).toString() as unknown as T;
+			} catch (e) {
+				return super.getVal(key);
+			}
 		}
 		if (Project.externalProps?.includes(key as keyof ProjectExternalProps)) {
 			try {

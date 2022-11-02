@@ -1,11 +1,11 @@
 import { ipcMain }                                       from 'electron';
+import fs                                                from 'fs/promises';
 import PM_Storage, { Tables }                            from '../Storage/PM_Storage';
 import { Program }                                       from './Program';
 import { BackgroundEvents }                              from '../../../types/Events';
 import { ProgramFields, ProgramFieldsKeys, ProgramType } from '../../../types/project';
 import APP                                               from '../../main';
 import PM_FileSystem                                     from '../Utils/PM_FileSystem';
-import fs                                                from 'fs/promises';
 import Projects                                          from '../Projects/Projects';
 import Settings                                          from '../Settings';
 
@@ -71,8 +71,35 @@ export class Programs {
 				APP.sendRenderEvent(BackgroundEvents.ProgramUpdate);
 			}, 200);
 		});
-		ipcMain.on(BackgroundEvents.ProgramGetCommandVars, async (event, id: number) => {
-			event.returnValue = JSON.parse(JSON.stringify(Program.getVars(Program.fromId(id))));
+		ipcMain.on(BackgroundEvents.ProgramGetCommandVars, async (event, data: { programId: number | string, projectId?: number | string }) => {
+			let project;
+			let program;
+			if (data.projectId) {
+				if (typeof data.projectId === 'string') {
+					project = Projects.getById(parseInt(data.projectId, 10));
+				} else {
+					project = Projects.getById(data.projectId);
+				}
+			}
+			if (typeof data.programId === 'string') {
+				program = this.getById(parseInt(data.programId, 10));
+			} else {
+				program = this.getById(data.programId);
+			}
+			if (program) {
+				try {
+					let result = {};
+					if (project) {
+						result = Program.getVars(program, project);
+					} else {
+						result = Program.getVars(program);
+					}
+					event.returnValue = result;
+				} catch (e) {
+					console.error(e);
+					event.returnValue = {};
+				}
+			}
 		});
 		ipcMain.on(BackgroundEvents.ProgramRunWithProject, async (_event, data: { programId: number | string, projectId: number | string }) => {
 			let project;
@@ -153,7 +180,7 @@ export class Programs {
 				const data = this.programsData[key];
 				if (data.name) {
 					if (!type || type === data.type) {
-						list[key] = (Program.fromId(parseInt(key)).toObject());
+						list[key] = (Program.fromId(parseInt(key, 10)).toObject());
 					}
 				}
 			}

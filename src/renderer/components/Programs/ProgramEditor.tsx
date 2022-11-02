@@ -3,12 +3,13 @@ import { useTranslation }                           from 'react-i18next';
 import { useEffect, useMemo, useReducer, useState } from 'react';
 import { InputText }                                from 'primereact/inputtext';
 import { Button }                                   from 'primereact/button';
-import { InputTextarea }                            from 'primereact/inputtextarea';
 import { ListBox }                                  from 'primereact/listbox';
 import useCommit                                    from '../hooks/useCommit';
 import { ProgramFields }                            from '../../../types/project';
+import { MyAceEditor }                              from '../ui/MyAceEditor';
 import { Help }                                     from '../ui/Help';
-
+import 'ace-builds/src-noconflict/theme-monokai';
+import 'ace-builds/src-noconflict/mode-ejs';
 
 const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program: ProgramFields) => void }) => {
 	const { t }                                 = useTranslation();
@@ -98,12 +99,14 @@ const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program:
 					</td>
 					<td className='value-column'>
 						<div className='p-inputgroup'>
-							<InputTextarea
-								rows={5} cols={25} autoResize
-								style={{ width: '100%' }}
+							<MyAceEditor
+								mode='ejs'
+								theme='monokai'
+								name='blah2'
+								height='100px'
+								onChange={newValue => setExecuteCommand(newValue)}
+								onBlur={(_e, editor) => commitExecuteCommand(editor?.getValue() || '')}
 								value={executeCommand || ''}
-								onChange={e => setExecuteCommand(e.target.value)}
-								onBlur={e => commitExecuteCommand(e.target.value)}
 							/>
 							<span className='p-inputgroup-addon'>
 								<Help label='?'>

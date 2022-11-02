@@ -103,7 +103,7 @@ const SelectIde = (props: { id: any, value?: any, setVal?: (value: any) => void 
 	return (
 		<div className='SelectIde'>
 			<Dropdown
-				style={{ width: 'calc(100% - 35px)' }}
+				style={{ width: 'calc(100%)' }}
 				options={programs}
 				optionLabel='name'
 				value={newValue}

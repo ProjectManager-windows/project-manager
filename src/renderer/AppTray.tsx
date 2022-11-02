@@ -12,8 +12,6 @@ import { ProjectType }         from '../types/project';
 
 export default function AppTray() {
 	const [projects, setProjects]          = useState(window.electron.projects.getAll());
-	const [ides]                           = useState(window.electron.ides.getAll());
-	const [terminals]                      = useState(window.electron.terminals.getAll());
 	const [view, setView]                  = useState((<div />));
 	const [selectedProject, selectProject] = useState<ProjectType>();
 	const [technology, setTechnology]      = useState<string>('');
@@ -31,7 +29,7 @@ export default function AppTray() {
 	return (
 		<div className='App-tray'>
 			<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
-			<ProjectContext.Provider value={{ projects: projectList, setProjects, selectedProject, selectProject, view, setView, technology, setTechnology, ides, terminals }}>
+			<ProjectContext.Provider value={{ projects: projectList, setProjects, selectedProject, selectProject, view, setView, technology, setTechnology }}>
 				<FontAwesomeIcon className='close' icon={faClose} onClick={() => closeTray()} />
 				<div className='header tray-header'>
 					<div className='search'>

@@ -102,7 +102,7 @@ const SelectTerminal = (props: { id: any, value?: any, setVal?: (value: any) => 
 	return (
 		<div className='SelectTerminal'>
 			<Dropdown
-				style={{ width: 'calc(100% - 35px)' }}
+				style={{ width: 'calc(100% )' }}
 				options={programs}
 				optionLabel='name'
 				value={newValue}

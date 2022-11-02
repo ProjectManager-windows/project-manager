@@ -30,7 +30,7 @@ export interface TechnologyType {
 export interface PublisherType extends TechnologyType {
 	publish: (Project: ProjectType) => void;
 }
-export interface ProjectType {
+export type ProjectType = ProjectAllProps & {
 	logo?: string;
 	color?: string;
 	id: number;
@@ -66,7 +66,7 @@ export interface ProgramFields {
 export type ProgramFieldsKeys = keyof ProgramFields
 
 export type ProgramCommandVars = {
-	[p: `PROJECT_${string}` | `PROGRAM_${string}` | keyof typeof process.env]: string | undefined
+	[p: `PROJECT_${string}` | `PROGRAM_${string}` | keyof typeof process.env]: string | number | { [k: string]: any } | undefined
 }
 
 export interface ProjectProps {
@@ -82,7 +82,7 @@ export interface ProjectExternalProps {
 	logoBaseName: string;
 	color: string;
 	description: string;
-	env: { [k: string]: string };
+	env: string;
 }
 
 export type ProjectAllProps = ProjectProps & ProjectExternalProps

@@ -112,8 +112,8 @@ export const bridge = {
 		delete(id: number) {
 			ipcRenderer.send(BackgroundEvents.ProgramDelete, id);
 		},
-		getCommandVars(id: number): ProgramCommandVars {
-			return ipcRenderer.sendSync(BackgroundEvents.ProgramGetCommandVars, id);
+		getCommandVars(programId: number, projectId?: number): ProgramCommandVars {
+			return ipcRenderer.sendSync(BackgroundEvents.ProgramGetCommandVars, { programId, projectId });
 		},
 		runWithProject(programId: number, projectId: number) {
 			return ipcRenderer.sendSync(BackgroundEvents.ProgramRunWithProject, { programId, projectId });

@@ -1,13 +1,16 @@
 import '../../styles/Config.scss';
-import { useTranslation } from 'react-i18next';
-import { ColorPicker }    from 'primereact/colorpicker';
-import { InputText }      from 'primereact/inputtext';
-import SelectIde          from '../ui/SelectIde';
-import useCommit          from '../hooks/useCommit';
-import SelectTerminal     from '../ui/SelectTerminal';
+import { useTranslation }           from 'react-i18next';
+import { ColorPicker }              from 'primereact/colorpicker';
+import { InputText }                from 'primereact/inputtext';
+import { Button }                   from 'primereact/button';
+import SelectIde                    from '../ui/SelectIde';
+import useCommit                    from '../hooks/useCommit';
+import SelectTerminal               from '../ui/SelectTerminal';
 import LanguagesBar                 from '../project/LanguagesBar';
 import { ProgramType, ProjectType } from '../../../types/project';
-import { Button }                   from 'primereact/button';
+import { MyAceEditor }              from '../ui/MyAceEditor';
+import 'ace-builds/src-noconflict/theme-monokai';
+import 'ace-builds/src-noconflict/mode-toml';
 
 const Config = (props: { selectedProject: ProjectType }) => {
 	const { selectedProject }                                                    = props;
@@ -21,6 +24,9 @@ const Config = (props: { selectedProject: ProjectType }) => {
 	});
 	const [color, setColor, commitColor, isChangedColor]                         = useCommit(selectedProject.color, (value) => {
 		window.electron.projects.config(selectedProject.id, 'color', value);
+	});
+	const [env, setEnv, commitEnv, isChangedEnv]                                 = useCommit(selectedProject.env, (value) => {
+		window.electron.projects.config(selectedProject.id, 'env', value);
 	});
 	if (!selectedProject) {
 		return <></>;
@@ -40,10 +46,12 @@ const Config = (props: { selectedProject: ProjectType }) => {
 						{t('name')}
 					</td>
 					<td className='value-column'>
-						 <span className='p-input-icon-right'>
-                    		<i className={`pi ${isChangedName ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+						<div className='p-inputgroup'>
 							<InputText style={{ width: '100%' }} value={name || ''} onChange={e => setName(e.target.value)} onBlur={e => commitName(e.target.value)} />
-						 </span>
+							<span className='p-inputgroup-addon'>
+ 								<i className={`pi ${isChangedName ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+							</span>
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -51,10 +59,12 @@ const Config = (props: { selectedProject: ProjectType }) => {
 						{t('description')}
 					</td>
 					<td className='value-column'>
-						 <span className='p-input-icon-right'>
-                    		<i className={`pi ${isChangedDescription ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+						<div className='p-inputgroup'>
 							<InputText style={{ width: '100%' }} value={description || ''} onChange={e => setDescription(e.target.value)} onBlur={e => commitDescription(e.target.value)} />
-						</span>
+							<span className='p-inputgroup-addon'>
+ 								<i className={`pi ${isChangedDescription ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+							</span>
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -63,31 +73,30 @@ const Config = (props: { selectedProject: ProjectType }) => {
 					</td>
 					<td className='value-column'>
 						<div style={{ width: '100%' }}>
-							<ColorPicker
-								style={{ width: '35px' }}
-								value={color}
-								onChange={e => {
-									if (typeof e.value === 'string') {
-										setColor(`#${String(e.value).replaceAll('#', '')}`);
-									}
-								}}
-								onMouseUp={() => commitColor()}
-							/>
-							<span
-								className='p-input-icon-right' style={{ width: 'calc(100% - 70px)' }}
-							>
-                    			<i className={`pi ${isChangedColor ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+							<div className='p-inputgroup'>
+								<span className='p-inputgroup-addon'>
+									<ColorPicker
+										style={{ width: '35px' }}
+										value={color}
+										onChange={e => {
+											if (typeof e.value === 'string') {
+												setColor(`#${String(e.value).replaceAll('#', '')}`);
+											}
+										}}
+										onMouseUp={() => commitColor()}
+									/>
+								</span>
 								<InputText
-									style={{ width: '100%' }}
-									value={color}
-									onChange={e => {
-										setColor(`#${e.target.value.replaceAll('#', '')}`);
-									}}
-									onBlur={e => {
-										commitColor(`#${e.target.value.replaceAll('#', '')}`);
-									}}
+									style={{ width: '100%' }} value={color} onChange={e => {
+									setColor(`#${e.target.value.replaceAll('#', '')}`);
+								}} onBlur={e => {
+									commitColor(`#${e.target.value.replaceAll('#', '')}`);
+								}}
 								/>
-							</span>
+								<span className='p-inputgroup-addon'>
+									<i className={`pi ${isChangedColor ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+								</span>
+							</div>
 						</div>
 					</td>
 				</tr>
@@ -108,6 +117,27 @@ const Config = (props: { selectedProject: ProjectType }) => {
 					</td>
 				</tr>
 				<tr>
+					<td>
+						{t('env')}
+					</td>
+					<td className='value-column'>
+						<div className='p-inputgroup'>
+							<MyAceEditor
+								mode='toml'
+								theme='monokai'
+								value={env || ''}
+								name='blah2'
+								height='100px'
+								onChange={newValue => setEnv(newValue)}
+								onBlur={(_e, editor) => commitEnv(editor?.getValue() || '')}
+							/>
+							<span className='p-inputgroup-addon'>
+								<i className={`pi ${isChangedEnv ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+							</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
 					<td className='name-column'>
 						{t('logo')}
 					</td>
@@ -118,18 +148,16 @@ const Config = (props: { selectedProject: ProjectType }) => {
 							onClick={() => {
 								window.electron.projects.changeLogo(selectedProject.id);
 							}}
-						>
-						</Button>
+						/>
 						<Button
-							className={'p-button-danger'}
+							className='p-button-danger'
 							label={t('remove logo')}
 							style={{ width: 'calc(50% - 5px)' }}
 							onClick={() => {
 								window.electron.projects.removeLogo(selectedProject.id);
 							}}
 							disabled={!selectedProject.logo}
-						>
-						</Button>
+						/>
 					</td>
 				</tr>
 

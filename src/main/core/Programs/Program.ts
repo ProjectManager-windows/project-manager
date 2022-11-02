@@ -7,12 +7,13 @@ import PM_Storage, { Tables }                             from '../Storage/PM_St
 import PM_FileSystem                                      from '../Utils/PM_FileSystem';
 import { Project }                                        from '../Projects/Project';
 import { ProgramCommandVars, ProgramFields, ProgramType } from '../../../types/project';
+import * as toml                                          from 'toml';
 
 export class Program implements ProgramFields {
 	readonly table                = Tables.programs;
 	public id: number             = 0;
 	public executePath: string    = '';
-	public executeCommand: string = '';
+	public executeCommand: string = '"<%=PROGRAM_PATH%>" "<%=PROJECT_PATH%>"';
 	public name: string           = ''; // unique identifier
 	public label: string          = ''; // user-friendly program name or language key
 	public logo: string           = ''; // icon program
@@ -89,19 +90,46 @@ export class Program implements ProgramFields {
 	}
 
 	static getVars(program: Program, project?: Project): ProgramCommandVars {
-		const projectData: { [p: `PROJECT_${string}`]: string | undefined } = {};
+		const RESULT: ProgramCommandVars = {};
+
+		const projectData: {
+			[p: string]: string | { [k: string]: string } | undefined
+			PROJECT_ENV: { [k: string]: string } | undefined,
+		} = {
+			PROJECT_NAME : undefined,
+			PROJECT_PATH : undefined,
+			PROJECT_DESC : undefined,
+			PROJECT_ENV  : undefined,
+			PROJECT_COLOR: undefined
+		};
 		if (project) {
 			projectData.PROJECT_NAME = project.getVal<string>('name');
 			projectData.PROJECT_PATH = project.getVal<string>('path');
-		} else {
-			projectData.PROJECT_NAME = undefined;
-			projectData.PROJECT_PATH = undefined;
+			projectData.PROJECT_DESC = project.getVal<string>('description');
+			try {
+				const env = project.getVal<string>('env');
+				if (env) {
+					projectData.PROJECT_ENV = toml.parse(env);
+				}
+			} catch (e) {
+
+			}
+			projectData.PROJECT_COLOR = project.getVal<string>('color');
 		}
-		const ProgramData: { [p: `PROGRAM_${string}`]: string | undefined } = {};
-		ProgramData.PROGRAM_PATH                                            = program.executePath;
-		ProgramData.PROGRAM_NAME                                            = program.name;
-		ProgramData.PROGRAM_TYPE                                            = program.type;
-		return Object.assign(process.env, projectData, ProgramData);
+		const ProgramData: { [p: string]: string | undefined } = {};
+		ProgramData.PROGRAM_PATH                               = program.executePath;
+		ProgramData.PROGRAM_NAME                               = program.name;
+		ProgramData.PROGRAM_TYPE                               = program.type;
+		Object.keys(process.env).forEach((key) => {
+			RESULT[key] = process.env[key];
+		});
+		Object.keys(ProgramData).forEach((key) => {
+			RESULT[key] = ProgramData[key];
+		});
+		Object.keys(projectData).forEach((key) => {
+			RESULT[key] = projectData[key];
+		});
+		return RESULT;
 	}
 
 	public execParse(): string {
