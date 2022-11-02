@@ -3,11 +3,11 @@
 	background-color : var(--primary-color-text);
 
 	.header {
-		display         : flex;
-		align-items     : flex-start;
+		align-items     : stretch;
 		flex-direction  : column;
 		align-content   : center;
 		justify-content : flex-start;
+		flex-wrap       : nowrap;
 
 		.name {
 			font-weight : 600;
@@ -15,7 +15,6 @@
 		}
 
 		.description {
-			max-width : 500px;
 			overflow  : hidden;
 			opacity   : 0.8;
 			height    : 2em;

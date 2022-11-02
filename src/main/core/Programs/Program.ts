@@ -133,8 +133,10 @@ export class Program implements ProgramFields {
 	}
 
 	public execParse(): string {
-		const output = ejs.render(this.executeCommand, Program.getVars(this, this.project));
-		return output.replaceAll('\n', ' ').replaceAll('\r', '');
+		let output = ejs.render(this.executeCommand, Program.getVars(this, this.project));
+		output       = output.replaceAll('\n', ' ').replaceAll('\r', '');
+		console.log(output);
+		return output;
 	}
 
 	async check(): Promise<boolean> {
