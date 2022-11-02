@@ -104,10 +104,17 @@ class Projects implements Collection {
 	}
 
 	getAll(): { [p: string]: Project } {
-		this.items  = {};
-		const table = PM_Storage.getAll<ItemType>(this.table);
-		for (const tableKey in table) {
-			this.items[tableKey] = new Project(table[tableKey]);
+		this.items = {};
+		const data = PM_Storage.getAll<ItemType>(this.table);
+		for (const tableKey in data) {
+			const key = parseInt(tableKey, 10);
+			if (data[key]) {
+				if (data[key].id > 0) {
+					this.items[tableKey] = new Project(data[key]);
+				} else {
+					PM_Storage.delById(this.table, key);
+				}
+			}
 		}
 		return this.items;
 	}
@@ -116,7 +123,8 @@ class Projects implements Collection {
 		const items: any = {};
 		const data       = this.getAll();
 		for (const tableKey in data) {
-			items[tableKey] = data[tableKey].toObject();
+			const key  = parseInt(tableKey, 10);
+			items[key] = data[key].toObject();
 		}
 		return items;
 	}

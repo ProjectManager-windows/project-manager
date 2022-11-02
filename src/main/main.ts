@@ -7,8 +7,6 @@ import MenuBuilder                                                              
 import { resolveHtmlPath }                                                                                 from './util';
 import Projects                                                                                            from './core/Projects/Projects';
 import events                                                                                              from './ipcMain';
-import IDEs                                                                                                from './core/IDEs/IDEs';
-import Terminals                                                                                           from './core/Terminals/Terminals';
 import { BackgroundEvents }                                                                                from '../types/Events';
 import Programs                                                                                            from './core/Programs/Programs';
 
@@ -181,9 +179,9 @@ export class PM_App {
 		events.run();
 		Projects.init();
 		// eslint-disable-next-line no-console
-		IDEs.init().then(r => console.log(r)).catch(r => console.log(r));
+		// IDEs.init().then(r => console.log(r)).catch(r => console.log(r));
 		// eslint-disable-next-line no-console
-		Terminals.init().then(r => console.log(r)).catch(r => console.log(r));
+		// Terminals.init().then(r => console.log(r)).catch(r => console.log(r));
 		Programs.init().then(r => console.log(r)).catch(r => console.log(r));
 	}
 

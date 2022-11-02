@@ -2,10 +2,8 @@ import Store from 'electron-store';
 
 export enum Tables {
 	programs  = 'programs',
-	terminals = 'terminals',
 	projects  = 'projects',
 	settings  = 'settings',
-	IDEs      = 'IDEs',
 	empty     = '',
 }
 

@@ -82,7 +82,7 @@ const ProjectList = (props: { minimal: boolean }) => {
 			  forSort.push(project);
 		  }
 		  forSort = forSort.sort((a, b) => {
-			  return a.name.localeCompare(b.name);
+			  return a?.name?.localeCompare(b?.name);
 		  });
 		  if (forSort.length > 0) {
 			  return (

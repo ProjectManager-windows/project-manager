@@ -65,7 +65,24 @@ export interface ProgramFields {
 
 export type ProgramFieldsKeys = keyof ProgramFields
 
-
 export type ProgramCommandVars = {
-	[p: `PROJECT_${string}` | `PROGRAM_${string}` | keyof typeof process.env]: string|undefined
+	[p: `PROJECT_${string}` | `PROGRAM_${string}` | keyof typeof process.env]: string | undefined
 }
+
+export interface ProjectProps {
+	path?: string;
+	stats?: { [key: string]: number };
+}
+
+export interface ProjectExternalProps {
+	ide: string;
+	terminal: string;
+	name: string;
+	logo: string;
+	logoBaseName: string;
+	color: string;
+	description: string;
+	env: { [k: string]: string };
+}
+
+export type ProjectAllProps = ProjectProps & ProjectExternalProps

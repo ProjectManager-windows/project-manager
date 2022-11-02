@@ -1,28 +1,39 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
-import { glob }                from 'glob';
-import fs                      from 'fs/promises';
-import * as fsSync             from 'fs';
-import path                    from 'path';
-import rng                     from 'seedrandom';
-import JSON5                   from 'json5';
-import ignore                  from 'ignore';
-import { Item }                from '../Storage/Item';
-import PM_FileSystem, { file } from '../Utils/PM_FileSystem';
-import APP                     from '../../main';
-import { Tables }              from '../Storage/PM_Storage';
-import { BackgroundEvents }    from '../../../types/Events';
+import { glob }                                                from 'glob';
+import fs                                                      from 'fs/promises';
+import * as fsSync                                             from 'fs';
+import path                                                    from 'path';
+import rng                                                     from 'seedrandom';
+import JSON5                                                   from 'json5';
+import ignore                                                  from 'ignore';
+import { Item, ItemType }                                      from '../Storage/Item';
+import PM_FileSystem, { file }                                 from '../Utils/PM_FileSystem';
+import APP                                                     from '../../main';
+import { Tables }                                              from '../Storage/PM_Storage';
+import { BackgroundEvents }                                    from '../../../types/Events';
+import { ProjectAllProps, ProjectExternalProps, ProjectProps } from '../../../types/project';
 
 export class Project extends Item {
+	public data: ItemType & ProjectProps = { id: 0 };
+
 	public table = Tables.projects;
 
-	public static externalProps = [
+	public constructor(data: ItemType & ProjectProps) {
+		super(data);
+		this.init();
+		this.data = data;
+		this.afterInit(data);
+	}
+
+	public static externalProps: Array<keyof ProjectExternalProps> = [
 		'ide',// string
 		'terminal',// string
 		'name',// string
 		'logo',// string
 		'logoBaseName',// string
 		'color',// string
-		'description'// string
+		'description',// string
+		'env'// object
 	];
 
 	init() {
@@ -54,7 +65,7 @@ export class Project extends Item {
 		return this;
 	}
 
-	setVal<T = any>(key: string, value: T, init = false) {
+	setVal<T = any>(key: keyof ProjectAllProps, value: T, init = false) {
 		if (init) {
 			super.setVal(key, value);
 			return;
@@ -64,7 +75,7 @@ export class Project extends Item {
 			fsSync.writeFileSync(confPath, String(value));
 			return;
 		}
-		if (Project.externalProps?.includes(key)) {
+		if (Project.externalProps?.includes(key as keyof ProjectExternalProps)) {
 			try {
 				const confPath = path.join(this.getVal('path'), '.project-manager', 'config.json');
 				const config   = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
@@ -80,7 +91,7 @@ export class Project extends Item {
 		}
 	}
 
-	getVal<T = any>(key: string): T {
+	getVal<T = any>(key: keyof ProjectAllProps): T {
 		if (key === 'logo') {
 			if (this.getVal('logoBaseName')) {
 				const confPath = path.join(super.getVal('path'), '.project-manager', this.getVal('logoBaseName')).replaceAll('\\', '/');
@@ -88,7 +99,7 @@ export class Project extends Item {
 			}
 			return '' as unknown as T;
 		}
-		if (Project.externalProps?.includes(key)) {
+		if (Project.externalProps?.includes(key as keyof ProjectExternalProps)) {
 			try {
 				const confPath                   = path.join(super.getVal('path'), '.project-manager', 'config.json');
 				const config: { [p: string]: T } = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
@@ -113,7 +124,7 @@ export class Project extends Item {
 	toObject() {
 		const results: any = {};
 		for (const dataKey in this.data) {
-			results[dataKey] = this.getVal(dataKey);
+			results[dataKey] = this.getVal(dataKey as keyof ProjectAllProps);
 		}
 		results.logo = this.getVal('logo');
 		return results;
