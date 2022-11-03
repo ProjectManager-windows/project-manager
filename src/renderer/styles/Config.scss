@@ -13,38 +13,26 @@
 
 		.description {
 			max-width : 500px;
-			overflow: hidden;
+			overflow  : hidden;
 			opacity   : 0.8;
 			height    : 1em;
 			font-size : 0.65em;
 		}
 	}
 
-
-	table {
-		border-collapse : separate;
-		border-spacing  : 0 5px;
-
-		.name-column {
-			width     : 30%;
-			min-width : 150px;
-		}
+	.grid-table {
+		display               : grid;
+		grid-template-columns : minmax(150px, 220px) 1fr;
+		grid-template-rows    : 1fr;
+		gap                   : 3px 3px;
+		grid-template-areas   :
+    ". .";
 
 		.value-column {
-			width : 500px;
+			width : 100%;
 
-			.p-input-icon-right,button {
-				width : calc(100% - 35px);
-			}
-
-			&.logos-buttons {
-				width           : calc(100% - 35px);
-				display         : flex;
-				justify-content : space-between;
-				align-items     : stretch;
-				align-content   : center;
-				flex-direction  : row;
-				flex-wrap       : nowrap;
+			#env-editor {
+				width : 100% !important;;
 			}
 		}
 	}

@@ -11,6 +11,7 @@ import { ProgramType, ProjectType } from '../../../types/project';
 import { MyAceEditor }              from '../ui/MyAceEditor';
 import 'ace-builds/src-noconflict/theme-monokai';
 import 'ace-builds/src-noconflict/mode-toml';
+import 'ace-builds/src-noconflict/snippets/toml';
 
 const Config = (props: { selectedProject: ProjectType }) => {
 	const { selectedProject }                                                    = props;
@@ -38,42 +39,37 @@ const Config = (props: { selectedProject: ProjectType }) => {
 				<div className='description'>{selectedProject.description}</div>
 			</div>
 			<hr />
-			<table>
-				<thead />
-				<tbody>
-				<tr>
-					<td className='name-column'>
-						{t('name')}
-					</td>
-					<td className='value-column'>
-						<div className='p-inputgroup'>
-							<InputText style={{ width: '100%' }} value={name || ''} onChange={e => setName(e.target.value)} onBlur={e => commitName(e.target.value)} />
-							<span className='p-inputgroup-addon'>
+			<div className='grid-table'>
+				<div className='name-column'>
+					{t('name')}
+				</div>
+				<div className='value-column'>
+					<div className='p-inputgroup'>
+						<InputText style={{ width: '100%' }} value={name || ''} onChange={e => setName(e.target.value)} onBlur={e => commitName(e.target.value)} />
+						<span className='p-inputgroup-addon'>
  								<i className={`pi ${isChangedName ? 'pi-spin pi-spinner' : 'pi-check'}`} />
 							</span>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td className='name-column'>
-						{t('description')}
-					</td>
-					<td className='value-column'>
-						<div className='p-inputgroup'>
-							<InputText style={{ width: '100%' }} value={description || ''} onChange={e => setDescription(e.target.value)} onBlur={e => commitDescription(e.target.value)} />
-							<span className='p-inputgroup-addon'>
+					</div>
+				</div>
+				<div className='name-column'>
+					{t('description')}
+				</div>
+				<div className='value-column'>
+					<div className='p-inputgroup'>
+						<InputText style={{ width: '100%' }} value={description || ''} onChange={e => setDescription(e.target.value)} onBlur={e => commitDescription(e.target.value)} />
+						<span className='p-inputgroup-addon'>
  								<i className={`pi ${isChangedDescription ? 'pi-spin pi-spinner' : 'pi-check'}`} />
 							</span>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td className='name-column'>
-						{t('color')}
-					</td>
-					<td className='value-column'>
-						<div style={{ width: '100%' }}>
-							<div className='p-inputgroup'>
+					</div>
+				</div>
+
+
+				<div className='name-column'>
+					{t('color')}
+				</div>
+				<div className='value-column'>
+					<div style={{ width: '100%' }}>
+						<div className='p-inputgroup'>
 								<span className='p-inputgroup-addon'>
 									<ColorPicker
 										style={{ width: '35px' }}
@@ -93,76 +89,73 @@ const Config = (props: { selectedProject: ProjectType }) => {
 									commitColor(`#${e.target.value.replaceAll('#', '')}`);
 								}}
 								/>
-								<span className='p-inputgroup-addon'>
+							<span className='p-inputgroup-addon'>
 									<i className={`pi ${isChangedColor ? 'pi-spin pi-spinner' : 'pi-check'}`} />
 								</span>
-							</div>
 						</div>
-					</td>
-				</tr>
-				<tr>
-					<td className='name-column'>
-						{t(ProgramType.ide)}
-					</td>
-					<td className='value-column'>
-						<SelectIde id={selectedProject?.id} value={selectedProject?.ide} setVal={(v) => window.electron.projects.config(selectedProject.id, 'ide', v)} />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						{t(ProgramType.terminal)}
-					</td>
-					<td className='value-column'>
-						<SelectTerminal id={selectedProject?.id} value={selectedProject?.terminal} setVal={(v) => window.electron.projects.config(selectedProject.id, ProgramType.terminal, v)} />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						{t('env')}
-					</td>
-					<td className='value-column'>
-						<div className='p-inputgroup'>
-							<MyAceEditor
-								mode='toml'
-								theme='monokai'
-								value={env || ''}
-								name='blah2'
-								height='100px'
-								onChange={newValue => setEnv(newValue)}
-								onBlur={(_e, editor) => commitEnv(editor?.getValue() || '')}
-							/>
-							<span className='p-inputgroup-addon'>
+					</div>
+				</div>
+
+
+				<div className='name-column'>
+					{t(ProgramType.ide)}
+				</div>
+				<div className='value-column'>
+					<SelectIde id={selectedProject?.id} value={selectedProject?.ide} setVal={(v) => window.electron.projects.config(selectedProject.id, 'ide', v)} />
+				</div>
+
+
+				<div>
+					{t(ProgramType.terminal)}
+				</div>
+				<div className='value-column'>
+					<SelectTerminal id={selectedProject?.id} value={selectedProject?.terminal} setVal={(v) => window.electron.projects.config(selectedProject.id, ProgramType.terminal, v)} />
+				</div>
+
+
+				<div>
+					{t('env')}
+				</div>
+				<div className='value-column'>
+					<div className='p-inputgroup'>
+						<MyAceEditor
+							mode='toml'
+							theme='monokai'
+							value={env || ''}
+							name='env-editor'
+							height='100px'
+							onChange={newValue => setEnv(newValue)}
+							onBlur={(_e, editor) => commitEnv(editor?.getValue() || '')}
+						/>
+						<span className='p-inputgroup-addon'>
 								<i className={`pi ${isChangedEnv ? 'pi-spin pi-spinner' : 'pi-check'}`} />
 							</span>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td className='name-column'>
-						{t('logo')}
-					</td>
-					<td className='value-column logos-buttons'>
-						<Button
-							label={t('set logo')}
-							style={{ width: 'calc(50% - 5px)' }}
-							onClick={() => {
-								window.electron.projects.changeLogo(selectedProject.id);
-							}}
-						/>
-						<Button
-							className='p-button-danger'
-							label={t('remove logo')}
-							style={{ width: 'calc(50% - 5px)' }}
-							onClick={() => {
-								window.electron.projects.removeLogo(selectedProject.id);
-							}}
-							disabled={!selectedProject.logo}
-						/>
-					</td>
-				</tr>
+					</div>
+				</div>
 
-				</tbody>
-			</table>
+
+				<div className='name-column'>
+					{t('logo')}
+				</div>
+				<div className='value-column logos-buttons'>
+					<Button
+						label={t('set logo')}
+						style={{ width: 'calc(50% - 5px)' }}
+						onClick={() => {
+							window.electron.projects.changeLogo(selectedProject.id);
+						}}
+					/>
+					<Button
+						className='p-button-danger'
+						label={t('remove logo')}
+						style={{ width: 'calc(50% - 5px)' }}
+						onClick={() => {
+							window.electron.projects.removeLogo(selectedProject.id);
+						}}
+						disabled={!selectedProject.logo}
+					/>
+				</div>
+			</div>
 			<hr />
 			<LanguagesBar className='languageBar' stats={selectedProject.stats} />
 		</div>

@@ -1,17 +1,24 @@
 import AceEditor           from 'react-ace';
 import { IAceEditorProps } from 'react-ace/src/ace';
+import 'ace-builds/src-noconflict/ext-language_tools';
+import 'ace-builds/src-noconflict/ext-beautify';
+import 'ace-builds/src-noconflict/ext-spellcheck';
+import { IAceOptions }     from 'react-ace/src/types';
 
 export const MyAceEditor = (props: IAceEditorProps) => {
-	const { mode,theme, value, name, height, onChange, onBlur, setOptions } = props;
+	const { mode, theme, value, name, height, onChange, onBlur, setOptions } = props;
 
-	const options = Object.assign(setOptions??{}, {
+	const options:IAceOptions = Object.assign(setOptions ?? {}, {
 		fontFamily               : 'Fira Code',
 		enableBasicAutocompletion: true,
 		enableLiveAutocompletion : true,
 		enableSnippets           : true,
 		showLineNumbers          : true,
+		spellcheck               : true,
+		enableMultiselect        : true,
+		cursorStyle              : 'slim',
 		tabSize                  : 2
-	});
+	} as IAceOptions);
 
 	return (
 		<>
