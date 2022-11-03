@@ -11,7 +11,7 @@ export type windowsProgramType = {
 
 
 export async function getPrograms(): Promise<windowsProgramType[]> {
-	const exe = App.getAssetPath('exe', 'GetInstalledPrograms', 'GetInstalledPrograms.exe');
+	const exe = App.getAssetPath('exe', 'GetInstalledPrograms.exe');
 	if (await PM_FileSystem.exists(exe)) {
 		return new Promise<windowsProgramType[]>((resolve) => {
 			execFile(exe, (error, stdout,stderr) => {
