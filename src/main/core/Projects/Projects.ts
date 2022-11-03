@@ -1,14 +1,17 @@
-import { dialog, ipcMain, shell } from 'electron';
-import path                       from 'path';
-import fs                         from 'fs/promises';
-import Collection                 from '../Storage/Collection';
-import { Project }                from './Project';
-import PM_Storage, { Tables }     from '../Storage/PM_Storage';
-import { ItemType }               from '../Storage/Item';
-import ProgressBar                from '../ProgressBar/ProgressBar';
-import PM_FileSystem              from '../Utils/PM_FileSystem';
-import { t }                      from '../Utils/i18n';
-import { BackgroundEvents }       from '../../../types/Events';
+import { dialog, ipcMain, shell }       from 'electron';
+import path                             from 'path';
+import fs                               from 'fs/promises';
+import Collection                       from '../Storage/Collection';
+import { Project }                      from './Project';
+import PM_Storage, { Tables }           from '../Storage/PM_Storage';
+import { ItemType }  from '../Storage/Item';
+import ProgressBar   from '../Notifications/ProgressBar';
+import PM_FileSystem from '../Utils/PM_FileSystem';
+import { t }                            from '../Utils/i18n';
+import { BackgroundEvents }             from '../../../types/Events';
+import { ProgramType, ProjectAllProps } from '../../../types/project';
+import Settings                         from '../Settings';
+import Program                          from '../Programs/Program';
 
 export type ProjectsScheme = {
 	id: string
@@ -94,6 +97,25 @@ class Projects implements Collection {
 			// await trash(path, { glob: false });
 			await p.delete();
 		});
+
+		ipcMain.on(BackgroundEvents.Execute, async (_event, type: ProgramType, projectId) => {
+			const defaultTerminal = Number(Settings.get(`default.${type}`));
+			const project         = this.getById(projectId);
+			let id: number;
+			if (project.getVal(type as keyof ProjectAllProps)) {
+				id = project.getVal(type as keyof ProjectAllProps);
+			} else {
+				id = defaultTerminal || 1;
+			}
+			try {
+				const ide = Program.fromId(id);
+				ide.setProject(project);
+				_event.returnValue = await ide.run();
+			} catch (e) {
+				_event.returnValue = false;
+			}
+		});
+
 	}
 
 	static getInstance() {
@@ -141,7 +163,7 @@ class Projects implements Collection {
 		Projects.scan_index++;
 		const folder = await dialog.showOpenDialog({ properties: ['openDirectory'] });
 		if (!folder.canceled) {
-			const bar      = new ProgressBar(`scan${Projects.scan_index}`, 'scan');
+			const bar      = new ProgressBar(`scan_project_${Projects.scan_index}`, 'scan_project');
 			const myFs     = new PM_FileSystem();
 			const projects = await myFs.findProjects(folder.filePaths[0]);
 			bar.update({

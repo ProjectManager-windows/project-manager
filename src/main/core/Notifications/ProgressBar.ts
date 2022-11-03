@@ -1,7 +1,11 @@
-import ProgressUnit        from './ProgressUnit';
-// eslint-disable-next-line import/no-cycle
 import APP                  from '../../main';
 import { BackgroundEvents } from '../../../types/Events';
+
+export interface ProgressUnit {
+	total?: number;
+	current: number;
+	message?: string;
+}
 
 export class ProgressBar {
 	private current: number = 0;
@@ -39,9 +43,17 @@ export class ProgressBar {
 	}
 
 	public update(progress: ProgressUnit) {
-		this.total   = progress.total;
+		if (progress.total) {
+			this.total = progress.total;
+		}
 		this.current = progress.current;
 		this.message = progress.message ?? '';
+		this.sendUpdate();
+	}
+
+	public stop(message: string = '') {
+		this.current = this.total;
+		this.message = message;
 		this.sendUpdate();
 	}
 
@@ -56,7 +68,7 @@ export class ProgressBar {
 	}
 
 	private sendUpdate() {
-		APP.sendRenderEvent(BackgroundEvents.ProgressbarUpdate, this.toArray());
+		APP.sendRenderEvent(BackgroundEvents.ProgressbarUpdate, this.toArray()).then(() => null).catch(console.error);
 	}
 }
 

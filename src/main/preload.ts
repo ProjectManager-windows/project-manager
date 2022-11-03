@@ -13,7 +13,7 @@ export const bridge = {
 	path       : path,
 	ipcRenderer: {
 		sendMessage(channel: Channels, args: unknown[]) {
-			ipcRenderer.send(channel, args);
+			return ipcRenderer.sendSync(channel, args);
 		},
 		on(channel: Channels, func: (...args: any[]) => void) {
 			const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>

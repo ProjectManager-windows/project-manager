@@ -1,29 +1,36 @@
 import { execFile }  from 'child_process';
-import { PathLike }  from 'fs';
 import PM_FileSystem from '../../core/Utils/PM_FileSystem';
 import App           from '../../main';
+import { xml2json }  from 'xml-js';
 
 export type windowsProgramType = {
 	DisplayName: string,
 	Publisher: string,
-	InstallLocation: PathLike,
+	InstallLocation: string,
+}
+export type windowsProgramTypeList = {
+	ArrayOfItem: {
+		Item: {
+			_attributes: windowsProgramType
+		}[]
+	}
 }
 
-
-export async function getPrograms(): Promise<windowsProgramType[]> {
+export async function getInstalledPrograms(): Promise<windowsProgramTypeList> {
 	const exe = App.getAssetPath('exe', 'GetInstalledPrograms.exe');
 	if (await PM_FileSystem.exists(exe)) {
-		return new Promise<windowsProgramType[]>((resolve) => {
-			execFile(exe, (error, stdout,stderr) => {
+		return new Promise<windowsProgramTypeList>((resolve) => {
+			execFile(exe, (error, stdout, stderr) => {
 				if (!error) {
-					resolve(JSON.parse(stdout));
+					const json = xml2json(stdout, { compact: true });
+					const obj  = JSON.parse(json);
+					resolve(obj);
 					return;
 				}
 				console.error(stderr);
-				resolve([]);
+				throw new Error('getInstalledPrograms');
 			});
 		});
 	}
-	return [];
-
+	throw new Error('getInstalledPrograms');
 }

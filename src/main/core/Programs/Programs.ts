@@ -8,9 +8,14 @@ import APP                                               from '../../main';
 import PM_FileSystem                                     from '../Utils/PM_FileSystem';
 import Projects                                          from '../Projects/Projects';
 import Settings                                          from '../Settings';
+import ProgressBar                                       from '../Notifications/ProgressBar';
+import { getInstalledPrograms, windowsProgramType }      from '../../components/exe/getInstalledPrograms';
+import path                                              from 'path';
+import { Notification }                                  from '../Notifications/Notification';
 
 export class Programs {
 	private static instance: Programs;
+	private static scan_index: number = 0;
 
 	public programsData: { [p: string]: ProgramFields } | undefined;
 
@@ -154,6 +159,10 @@ export class Programs {
 				_event.returnValue = false;
 			}
 		});
+		ipcMain.on(BackgroundEvents.ProgramScan, async (_event) => {
+			_event.returnValue = await this.scan();
+			await APP.sendRenderEvent(BackgroundEvents.ProgramUpdate);
+		});
 	}
 
 	public getById(projectId: number) {
@@ -188,6 +197,89 @@ export class Programs {
 		return list;
 	}
 
+	async scan() {
+		Programs.scan_index++;
+
+		const bar         = new ProgressBar(`scan_programs_${Programs.scan_index}`, 'scan_programs');
+		const data        = await getInstalledPrograms();
+		const DisplayName = new Set();
+		bar.setTotal(data.ArrayOfItem.Item.length);
+		let i = 0;
+		data.ArrayOfItem.Item.forEach((item) => {
+			i++;
+			if (DisplayName.has(item._attributes.DisplayName)) {
+				return;
+			}
+			DisplayName.add(item._attributes.DisplayName);
+			try {
+				this.createProgramFromWindow(item._attributes);
+				bar.update({
+							   current: i
+						   });
+			} catch (e: any) {
+				const msg = e ? e?.toString() || 'Error' : 'Error';
+				bar.update({
+							   current: i,
+							   message: msg
+						   });
+				(new Notification('scan_programs_'+i).setName('error scan program').update(msg))
+			}
+
+		});
+		bar.stop();
+		return;
+	}
+
+	async createProgramFromWindow(data: windowsProgramType) {
+		if (!await PM_FileSystem.exists(data.InstallLocation)) {
+			return;
+		}
+		if (data.Publisher === 'JetBrains s.r.o.') {
+			const jetBrain = new Program(ProgramType.ide);
+			jetBrain.setName(data.DisplayName);
+			if (data.DisplayName.toLowerCase().includes('phpstorm')) {
+				const p = path.join(data.InstallLocation, 'bin', 'phpstorm64.exe');
+				if (!await PM_FileSystem.fileExists(p)) {
+					throw new Error(`Can not find ${data.DisplayName} executable`);
+				}
+				jetBrain.setExecutePath(p);
+			}
+			if (data.DisplayName.toLowerCase().includes('webstorm')) {
+				const p = path.join(data.InstallLocation, 'bin', 'webstorm64.exe');
+				if (!await PM_FileSystem.fileExists(p)) {
+					throw new Error(`Can not find ${data.DisplayName} executable`);
+				}
+				jetBrain.setExecutePath(p);
+			}
+			if (data.DisplayName.toLowerCase().includes('intellij')) {
+				const p = path.join(data.InstallLocation, 'bin', 'idea64.exe');
+				if (!await PM_FileSystem.fileExists(p)) {
+					throw new Error(`Can not find ${data.DisplayName} executable`);
+				}
+				jetBrain.setExecutePath(p);
+			}
+			await jetBrain.save();
+		}
+		if (data.DisplayName.toLowerCase().includes('visual studio code')) {
+			const mico = new Program(ProgramType.ide);
+			mico.setName(data.DisplayName);
+			const p = path.join(data.InstallLocation, 'Code.exe');
+			if (!await PM_FileSystem.fileExists(p)) {
+				throw new Error(`Can not find ${data.DisplayName} executable`);
+			}
+			mico.setExecutePath(p);
+			await mico.save();
+		} else if (data.DisplayName.toLowerCase().includes('visual studio')) {
+			const mico = new Program(ProgramType.ide);
+			mico.setName(data.DisplayName);
+			const p = path.join(data.InstallLocation, 'devenv.exe');
+			if (!await PM_FileSystem.fileExists(p)) {
+				throw new Error(`Can not find ${data.DisplayName} executable`);
+			}
+			mico.setExecutePath(p);
+			await mico.save();
+		}
+	}
 }
 
 export default Programs.getInstance();

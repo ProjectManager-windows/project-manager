@@ -1,4 +1,4 @@
-import EventEmitter        from 'events';
+import EventEmitter         from 'events';
 import ProgressBars         from './ProgressBars';
 import { BackgroundEvents } from '../../types/Events';
 
@@ -56,7 +56,7 @@ export class Notifications extends EventEmitter {
 			this.Notifications[key] = bar;
 			this.emit('update', this.Notifications);
 		});
-		window.electron.ipcRenderer.on(BackgroundEvents.NotificationUpdate, (message: any) => {
+		window.electron.ipcRenderer.on(BackgroundEvents.NotificationUpdate, (message: { key: string, name: string, message: string }) => {
 			if (this.Notifications[message.key] === undefined) {
 				this.Notifications[message.key] = new NotificationItem(message.key, message.name, message.message);
 			}
@@ -66,7 +66,7 @@ export class Notifications extends EventEmitter {
 		});
 	}
 
-	del(key: string){
+	del(key: string) {
 		delete this.Notifications[key];
 		this.emit('update', this.Notifications);
 	}

@@ -39,6 +39,15 @@ export class Program implements ProgramFields {
 		return this.label;
 	}
 
+	getExecutePath(): string {
+		return this.executePath;
+	}
+
+	setExecutePath(value: string) {
+		this.executePath = value;
+		return this;
+	}
+
 	setLabel(value: string) {
 		this.label = value;
 		return this;
@@ -134,7 +143,7 @@ export class Program implements ProgramFields {
 
 	public execParse(): string {
 		let output = ejs.render(this.executeCommand, Program.getVars(this, this.project));
-		output       = output.replaceAll('\n', ' ').replaceAll('\r', '');
+		output     = output.replaceAll('\n', ' ').replaceAll('\r', '');
 		console.log(output);
 		return output;
 	}
@@ -231,7 +240,7 @@ export class Program implements ProgramFields {
 			logo          : this.logo,
 			color         : this.color,
 			type          : this.type
-		}, ['name', 'id']);
+		}, ['name', 'id', 'executePath']);
 		return this;
 	}
 }

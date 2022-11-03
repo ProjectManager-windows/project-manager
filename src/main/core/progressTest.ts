@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-cycle
-import ProgressBar from './ProgressBar/ProgressBar';
+import ProgressBar from './Notifications/ProgressBar';
 
 export default {
 	run() {
