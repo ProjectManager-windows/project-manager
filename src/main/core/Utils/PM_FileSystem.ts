@@ -7,6 +7,7 @@ import { Abortable }                             from 'events';
 import Path                                      from 'path';
 import plugins                                   from '../../components/plugins';
 import { getIcon }                               from '../../components/exe/iconExtractor';
+import { asyncExec }                             from './Promisses';
 
 export type file = {
 	path: string,
@@ -226,6 +227,14 @@ class PM_FileSystem {
 			await fs.mkdir(Path.dirname(path), { recursive: true });
 		}
 		return fs.writeFile(path, data, type);
+	}
+
+	static async hide(path: string) {
+		return asyncExec('attrib +H +I "'+path+'"');
+	}
+
+	static async show(path: string) {
+		return asyncExec('attrib  -H -I "'+path+'"');
 	}
 
 }

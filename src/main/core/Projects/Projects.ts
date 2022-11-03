@@ -230,7 +230,7 @@ class Projects implements Collection {
 		if (!await PM_FileSystem.fileExists(configFolder)) {
 			await fs.mkdir(configFolder, { recursive: true, mode: 0o777 });
 		}
-		// hidefile.hideSync(configFolder);
+		await PM_FileSystem.hide(configFolder);
 		const configFile = path.join(configFolder, 'config.json');
 		if (!await PM_FileSystem.fileExists(configFile)) {
 			await fs.writeFile(configFile, '{}', { encoding: 'utf8', mode: 0o777 });
