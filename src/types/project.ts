@@ -49,6 +49,8 @@ export type ProjectType = ProjectAllProps & {
 export enum ProgramType {
 	ide      = 'ide',
 	terminal = 'terminal',
+	browser  = 'browser',
+	explorer = 'explorer',
 	other    = 'other',
 }
 

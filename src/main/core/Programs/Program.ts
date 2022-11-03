@@ -201,7 +201,15 @@ export class Program implements ProgramFields {
 			throw new Error('Invalid program executePath');
 		}
 		if (!this.executeCommand) {
-			this.executeCommand = '"<%-PROGRAM_PATH%>" "<%-PROJECT_PATH%>"';
+			switch (this.type) {
+				case ProgramType.ide:
+				case ProgramType.terminal:
+					this.executeCommand = '"<%-PROGRAM_PATH%>" "<%-PROJECT_PATH%>"';
+					break;
+				default:
+					this.executeCommand = '';
+					break;
+			}
 		}
 		if (!this.color) {
 			this.color = 'transparent';
