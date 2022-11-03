@@ -47,11 +47,11 @@ export type ProjectType = ProjectAllProps & {
 }
 
 export enum ProgramType {
-	ide      = 'ide',
-	terminal = 'terminal',
-	browser  = 'browser',
-	explorer = 'explorer',
-	other    = 'other',
+	ide        = 'ide',
+	terminal   = 'terminal',
+	webBrowser = 'webBrowser',
+	explorer   = 'explorer',
+	other      = 'other',
 }
 
 export interface ProgramFields {

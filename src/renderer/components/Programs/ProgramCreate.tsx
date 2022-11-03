@@ -15,7 +15,9 @@ const ProgramEditor = () => {
 		return [
 			{ name: t(ProgramType.other).ucfirst(), code: ProgramType.other },
 			{ name: t(ProgramType.ide).ucfirst(), code: ProgramType.ide },
-			{ name: t(ProgramType.terminal).ucfirst(), code: ProgramType.terminal }
+			{ name: t(ProgramType.terminal).ucfirst(), code: ProgramType.terminal },
+			{ name: t(ProgramType.webBrowser).ucfirst(), code: ProgramType.webBrowser },
+			{ name: t(ProgramType.explorer).ucfirst(), code: ProgramType.explorer }
 		];
 	}, [t]);
 	const chooseFile = () => {
@@ -32,7 +34,6 @@ const ProgramEditor = () => {
 		if (!path) return;
 		window.electron.programs.create({ type: type.code, path: path });
 	};
-	console.log(type)
 	return <div className='ProgramEditor'>
 		<h4>{t('create').ucfirst()}</h4>
 		<hr />
