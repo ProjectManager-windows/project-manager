@@ -264,14 +264,40 @@ export class Project extends Item {
 	}
 
 	public async setLogo(logoPath: string) {
-		const name   = path.basename(logoPath);
+		const name = path.basename(logoPath);
+		const ext  = path.extname(logoPath);
+
 		let confPath = path.join(this.getVal('path'), '.project-manager');
 		if (!await PM_FileSystem.folderExists(confPath)) {
 			await fs.mkdir(confPath, { recursive: true, mode: 0o777 });
 		}
-		confPath = path.join(confPath, name);
-		await fs.copyFile(logoPath, confPath);
-		this.setVal('logoBaseName', name);
+
+		if (['svg', 'jpg', 'jpeg', 'png', 'ico', 'gif', 'webp', 'base64', 'b64'].includes(ext.toLowerCase())) {
+			confPath = path.join(confPath, name);
+			await fs.copyFile(logoPath, confPath);
+			this.setVal('logoBaseName', name);
+		} else {
+			confPath = path.join(confPath, 'logo');
+			const data = await PM_FileSystem.getIconByFile(logoPath);
+			let ext    = '';
+			switch (data.charAt(0)) {
+				case '/':
+					ext = '.jpg';
+					break;
+				case 'i':
+					ext = '.png';
+					break;
+				case 'R':
+					ext = '.gif';
+					break;
+				case 'U':
+					ext = '.webp';
+					break;
+			}
+			confPath += ext;
+			await PM_FileSystem.writeFile(confPath, data, 'base64');
+			this.setVal('logoBaseName', path.basename(confPath));
+		}
 		return name;
 	}
 
@@ -279,7 +305,7 @@ export class Project extends Item {
 		const logo   = this.getVal('logoBaseName');
 		let confPath = path.join(this.getVal('path'), '.project-manager');
 		confPath     = path.join(confPath, logo);
-		this.setVal('logoBaseName',null)
+		this.setVal('logoBaseName', null);
 		if (await PM_FileSystem.exists(confPath)) {
 			return fs.unlink(confPath);
 		}

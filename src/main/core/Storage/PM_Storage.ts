@@ -1,10 +1,11 @@
 import Store from 'electron-store';
 
 export enum Tables {
-	programs  = 'programs',
-	projects  = 'projects',
-	settings  = 'settings',
-	empty     = '',
+	programs = 'programs',
+	projects = 'projects',
+	settings = 'settings',
+	ids      = 'ids',
+	empty    = '',
 }
 
 class PM_Storage {
@@ -28,7 +29,7 @@ class PM_Storage {
 			return;
 		}
 		if (uniqueFields.length > 0) {
-			const data2 = data as { [p: string]: any }
+			const data2     = data as { [p: string]: any };
 			const tableData = this.getAll<T>(table) as { [p: string]: { [p: string]: any } };
 			const isUnique  = uniqueFields.every((field: string) => {
 				return !Object.entries(tableData).some(([_id, item]) => {
@@ -73,14 +74,23 @@ class PM_Storage {
 	}
 
 	getNextId(table: Tables): number {
-		const projects = this.getAll(table);
-		if (projects) {
-			const ids = Object.keys(projects).map((val) => parseInt(val, 10));
-			if (ids.length > 0) {
-				return Math.max(...ids) + 1;
+		let ID: number = parseInt(<string>this.store.get(`${Tables.ids}.${table}`), 10);
+		if (!ID) {
+			const projects = this.getAll(table);
+			if (projects) {
+				const ids = Object.keys(projects).map((val) => parseInt(val, 10));
+				if (ids.length > 0) {
+					ID = Math.max(...ids) + 1;
+					this.store.set(`${Tables.ids}.${table}`, ID);
+					return ID;
+				}
 			}
+			this.store.set(`${Tables.ids}.${table}`, 1);
+			return 1;
 		}
-		return 1;
+		ID++;
+		this.store.set(`${Tables.ids}.${table}`, ID);
+		return ID;
 	}
 }
 

@@ -67,11 +67,6 @@ class Projects implements Collection {
 				{
 					defaultPath: p.getVal('path'),
 					properties : ['openFile'],
-					filters    : [
-						{
-							name      : '',
-							extensions: ['svg', 'jpg', 'jpeg', 'png', 'ico', 'gif', 'webp', 'base64', 'b64']
-						}]
 				});
 			if (!file.canceled) {
 				const logo = file.filePaths[0];

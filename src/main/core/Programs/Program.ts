@@ -8,6 +8,7 @@ import PM_FileSystem                                      from '../Utils/PM_File
 import { Project }                                        from '../Projects/Project';
 import { ProgramCommandVars, ProgramFields, ProgramType } from '../../../types/project';
 import * as toml                                          from 'toml';
+import md5                                                from 'md5';
 
 export class Program implements ProgramFields {
 	readonly table                = Tables.programs;
@@ -16,6 +17,7 @@ export class Program implements ProgramFields {
 	public executeCommand: string = '';
 	public name: string           = ''; // unique identifier
 	public label: string          = ''; // user-friendly program name or language key
+	public hash: string           = ''; // hash of program name
 	public logo: string           = ''; // icon program
 	public color: string          = ''; // background color for icon
 	public isNew: boolean         = true;
@@ -203,6 +205,9 @@ export class Program implements ProgramFields {
 		if (!this.name) {
 			throw new Error('Invalid program name');
 		}
+		if (!this.hash) {
+			this.hash = md5(this.name);
+		}
 		if (!this.label) {
 			this.label = this.name;
 		}
@@ -224,7 +229,7 @@ export class Program implements ProgramFields {
 			this.color = 'transparent';
 		}
 		if (!this.logo) {
-			const logoPath = path.join(app.getPath('userData'), 'programs', `${this.name}.ico`).replaceAll('\\', '/');
+			const logoPath = path.join(app.getPath('userData'), 'programIcons', `${this.hash}.ico`).replaceAll('\\', '/');
 			if (!await PM_FileSystem.exists(logoPath)) {
 				const data = await PM_FileSystem.getIconByFile(this.executePath);
 				await PM_FileSystem.writeFile(logoPath, data, 'base64');

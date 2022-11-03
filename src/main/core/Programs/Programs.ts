@@ -161,7 +161,9 @@ export class Programs {
 		});
 		ipcMain.on(BackgroundEvents.ProgramScan, async (_event) => {
 			_event.returnValue = await this.scan();
-			await APP.sendRenderEvent(BackgroundEvents.ProgramUpdate);
+			setTimeout(() => {
+				APP.sendRenderEvent(BackgroundEvents.ProgramUpdate);
+			}, 200);
 		});
 	}
 
@@ -205,14 +207,14 @@ export class Programs {
 		const DisplayName = new Set();
 		bar.setTotal(data.ArrayOfItem.Item.length);
 		let i = 0;
-		data.ArrayOfItem.Item.forEach((item) => {
+		await Promise.all(data.ArrayOfItem.Item.map(async (item) => {
 			i++;
 			if (DisplayName.has(item._attributes.DisplayName)) {
 				return;
 			}
 			DisplayName.add(item._attributes.DisplayName);
 			try {
-				this.createProgramFromWindow(item._attributes);
+				await this.createProgramFromWindow(item._attributes);
 				bar.update({
 							   current: i
 						   });
@@ -222,10 +224,9 @@ export class Programs {
 							   current: i,
 							   message: msg
 						   });
-				(new Notification('scan_programs_'+i).setName('error scan program').update(msg))
+				(new Notification('scan_programs_' + i).setName('error scan program').update(msg));
 			}
-
-		});
+		}));
 		bar.stop();
 		return;
 	}
