@@ -6,7 +6,7 @@ import { Dirent, Stats }                         from 'fs';
 import { Abortable }                             from 'events';
 import Path                                      from 'path';
 import plugins                                   from '../../components/plugins';
-import { getIcon }                               from '../../components/iconExtractor';
+import { getIcon }                               from '../../components/exe/iconExtractor';
 
 export type file = {
 	path: string,
