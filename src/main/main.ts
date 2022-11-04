@@ -241,7 +241,7 @@ export class PM_App {
 
 	public async createWindow() {
 		if (this.isDebug) {
-			// await this.installExtensions();
+			await this.installExtensions();
 		}
 		this.mainWindow = new BrowserWindow(
 			{

@@ -1,6 +1,6 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent }                                    from 'electron';
-import log                                                                                 from 'electron-log';
-import path                                                                                from 'path';
+import { contextBridge, ipcRenderer, IpcRendererEvent }                                                     from 'electron';
+import log                                                                                                  from 'electron-log';
+import path                                                                                                 from 'path';
 import { BackgroundEvents }                                                                                 from '../types/Events';
 import { FolderFields, ProgramCommandVars, ProgramFields, ProgramFieldsKeys, ProgramType, ProjectAllProps } from '../types/project';
 
@@ -54,7 +54,7 @@ export const bridge = {
 		// Other method you want to add like has(), reset(), etc.
 	},
 	projects   : {
-		getAll():ProjectAllProps[] {
+		getAll(): ProjectAllProps[] {
 			return ipcRenderer.sendSync(BackgroundEvents.ProjectGetAll);
 		},
 		getProject(id: number) {
@@ -67,8 +67,8 @@ export const bridge = {
 		scan() {
 			ipcRenderer.send(BackgroundEvents.ProjectScan);
 		},
-		scanFolders(folders:string[]){
-			ipcRenderer.send(BackgroundEvents.ProjectScanFolders,folders);
+		scanFolders(folders: string[]) {
+			ipcRenderer.send(BackgroundEvents.ProjectScanFolders, folders);
 		},
 		add() {
 			ipcRenderer.send(BackgroundEvents.ProjectAdd);
@@ -101,6 +101,9 @@ export const bridge = {
 	programs   : {
 		getAll(type?: ProgramType): { [key: string]: ProgramFields } {
 			return ipcRenderer.sendSync(BackgroundEvents.ProgramsGetAll, type);
+		},
+		scan() {
+			ipcRenderer.send(BackgroundEvents.ProgramScan);
 		},
 		onUpdate(callback: () => void): () => void {
 			ipcRenderer.on(BackgroundEvents.ProgramUpdate, callback);

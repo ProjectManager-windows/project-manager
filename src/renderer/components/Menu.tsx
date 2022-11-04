@@ -48,7 +48,16 @@ const Menu = () => {
 			icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faTerminal} />,
 			command: () => {
 				if (location.pathname !== '/programs') navigate('/programs');
-			}
+			},
+			items  : [
+				{
+					label  : t('scan').ucfirst(),
+					icon   : 'pi pi-fw pi-search',
+					command: () => {
+						window.electron.programs.scan();
+					}
+				}
+			]
 		},
 		{
 			label  : t('folders').ucfirst(),

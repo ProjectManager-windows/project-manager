@@ -27,13 +27,12 @@ String.prototype.ucfirst     = function() {
 	// @ts-ignore
 	return ucfirst(this);
 };
-Number.prototype.formatBytes = function(decimals = 2) {
+Number.prototype.formatBytes = function(decimals = 2, sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']) {
 	let bytes = this as number;
 	if (!+bytes) return '0 Bytes';
-	const k     = 1024;
-	const dm    = decimals < 0 ? 0 : decimals;
-	const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-	const i     = Math.floor(Math.log(bytes) / Math.log(k));
+	const k  = 1024;
+	const dm = decimals < 0 ? 0 : decimals;
+	const i  = Math.floor(Math.log(bytes) / Math.log(k));
 	return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 };
 window.i18n                  = i18n;
@@ -42,7 +41,7 @@ window.LanguagesExtensions   = LanguagesExtensions;
 window.languagesColors       = languagesColors;
 window.ImageCache            = {};
 window.icons                 = icons;
-window.pixel                 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+window.pixel                 = icons.pixel;
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const container              = document.getElementById('root')!;
 const root                   = createRoot(container);

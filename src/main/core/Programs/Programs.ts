@@ -194,7 +194,6 @@ export class Programs {
 
 	async scan() {
 		Programs.scan_index++;
-
 		const bar         = new ProgressBar(`scan_programs_${Programs.scan_index}`, 'scan_programs');
 		const data        = await getInstalledPrograms();
 		const DisplayName = new Set();
@@ -266,7 +265,7 @@ export class Programs {
 		} else if (data.DisplayName.toLowerCase().includes('visual studio')) {
 			const mico = new Program(ProgramType.ide);
 			mico.setName(data.DisplayName);
-			const p = path.join(data.InstallLocation, 'devenv.exe');
+			const p = path.join(data.InstallLocation, 'Common7', 'IDE', 'devenv.exe');
 			if (!await PM_FileSystem.fileExists(p)) {
 				throw new Error(`Can not find ${data.DisplayName} executable`);
 			}

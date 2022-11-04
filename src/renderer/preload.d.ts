@@ -3,7 +3,7 @@ import i18n                from './classes/i18n';
 import Notifications       from './classes/Notifications';
 import LanguagesExtensions from '../../assets/Programming_Languages_Extensions.json';
 import { Icons }           from './icons/icons';
-
+type sizes =[string, string, string, string, string, string, string, string, string]
 declare global {
 	// eslint-disable-next-line no-underscore-dangle
 	const __static: string;
@@ -26,7 +26,7 @@ declare global {
 	}
 
 	interface Number {
-		formatBytes: (decimals?:number) => string;
+		formatBytes: (decimals?:number,sizes?:sizes) => string;
 	}
 }
 
