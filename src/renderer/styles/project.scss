@@ -17,12 +17,79 @@
 		height                : calc(100vh - 20px);
 		overflow              : auto;
 		display               : grid;
-		grid-template-columns : minmax(60px, 0.6fr) minmax(60px, 0.4fr) 2fr;
+		grid-template-columns : minmax(60px, 0.6fr) 3px minmax(60px, 0.4fr) 3px 2fr;
 		grid-template-rows    : 1fr;
 		gap                   : 2px;
 		grid-auto-flow        : row;
 		grid-template-areas   :
-    	"projects technologies view";
+    	"projects . technologies . view";
+
+		.tools {
+			grid-area : tools;
+		}
+
+		.grid-slide {
+			$color           : #a7a9aa;
+			background-color : $color;
+			cursor           : e-resize;
+			width            : 3px;
+			height           : 100%;
+			z-index: 999;
+
+			&:hover {
+				box-shadow : 0 0 1px 1px $color !important;
+			}
+			&[draggable=true] {
+				cursor: move;
+			}
+
+		}
+
+		.projects {
+			user-select: none;
+			min-width        : 60px;
+			height           : calc(100vh - 86px);
+			padding          : 5px;
+			grid-area        : projects;
+			background-color : var(--primary-color);
+
+		}
+
+		.technologies {
+			height           : calc(100vh - 86px);
+			user-select: none;
+			overflow         : auto;
+			padding          : 5px;
+			grid-area        : technologies;
+			background-color : var(--text-secondary-color);
+
+		}
+
+		.view {
+			height           : calc(100vh - 86px);
+			overflow         : auto;
+			padding          : 5px;
+			grid-area        : view;
+			background-color : var(--primary-color-text);
+
+			.header {
+				display         : flex !important;
+				font-size       : 2em !important;
+				padding         : 0 !important;
+				margin          : 0 !important;
+				align-items     : flex-start !important;
+				flex-wrap       : nowrap !important;
+				flex-direction  : column !important;
+				align-content   : center !important;
+				justify-content : space-between !important;
+
+				img {
+					width         : 40px;
+					height        : 40px;
+					border-radius : 50%;
+				}
+			}
+		}
 
 		& {
 			::-webkit-scrollbar {
@@ -65,54 +132,6 @@
 
 			::-webkit-scrollbar-corner {
 				background : transparent;
-			}
-		}
-
-		.tools {
-			grid-area : tools;
-		}
-
-		.projects {
-			min-width        : 60px;
-			height           : calc(100vh - 86px);
-			padding          : 5px;
-			grid-area        : projects;
-			background-color : var(--primary-color);
-
-		}
-
-		.technologies {
-			height           : calc(100vh - 86px);
-			overflow         : auto;
-			padding          : 5px;
-			grid-area        : technologies;
-			background-color : var(--text-secondary-color);
-
-		}
-
-		.view {
-			height           : calc(100vh - 86px);
-			overflow         : auto;
-			padding          : 5px;
-			grid-area        : view;
-			background-color : var(--primary-color-text);
-
-			.header {
-				display         : flex !important;
-				font-size       : 2em !important;
-				padding         : 0 !important;
-				margin          : 0 !important;
-				align-items     : flex-start !important;
-				flex-wrap       : nowrap !important;
-				flex-direction  : column !important;
-				align-content   : center !important;
-				justify-content : space-between !important;
-
-				img {
-					width         : 40px;
-					height        : 40px;
-					border-radius : 50%;
-				}
 			}
 		}
 	}

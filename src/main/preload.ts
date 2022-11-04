@@ -1,8 +1,8 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent }                                                     from 'electron';
-import log                                                                                                  from 'electron-log';
-import path                                                                                                 from 'path';
-import { BackgroundEvents }                                                                                 from '../types/Events';
-import { FolderFields, ProgramCommandVars, ProgramFields, ProgramFieldsKeys, ProgramType, ProjectAllProps } from '../types/project';
+import { contextBridge, ipcRenderer, IpcRendererEvent }                                                 from 'electron';
+import log                                                                                              from 'electron-log';
+import path                                                                                             from 'path';
+import { BackgroundEvents }                                                                             from '../types/Events';
+import { FolderFields, ProgramCommandVars, ProgramFields, ProgramFieldsKeys, ProgramType, ProjectType } from '../types/project';
 
 export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'electron-notification-update' | 'test';
 
@@ -54,7 +54,7 @@ export const bridge = {
 		// Other method you want to add like has(), reset(), etc.
 	},
 	projects   : {
-		getAll(): ProjectAllProps[] {
+		getAll(): { [key: string]: ProjectType } {
 			return ipcRenderer.sendSync(BackgroundEvents.ProjectGetAll);
 		},
 		getProject(id: number) {
