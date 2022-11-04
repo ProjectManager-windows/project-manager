@@ -144,6 +144,7 @@ export class Project extends Item {
 			results[dataKey] = this.getVal(dataKey as keyof ProjectAllProps);
 		}
 		results.logo = this.getVal('logo');
+		results.env = this.getVal('env');
 		return results;
 	}
 

@@ -86,19 +86,25 @@ export class Program implements ProgramFields {
 	}
 
 	async run() {
-		return new Promise((resolve, reject) => {
-			const options: ExecOptions = {};
-			if (this.project && this.project.getVal('path')) {
-				options.cwd = this.project.getVal('path');
-			}
-			exec(this.execParse(), options, (error, stdout, stderr) => {
-				if (error) {
-					resolve(stdout);
-				} else {
-					reject(stderr);
-				}
-			});
-		});
+		const options: ExecOptions = {};
+		if (this.project && this.project.getVal('path')) {
+			options.cwd = this.project.getVal('path');
+		}
+		const commands = this.execParse();
+		return Promise.all(
+			commands.map((cmd) => {
+				if (!cmd) return true;
+				return new Promise((resolve, reject) => {
+					exec(cmd, options, (error, stdout, stderr) => {
+						if (error) {
+							resolve(stdout);
+						} else {
+							reject(stderr);
+						}
+					});
+				});
+			})
+		);
 	}
 
 	static getVars(program: Program, project?: Project): ProgramCommandVars {
@@ -144,11 +150,11 @@ export class Program implements ProgramFields {
 		return RESULT;
 	}
 
-	public execParse(): string {
-		let output = ejs.render(this.executeCommand, Program.getVars(this, this.project));
-		output     = output.replaceAll('\n', ' ').replaceAll('\r', '');
-		console.log(output);
-		return output;
+	public execParse(): string[] {
+		let output  = ejs.render(this.executeCommand, Program.getVars(this, this.project));
+		let output2 = output.replaceAll('\r', '\n').replaceAll('\n\n', '\n').split('\n');
+		console.log(output2);
+		return output2;
 	}
 
 	async check(): Promise<boolean> {
