@@ -1,5 +1,4 @@
 import { ipcMain }                                       from 'electron';
-import fs                                                from 'fs/promises';
 import PM_Storage, { Tables }                            from '../Storage/PM_Storage';
 import { Program }                                       from './Program';
 import { BackgroundEvents }                              from '../../../types/Events';
@@ -65,13 +64,7 @@ export class Programs {
 			}, 200);
 		});
 		ipcMain.on(BackgroundEvents.ProgramDelete, async (_event, id: number) => {
-			const p = Program.fromId(id);
-			if (!p.isNew) {
-				if (await PM_FileSystem.fileExists(p.getLogo())) {
-					await fs.unlink(p.getLogo());
-				}
-				PM_Storage.delById(Tables.programs, id);
-			}
+			await Program.fromId(id).delete();
 			setTimeout(() => {
 				APP.sendRenderEvent(BackgroundEvents.ProgramUpdate);
 			}, 200);

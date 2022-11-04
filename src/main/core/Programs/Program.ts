@@ -9,6 +9,7 @@ import { Project }                                        from '../Projects/Proj
 import { ProgramCommandVars, ProgramFields, ProgramType } from '../../../types/project';
 import * as toml                                          from 'toml';
 import md5                                                from 'md5';
+import fs                                                 from 'fs/promises';
 
 export class Program implements ProgramFields {
 	readonly table                = Tables.programs;
@@ -229,9 +230,25 @@ export class Program implements ProgramFields {
 			this.color = 'transparent';
 		}
 		if (!this.logo) {
-			const logoPath = path.join(app.getPath('userData'), 'programIcons', `${this.hash}.ico`).replaceAll('\\', '/');
+			let logoPath = path.join(app.getPath('userData'), 'programIcons', `${this.hash}.ico`).replaceAll('\\', '/');
 			if (!await PM_FileSystem.exists(logoPath)) {
 				const data = await PM_FileSystem.getIconByFile(this.executePath);
+				let ext    = '.ico';
+				switch (data.charAt(0)) {
+					case '/':
+						ext = '.jpg';
+						break;
+					case 'i':
+						ext = '.png';
+						break;
+					case 'R':
+						ext = '.gif';
+						break;
+					case 'U':
+						ext = '.webp';
+						break;
+				}
+				logoPath = path.join(app.getPath('userData'), 'programIcons', `${this.hash}${ext}`).replaceAll('\\', '/');
 				await PM_FileSystem.writeFile(logoPath, data, 'base64');
 			}
 			this.logo = logoPath;
@@ -247,6 +264,15 @@ export class Program implements ProgramFields {
 			type          : this.type
 		}, ['name', 'id', 'executePath']);
 		return this;
+	}
+
+	async delete() {
+		if (!this.isNew) {
+			if (await PM_FileSystem.fileExists(this.getLogo())) {
+				await fs.unlink(this.getLogo());
+			}
+			PM_Storage.delById(Tables.programs, this.id);
+		}
 	}
 }
 

@@ -1,11 +1,11 @@
 import '../styles/menu.scss';
-import { Menubar }                                                                                                                       from 'primereact/menubar';
-import React, { useEffect, useState }                                                                                                    from 'react';
-import { useTranslation }                                                                                                                from 'react-i18next';
-import { FontAwesomeIcon }                                                                                                               from '@fortawesome/react-fontawesome';
-import { faFile, faFolder, faGear, faMagnifyingGlass, faMaximize, faPlus, faSquareXmark, faTerminal, faWindowMinimize, faWindowRestore } from '@fortawesome/free-solid-svg-icons';
-import { useLocation, useNavigate }                                                                                                      from 'react-router-dom';
-import logo                                                                                                                              from '../../../assets/icon.svg';
+import { Menubar }                                                                                            from 'primereact/menubar';
+import React, { useEffect, useState }                                                                         from 'react';
+import { useTranslation }                                                                                     from 'react-i18next';
+import { FontAwesomeIcon }                                                                                    from '@fortawesome/react-fontawesome';
+import { faFile, faFolder, faGear, faMaximize, faSquareXmark, faTerminal, faWindowMinimize, faWindowRestore } from '@fortawesome/free-solid-svg-icons';
+import { useLocation, useNavigate }                                                                           from 'react-router-dom';
+import logo                                                                                                   from '../../../assets/icon.svg';
 
 const Menu = () => {
 	const navigate          = useNavigate();
@@ -21,63 +21,47 @@ const Menu = () => {
 	);
 	const items             = [
 		{
-			label  : t('project').ucfirst(),
+			label  : t('projects').ucfirst(),
 			icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faFile} />,
 			command: () => {
 				if (location.pathname !== '/') navigate('/');
 			},
 			items  : [
 				{
-					label: t('add project').ucfirst(),
-					icon : <FontAwesomeIcon className='p-menuitem-icon' icon={faPlus} />,
-					items: [
-						{
-							label  : t('scan').ucfirst(),
-							icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faMagnifyingGlass} />,
-							command: () => {
-								window.electron.projects.scan();
-							}
-						},
-						{
-							label  : t('select folder').ucfirst(),
-							icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faFolder} />,
-							command: () => {
-								window.electron.projects.add();
-							}
-						}
-					]
-				},
-				{
-					separator: true
-				},
-				{
-					label  : t('settings').ucfirst(),
-					icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faGear} />,
+					label  : t('scan').ucfirst(),
+					icon   : 'pi pi-fw pi-search',
 					command: () => {
-						if (location.pathname !== '/settings') navigate('/settings');
+						window.electron.projects.scan();
+					}
+				},
+				{
+					label  : t('select folder').ucfirst(),
+					icon   : 'pi pi-fw pi-folder',
+					command: () => {
+						window.electron.projects.add();
 					}
 				}
 			]
 		},
-		// {
-		// 	label  : t('IDEs').ucfirst(),
-		// 	icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faMicrochip} />,
-		// 	command: () => {
-		// 		if (location.pathname !== '/ides') navigate('/ides');
-		// 	}
-		// },
-		// {
-		// 	label  : t('terminals').ucfirst(),
-		// 	icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faTerminal} />,
-		// 	command: () => {
-		// 		if (location.pathname !== '/terminal') navigate('/terminal');
-		// 	}
-		// },
 		{
 			label  : t('programs').ucfirst(),
 			icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faTerminal} />,
 			command: () => {
 				if (location.pathname !== '/programs') navigate('/programs');
+			}
+		},
+		{
+			label  : t('folders').ucfirst(),
+			icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faFolder} />,
+			command: () => {
+				if (location.pathname !== '/folders') navigate('/folders');
+			}
+		},
+		{
+			label  : t('settings').ucfirst(),
+			icon   : <FontAwesomeIcon className='p-menuitem-icon' icon={faGear} />,
+			command: () => {
+				if (location.pathname !== '/settings') navigate('/settings');
 			}
 		},
 		{

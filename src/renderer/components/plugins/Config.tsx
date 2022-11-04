@@ -41,7 +41,7 @@ const Config = (props: { selectedProject: ProjectType }) => {
 			<hr />
 			<div className='grid-table'>
 				<div className='name-column'>
-					{t('name')}
+					{t('name').ucfirst()}
 				</div>
 				<div className='value-column'>
 					<div className='p-inputgroup'>
@@ -52,7 +52,7 @@ const Config = (props: { selectedProject: ProjectType }) => {
 					</div>
 				</div>
 				<div className='name-column'>
-					{t('description')}
+					{t('description').ucfirst()}
 				</div>
 				<div className='value-column'>
 					<div className='p-inputgroup'>
@@ -65,7 +65,7 @@ const Config = (props: { selectedProject: ProjectType }) => {
 
 
 				<div className='name-column'>
-					{t('color')}
+					{t('color').ucfirst()}
 				</div>
 				<div className='value-column'>
 					<div style={{ width: '100%' }}>
@@ -114,7 +114,7 @@ const Config = (props: { selectedProject: ProjectType }) => {
 
 
 				<div>
-					{t('env')}
+					{t('env').ucfirst()}
 				</div>
 				<div className='value-column'>
 					<div className='p-inputgroup'>
@@ -135,11 +135,11 @@ const Config = (props: { selectedProject: ProjectType }) => {
 
 
 				<div className='name-column'>
-					{t('logo')}
+					{t('logo').ucfirst()}
 				</div>
 				<div className='value-column logos-buttons'>
 					<Button
-						label={t('set logo')}
+						label={t('set logo').ucfirst()}
 						style={{ width: 'calc(50% - 5px)' }}
 						onClick={() => {
 							window.electron.projects.changeLogo(selectedProject.id);
@@ -147,7 +147,7 @@ const Config = (props: { selectedProject: ProjectType }) => {
 					/>
 					<Button
 						className='p-button-danger'
-						label={t('remove logo')}
+						label={t('remove logo').ucfirst()}
 						style={{ width: 'calc(50% - 5px)' }}
 						onClick={() => {
 							window.electron.projects.removeLogo(selectedProject.id);

@@ -8,6 +8,7 @@ import Path                                      from 'path';
 import plugins                                   from '../../components/plugins';
 import { getIcon }                               from '../../components/exe/iconExtractor';
 import { asyncExec }                             from './Promisses';
+import { PluginType }                            from '../../components/plugins/Plugin';
 
 export type file = {
 	path: string,
@@ -148,6 +149,10 @@ class PM_FileSystem {
 		const stat = await fs.stat(item);
 		if (stat.isFile()) {
 			return false;
+		}
+
+		if (await PluginType.isProject(item)) {
+			return true;
 		}
 		// eslint-disable-next-line guard-for-in
 		for (const plugin in plugins) {

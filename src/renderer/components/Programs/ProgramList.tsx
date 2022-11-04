@@ -1,10 +1,11 @@
 import '../../styles/ProgramList.scss';
 import '../../styles/ProgramItem.scss';
-import React             from 'react';
-import { Ripple }        from 'primereact/ripple';
-import ProgramItem       from './ProgramItem';
-import useLogo           from '../hooks/useLogo';
-import { ProgramFields } from '../../../types/project';
+import React              from 'react';
+import { Ripple }         from 'primereact/ripple';
+import ProgramItem        from './ProgramItem';
+import useLogo            from '../hooks/useLogo';
+import { ProgramFields }  from '../../../types/project';
+import { useTranslation } from 'react-i18next';
 
 const ProgramList = (props: {
 	Programs: { [key: string]: ProgramFields },
@@ -12,6 +13,7 @@ const ProgramList = (props: {
 	createProgram: (e: React.MouseEvent<HTMLDivElement>) => void
 }) => {
 	const { Programs, onSelect, createProgram } = props;
+	const { t }                                 = useTranslation();
 	let forSort                                 = [];
 	for (const ProgramKey in Programs) {
 		const Program = Programs[ProgramKey];
@@ -36,7 +38,7 @@ const ProgramList = (props: {
 						<div>
 							{logo}
 							<div className='info'>
-								<div className='tp name' data-pr-tooltip='create'>create</div>
+								<div className='tp name' data-pr-tooltip='create'>{t('add').ucfirst()}</div>
 							</div>
 						</div>
 					</li>

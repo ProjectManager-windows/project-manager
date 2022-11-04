@@ -9,6 +9,7 @@ import Menu                                      from './components/Menu';
 import { AppContext }                            from './components/context/AppContext';
 import { NotificationItemInterface }             from './classes/Notifications';
 import Programs                                  from './pages/Programs';
+import { Folders }                               from './pages/Folders';
 
 export default function App() {
 	const toast                         = useRef(null);
@@ -36,6 +37,7 @@ export default function App() {
 							{/* <Route path='/ides' element={<Ides />} /> */}
 							{/* <Route path='/terminal' element={<Terminals />} /> */}
 							<Route path='/programs' element={<Programs />} />
+							<Route path='/Folders' element={<Folders />} />
 						</Routes>
 					</div>
 					<Footer />

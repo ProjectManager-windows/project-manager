@@ -24,6 +24,10 @@ declare global {
 	interface String {
 		ucfirst: () => string;
 	}
+
+	interface Number {
+		formatBytes: (decimals?:number) => string;
+	}
 }
 
 export {};

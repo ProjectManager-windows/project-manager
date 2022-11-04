@@ -9,6 +9,7 @@ import Projects                                                                 
 import events                                                                                              from './ipcMain';
 import { BackgroundEvents }                                                                                from '../types/Events';
 import Programs                                                                                            from './core/Programs/Programs';
+import Folders                                                                                             from './core/Folders/Folders';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -177,12 +178,9 @@ export class PM_App {
 
 		// (new Store).clear();
 		events.run();
-		Projects.init();
-		// eslint-disable-next-line no-console
-		// IDEs.init().then(r => console.log(r)).catch(r => console.log(r));
-		// eslint-disable-next-line no-console
-		// Terminals.init().then(r => console.log(r)).catch(r => console.log(r));
-		Programs.init().then(r => console.log(r)).catch(r => console.log(r));
+		Projects.init().then(console.info).catch(console.error);
+		Programs.init().then(console.info).catch(console.error);
+		Folders.init().then(console.info).catch(console.error);
 	}
 
 	public getAssetPath(...paths: string[]): string {

@@ -53,6 +53,12 @@ export enum ProgramType {
 	explorer   = 'explorer',
 	other      = 'other',
 }
+export interface FolderFields {
+	id: number;
+	name: string;
+	path: string;
+	activeWatcher: boolean;
+}
 
 export interface ProgramFields {
 	id: number;
@@ -73,6 +79,8 @@ export type ProgramCommandVars = {
 
 export interface ProjectProps {
 	path?: string;
+	size?: number;
+	compressedSize?: number;
 	stats?: { [key: string]: number };
 }
 

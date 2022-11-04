@@ -1,8 +1,8 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent }                      from 'electron';
-import log                                                                   from 'electron-log';
-import path                                                                  from 'path';
-import { BackgroundEvents }                                                  from '../types/Events';
-import { ProgramCommandVars, ProgramFields, ProgramFieldsKeys, ProgramType } from '../types/project';
+import { contextBridge, ipcRenderer, IpcRendererEvent }                                    from 'electron';
+import log                                                                                 from 'electron-log';
+import path                                                                                from 'path';
+import { BackgroundEvents }                                                                                 from '../types/Events';
+import { FolderFields, ProgramCommandVars, ProgramFields, ProgramFieldsKeys, ProgramType, ProjectAllProps } from '../types/project';
 
 export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'electron-notification-update' | 'test';
 
@@ -42,7 +42,7 @@ export const bridge = {
 		// Other method you want to add like has(), reset(), etc.
 	},
 	settings   : {
-		get<T = any>(property: string):T {
+		get<T = any>(property: string): T {
 			return ipcRenderer.sendSync(BackgroundEvents.StoreGet, `settings.${property}`);
 		},
 		set<T = any>(property: string, val: T) {
@@ -54,7 +54,7 @@ export const bridge = {
 		// Other method you want to add like has(), reset(), etc.
 	},
 	projects   : {
-		getAll() {
+		getAll():ProjectAllProps[] {
 			return ipcRenderer.sendSync(BackgroundEvents.ProjectGetAll);
 		},
 		getProject(id: number) {
@@ -66,6 +66,9 @@ export const bridge = {
 		},
 		scan() {
 			ipcRenderer.send(BackgroundEvents.ProjectScan);
+		},
+		scanFolders(folders:string[]){
+			ipcRenderer.send(BackgroundEvents.ProjectScanFolders,folders);
 		},
 		add() {
 			ipcRenderer.send(BackgroundEvents.ProjectAdd);
@@ -118,6 +121,25 @@ export const bridge = {
 		runWithProject(programId: number, projectId: number) {
 			return ipcRenderer.sendSync(BackgroundEvents.ProgramRunWithProject, { programId, projectId });
 		}
+	},
+	folders    : {
+		getAll(): { [key: string]: FolderFields } {
+			return ipcRenderer.sendSync(BackgroundEvents.FoldersGetAll);
+		},
+		add() {
+			ipcRenderer.send(BackgroundEvents.FolderAdd);
+		},
+		delete(ids: number[]) {
+			ipcRenderer.send(BackgroundEvents.FoldersDelete, ids);
+		},
+		toggle(id: number, value: boolean) {
+			ipcRenderer.send(BackgroundEvents.FolderToggle, { id, value });
+		},
+		onUpdate(callback: () => void): () => void {
+			ipcRenderer.on(BackgroundEvents.FolderUpdate, callback);
+			return () => ipcRenderer.removeListener(BackgroundEvents.FolderUpdate, callback);
+		}
+
 	},
 	tray       : {
 		close() {

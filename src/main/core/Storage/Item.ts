@@ -17,7 +17,8 @@ export abstract class Item {
 
 	abstract init(data: ItemType): void
 
-	afterInit(_data: ItemType): void{}
+	afterInit(_data: ItemType): void {
+	}
 
 	setVal<T = any>(key: string, value: T) {
 		this.data[key] = value;
@@ -27,11 +28,11 @@ export abstract class Item {
 		return this.data[key];
 	}
 
-	save(): number {
+	save(uniqueFields: string[] = []): number {
 		if (!this.getVal<number>('id')) {
 			this.setVal<number>('id', PM_Storage.getNextId(this.table));
 		}
-		PM_Storage.commit<ItemType>(this.table, this.getVal<number>('id'), this.data);
+		PM_Storage.commit<ItemType>(this.table, this.getVal<number>('id'), this.data, uniqueFields);
 		return parseInt(this.getVal('id'), 10);
 	}
 

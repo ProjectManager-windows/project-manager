@@ -111,7 +111,7 @@ const SelectTerminal = (props: { id: any, value?: any, setVal?: (value: any) => 
 				filter
 				// showClear
 				filterBy='name'
-				placeholder={t('Select terminal')}
+				placeholder={t('Select terminal').ucfirst()}
 				valueTemplate={selectedCountryTemplate}
 				itemTemplate={countryOptionTemplate}
 			/>

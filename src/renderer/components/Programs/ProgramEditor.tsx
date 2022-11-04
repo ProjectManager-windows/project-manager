@@ -66,7 +66,7 @@ const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program:
 			<hr />
 			<div className='grid-table'>
 				<div className='name-column'>
-					{t('name')}
+					{t('name').ucfirst()}
 				</div>
 				<div className='value-column'>
 					<div className='p-inputgroup'>
@@ -77,7 +77,7 @@ const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program:
 					</div>
 				</div>
 				<div className='name-column'>
-					{t('label')}
+					{t('label').ucfirst()}
 				</div>
 				<div className='value-column'>
 					<div className='p-inputgroup'>
@@ -88,7 +88,7 @@ const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program:
 					</div>
 				</div>
 				<div className='name-column'>
-					{t('executeCommand')}
+					{t('execute command').ucfirst()}
 				</div>
 				<div className='value-column'>
 					<div className='p-inputgroup'>
@@ -116,7 +116,7 @@ const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program:
 					</div>
 				</div>
 				<div className='name-column'>
-					{t('set default')}
+					{t('set default').ucfirst()}
 				</div>
 				<div className='value-column'>
 					<Button

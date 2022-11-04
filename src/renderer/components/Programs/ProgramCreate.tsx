@@ -35,7 +35,7 @@ const ProgramEditor = () => {
 		window.electron.programs.create({ type: type.code, path: path });
 	};
 	return <div className='ProgramEditor'>
-		<h4>{t('create').ucfirst()}</h4>
+		<h4>{t('add').ucfirst()}</h4>
 		<hr />
 		<ul>
 			<li className='value-column'>

@@ -4,9 +4,9 @@ import fs                               from 'fs/promises';
 import Collection                       from '../Storage/Collection';
 import { Project }                      from './Project';
 import PM_Storage, { Tables }           from '../Storage/PM_Storage';
-import { ItemType }  from '../Storage/Item';
-import ProgressBar   from '../Notifications/ProgressBar';
-import PM_FileSystem from '../Utils/PM_FileSystem';
+import { ItemType }                     from '../Storage/Item';
+import ProgressBar                      from '../Notifications/ProgressBar';
+import PM_FileSystem                    from '../Utils/PM_FileSystem';
 import { t }                            from '../Utils/i18n';
 import { BackgroundEvents }             from '../../../types/Events';
 import { ProgramType, ProjectAllProps } from '../../../types/project';
@@ -33,20 +33,20 @@ class Projects implements Collection {
 
 	private constructor() {
 		ipcMain.on(BackgroundEvents.ProjectGetAll, async (event) => {
-			this.init();
 			event.returnValue = this.getAllRaw();
 		});
 		ipcMain.on(BackgroundEvents.ProjectGetProject, async (event, id) => {
-			this.init();
 			event.returnValue = this.getById(id);
 		});
 		ipcMain.on(BackgroundEvents.ProjectScan, async (event) => {
-			this.init();
 			await this.scan();
 			event.returnValue = 'ok';
 		});
+		ipcMain.on(BackgroundEvents.ProjectScanFolders, async (event, folders: string[]) => {
+			await this.scanFolders(folders);
+			event.returnValue = 'ok';
+		});
 		ipcMain.on(BackgroundEvents.ProjectAdd, async (event) => {
-			this.init();
 			await this.addFolder();
 			event.returnValue = 'ok';
 		});
@@ -66,7 +66,7 @@ class Projects implements Collection {
 			const file = await dialog.showOpenDialog(
 				{
 					defaultPath: p.getVal('path'),
-					properties : ['openFile'],
+					properties : ['openFile']
 				});
 			if (!file.canceled) {
 				const logo = file.filePaths[0];
@@ -158,34 +158,46 @@ class Projects implements Collection {
 		Projects.scan_index++;
 		const folder = await dialog.showOpenDialog({ properties: ['openDirectory'] });
 		if (!folder.canceled) {
-			const bar      = new ProgressBar(`scan_project_${Projects.scan_index}`, 'scan_project');
-			const myFs     = new PM_FileSystem();
-			const projects = await myFs.findProjects(folder.filePaths[0]);
-			bar.update({
-						   total  : 1,
-						   current: 1,
-						   message: `${t('founded')}: ${projects.length} ${t('projects')}`
-					   });
-
-			for (let i = 0; i < projects.length; i++) {
-				if (await this.addFromFolder(projects[i])) {
-					bar.update({
-								   total  : projects.length - 1,
-								   current: i,
-								   message: `${t('add')}: ${path.basename(projects[i])}`
-							   });
-				} else {
-					bar.update({
-								   total  : projects.length - 1,
-								   current: i,
-								   message: `${t('update')}: ${path.basename(projects[i])}`
-							   });
-				}
-			}
-
-			return true;
+			await this.scanFolder(folder.filePaths[0]);
 		}
 		return false;
+	}
+
+	async scanFolders(Paths: string[]) {
+		return Promise.all(Paths.map(async (folder) => {
+							   return this.scanFolder(folder);
+						   })
+		);
+	}
+
+	async scanFolder(Path: string) {
+		const fName    = path.basename(Path);
+		const bar      = new ProgressBar(`scan_project_${fName}_${Projects.scan_index}`, `${t('scan project')}: ${fName} `);
+		const myFs     = new PM_FileSystem();
+		const projects = await myFs.findProjects(Path);
+		bar.update({
+					   total  : 1,
+					   current: 1,
+					   message: `${t('founded')}: ${projects.length} ${t('projects')}`
+				   });
+
+		for (let i = 0; i < projects.length; i++) {
+			if (await this.addFromFolder(projects[i])) {
+				bar.update({
+							   total  : projects.length - 1,
+							   current: i,
+							   message: `${t('added')}: ${path.basename(projects[i])}`
+						   });
+			} else {
+				bar.update({
+							   total  : projects.length - 1,
+							   current: i,
+							   message: `${t('updated')}: ${path.basename(projects[i])}`
+						   });
+			}
+		}
+
+		return true;
 	}
 
 	async addFromFolder(folder: string) {
@@ -227,8 +239,9 @@ class Projects implements Collection {
 		return 0;
 	}
 
-	public init() {
+	public async init() {
 		PM_Storage.init(this.table);
+		console.log('Projects INIT');
 	}
 
 	async generateConfigFolder(folder: string) {

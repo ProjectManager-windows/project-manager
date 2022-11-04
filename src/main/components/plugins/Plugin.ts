@@ -1,5 +1,6 @@
 import { PathLike }    from 'fs';
 import { ProjectType } from '../../../types/project';
+import { readdir }     from 'fs/promises';
 
 export abstract class PluginType {
 	static ispChanel = '';
@@ -9,12 +10,15 @@ export abstract class PluginType {
 		this.Project = Project;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	static async isProject(_path: PathLike) {
-		return false;
+	static async isProject(path: PathLike) {
+		const dirs = await readdir(path);
+		return dirs.includes('.idea')||
+			   dirs.includes('.vscode')||
+			   dirs.includes('.project-manager')||
+			   dirs.includes('composer.json')||
+			   dirs.includes('package.json');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	static async isTechnologies(_path: PathLike) {
 		return false;
 	}

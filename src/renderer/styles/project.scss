@@ -2,8 +2,9 @@
 	.search {
 		display       : flex;
 		margin-bottom : 5px;
+		width         : 100%;
 
-		.search-input {
+		.search-input, .p-input-icon-left {
 			width : 100%;
 		}
 	}
@@ -16,7 +17,7 @@
 		height                : calc(100vh - 20px);
 		overflow              : auto;
 		display               : grid;
-		grid-template-columns : minmax(60px, 0.5fr) minmax(60px, 0.3fr) 2fr;
+		grid-template-columns : minmax(60px, 0.6fr) minmax(60px, 0.4fr) 2fr;
 		grid-template-rows    : 1fr;
 		gap                   : 2px;
 		grid-auto-flow        : row;

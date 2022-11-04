@@ -5,7 +5,7 @@ import useLogo                        from '../hooks/useLogo';
 import { ProgramFields, ProgramType } from '../../../types/project';
 
 
-const ProgramItem = (props: { program: ProgramFields, onSelect: (e: React.MouseEvent<HTMLDivElement>, terminal: ProgramFields) => void }) => {
+const ProgramItem = (props: { program: ProgramFields, onSelect: (e: React.MouseEvent<HTMLDivElement>, program: ProgramFields) => void }) => {
 	const { program, onSelect } = props;
 	const logo                  = useLogo({
 											  type : ProgramType.terminal,

@@ -4,6 +4,7 @@ export enum Tables {
 	programs = 'programs',
 	projects = 'projects',
 	settings = 'settings',
+	folders  = 'folders',
 	ids      = 'ids',
 	empty    = '',
 }

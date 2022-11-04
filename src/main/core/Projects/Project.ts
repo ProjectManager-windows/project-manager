@@ -131,12 +131,11 @@ export class Project extends Item {
 	}
 
 	save(): number {
-		const id = super.save();
+		const id = super.save(['path']);
 		APP.sendRenderEvent(BackgroundEvents.ProjectUpdate).then(() => null).catch(() => {
 			throw new Error('Error saving project');
 		});
 		return id;
-
 	}
 
 	toObject() {
@@ -154,11 +153,17 @@ export class Project extends Item {
 		const files              = await new PM_FileSystem([]).getFiles(localPath);
 		const gitignore          = await gitignoreWait;
 		const finalFiles: file[] = [];
+		let size                 = 0;
+		let compressedSize       = 0;
 		if (gitignore) {
 			const ignorer = ignore().add((await fs.readFile(path.join(localPath, '.gitignore'))).toString());
 			files.forEach((file) => {
 							  if (!ignorer.ignores(path.relative(localPath, file.path))) {
 								  finalFiles.push(file);
+								  size += file.size;
+								  compressedSize += file.size;
+							  } else {
+								  size += file.size;
 							  }
 						  }
 			);
@@ -174,6 +179,8 @@ export class Project extends Item {
 			stats[file.ext] += file.size;
 		}
 		this.setVal('stats', stats);
+		this.setVal('size', size);
+		this.setVal('compressedSize', compressedSize);
 
 	}
 
@@ -277,7 +284,7 @@ export class Project extends Item {
 			await fs.copyFile(logoPath, confPath);
 			this.setVal('logoBaseName', name);
 		} else {
-			confPath = path.join(confPath, 'logo');
+			confPath   = path.join(confPath, 'logo');
 			const data = await PM_FileSystem.getIconByFile(logoPath);
 			let ext    = '';
 			switch (data.charAt(0)) {

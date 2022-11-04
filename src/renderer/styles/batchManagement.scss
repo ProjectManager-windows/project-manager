@@ -1,0 +1,28 @@
+.batchManagement {
+	height: calc(100vh - 190px);
+	td[role=cell] {
+		img {
+			border-radius : 50%
+		}
+	}
+	.header{
+		height:50px
+	}
+	.content{
+		height:calc(100% - 50px)
+	}
+	.tableHeader{
+		display: flex !important;
+		align-items: stretch !important;
+		justify-content: space-between !important;
+		flex-wrap: nowrap !important;
+		flex-direction: row !important;
+	}
+	.sizes{
+		display: grid;
+		gap: 5px;
+		grid-template-areas   :
+		". ."
+    	". .";
+	}
+}
