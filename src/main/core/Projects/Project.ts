@@ -280,7 +280,7 @@ export class Project extends Item {
 			await fs.mkdir(confPath, { recursive: true, mode: 0o777 });
 		}
 
-		if (['svg', 'jpg', 'jpeg', 'png', 'ico', 'gif', 'webp', 'base64', 'b64'].includes(ext.toLowerCase())) {
+		if (['.svg', '.jpg', '.jpeg', '.png', '.ico', '.gif', '.webp'].includes(ext.toLowerCase())) {
 			confPath = path.join(confPath, name);
 			await fs.copyFile(logoPath, confPath);
 			this.setVal('logoBaseName', name);

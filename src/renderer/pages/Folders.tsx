@@ -35,7 +35,15 @@ export const Folders = () => {
 	const renderHeader       = () => {
 		return (
 			<div className='flex justify-content-between align-items-center'>
-				<Button className='p-button-info' type='button' icon='pi pi-plus' label={t('add folder').ucfirst()} onClick={() => window.electron.folders.add()}></Button>
+				<span className='p-buttonset'>
+				<Button className='p-button-success' type='button' icon='pi pi-plus' label={t('add folder').ucfirst()} onClick={() => window.electron.folders.add()}></Button>
+				<Button
+					className='p-button-info' type='button' icon='pi pi-search' label={t('scan').ucfirst()} onClick={() => window.electron.projects.scanFolders(selectedFolders.map((i) => i.path))}
+				></Button>
+				<Button
+					className='p-button-danger' type='button' icon='pi pi-times' label={t('delete').ucfirst()} onClick={() => window.electron.folders.delete(selectedFolders.map((i) => i.id))}
+				></Button>
+					</span>
 			</div>
 		);
 	};
