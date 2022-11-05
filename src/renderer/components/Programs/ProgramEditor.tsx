@@ -109,6 +109,9 @@ const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program:
 			setDebugResult({ commands: [], errors: [t('Error not project')] });
 		}
 	}
+	useEffect(()=>{
+		setDebugResult({ commands: [], errors: [] });
+	},[debugProject])
 
 	return (
 		<div className={`ProgramEditor ${Program.name}`}>
