@@ -6,7 +6,7 @@ import ru                   from '../../../assets/locale/common/ru.json';
 // the translations
 // (tip move them in a JSON file and import them,
 // or even better, manage them separated from your code: https://react.i18next.com/guides/multiple-translation-files)
-const resources = {
+export const resources = {
 	en: {
 		translation: en
 	},
@@ -23,5 +23,14 @@ i18n
 				  escapeValue: false // react already safes from xss
 			  }
 		  });
+export const languages= Object.keys(resources) as Array<keyof typeof resources>;
+
+export function setLanguage(language: string) {
+	window.electron.store.set('settings.locale', language);
+	i18n.changeLanguage(language);
+}
+export function getLanguage() {
+	return window.electron.store.get('settings.locale');
+}
 
 export default i18n;
