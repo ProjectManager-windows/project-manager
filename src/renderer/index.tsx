@@ -50,10 +50,13 @@ window.pixel               = icons.pixel;
 addLocale('ru', window.lang.languages.ru.translation);
 addLocale('en', window.lang.languages.en.translation);
 locale(window.lang.get());
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const container            = document.getElementById('root')!;
 const root                 = createRoot(container);
 const TrayWindowWidth      = window.electron.store.get('engine.TrayWindowWidth');
+window.document.addEventListener('mousemove',(e)=>{
+	window.mouse =e
+})
+
 Object.assign(console, window.electron.log.functions);
 if (window.innerWidth <= TrayWindowWidth + 5) {
 	root.render(<AppTray />);

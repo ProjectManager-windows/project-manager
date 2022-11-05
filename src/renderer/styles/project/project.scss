@@ -33,7 +33,7 @@
 			background-color : $color;
 			cursor           : e-resize;
 			width            : 3px;
-			height           : 100%;
+			height           : calc(100% - 90px);
 			z-index          : 999;
 
 			display          : flex;

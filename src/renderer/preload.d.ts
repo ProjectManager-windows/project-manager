@@ -1,8 +1,8 @@
 import { bridge }                                               from 'main/preload';
 import i18n, { getLanguage, languages, resources, setLanguage } from './classes/i18n';
 import Notifications                                            from './classes/Notifications';
-import LanguagesExtensions                           from '../../assets/Programming_Languages_Extensions.json';
-import { Icons }                                     from './icons/icons';
+import LanguagesExtensions                                      from '../../assets/Programming_Languages_Extensions.json';
+import { Icons }                                                from './icons/icons';
 
 type sizes = [string, string, string, string, string, string, string, string, string]
 declare global {
@@ -19,6 +19,7 @@ declare global {
 			list: typeof languages;
 			languages: typeof resources;
 		};
+		mouse?: MouseEvent;
 		$: typeof $;
 		JQuery: typeof $;
 		i18n: typeof i18n;
