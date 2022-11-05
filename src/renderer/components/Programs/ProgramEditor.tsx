@@ -158,7 +158,7 @@ const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program:
 					</div>
 				</div>
 				<div className='name-column'>
-					{t('set default').ucfirst()}
+					{t('set as default').ucfirst()}
 				</div>
 				<div className='value-column'>
 					<Button
