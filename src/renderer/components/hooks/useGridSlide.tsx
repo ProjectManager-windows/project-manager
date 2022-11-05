@@ -15,8 +15,6 @@ export function useGridSlide(): [JSX.Element, number, () => void] {
 			e.currentTarget.style.zIndex   = '999';
 			e.currentTarget.style.left     = e.pageX + 'px';
 			e.currentTarget.style.opacity  = '0.5';
-			// e.currentTarget.style.top      = e.pageY + 'px';
-
 		}
 	}
 
