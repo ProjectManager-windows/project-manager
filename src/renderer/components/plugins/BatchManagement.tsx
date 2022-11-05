@@ -95,8 +95,8 @@ const BatchManagement = () => {
 	const renderHeader                              = () => {
 		const leftContents = (
 			<span className='p-buttonset'>
-				<Button className='p-button-info' type='button' icon={<FontAwesomeIcon icon={faPlus} />} label={t('add folder').ucfirst()} onClick={() => console.log('test')}></Button>
-				<Button className='p-button-info' type='button' icon={<FontAwesomeIcon icon={faBroom} />} label={t('clear temps').ucfirst()} onClick={() => console.log('test')}></Button>
+				<Button hidden className='p-button-info' type='button' icon={<FontAwesomeIcon icon={faPlus} />} label={t('add folder').ucfirst()} onClick={() => console.log('test')}></Button>
+				<Button hidden className='p-button-info' type='button' icon={<FontAwesomeIcon icon={faBroom} />} label={t('clear temps').ucfirst()} onClick={() => console.log('test')}></Button>
 				<Button className='p-button-danger' type='button' icon={<FontAwesomeIcon icon={faTrash} />} label={t('delete').ucfirst()} onClick={() => console.log('test')}></Button>
 			</span>
 		);

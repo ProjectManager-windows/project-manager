@@ -34,12 +34,8 @@ const TechnologiesList = () => {
 	const faGear2  = useFaIcon(faGear);
 	const list     = useMemo(() => {
 		const list = [];
-		list.push(<TechnologyItem
-			name={'BatchManagement'} key={'BatchManagement'} active={technology === 'BatchManagement'} onSelect={select} label={t('batch management').ucfirst()} icon={faGears2} color='#ffffff'
-		/>);
-		if (selectedProject) {
-			list.push(<TechnologyItem name={'config'} key={'config'} active={technology === 'config'} onSelect={select} label={t('config').ucfirst()} icon={faGear2} color='#ffffff' />);
-		}
+		list.push(<TechnologyItem name={'BatchManagement'} key={'BatchManagement'} active={technology === 'BatchManagement'} onSelect={select} label={t('batch management').ucfirst()} icon={faGears2} color='#ffffff'/>);
+		list.push(<TechnologyItem disabled={!selectedProject} name={'config'} key={'config'} active={technology === 'config'} onSelect={select} label={t('config').ucfirst()} icon={faGear2} color='#ffffff' />);
 		return list;
 	}, [selectedProject,technology]);
 	return (

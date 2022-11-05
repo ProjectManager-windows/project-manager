@@ -2,7 +2,10 @@
 	cursor           : pointer;
 	background-color : var(--primary-color-text);
 	border-radius    : 15px;
-
+	&[data-disabled=true]{
+		opacity:0.5;
+		pointer-events: none;
+	}
 	&:hover {
 		border-radius : 20px;
 	}
