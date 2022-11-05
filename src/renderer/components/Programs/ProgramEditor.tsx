@@ -182,12 +182,12 @@ const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program:
 			</div>
 			<Dialog header={header} footer={footer} visible={displayMaximizable} maximizable modal style={{ width: '50vw', height: '50vw' }} onHide={() => setDisplayMaximizable(false)}>
 				<Splitter style={{ height: '100%' }} layout='vertical'>
-					<SplitterPanel size={70} minSize={20}>
+					<SplitterPanel size={50} minSize={20}>
 						<div style={{ display: 'flex', height: '100%' }}>
 							{editor}
 						</div>
 					</SplitterPanel>
-					<SplitterPanel size={30} minSize={20}>
+					<SplitterPanel size={50} minSize={20}>
 						<div className='p-inputgroup'>
 							<Dropdown
 								value={debugProject} filter showClear filterBy='name' placeholder={t('debug with ...').ucfirst()} optionValue='id' options={projects}
