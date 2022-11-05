@@ -12,6 +12,7 @@ import { faBroom, faGear, faPlus, faTrash }                    from '@fortawesom
 import { ProjectContext }                                      from '../context/ProjectContext';
 import { InputText }                                           from 'primereact/inputtext';
 import { FilterMatchMode, FilterOperator }                     from 'primereact/api';
+import { Toolbar }                                             from 'primereact/toolbar';
 
 const BatchManagement = () => {
 	const { setTechnology, selectProject } = useContext(ProjectContext);
@@ -49,13 +50,13 @@ const BatchManagement = () => {
 	const folderBodyTemplate = (rowData: ProjectAllProps) => {
 		return window.electron.path.basename(window.electron.path.dirname(String(rowData.path)));
 	};
-	const sizeBodyTemplate = (rowData: ProjectAllProps) => {
+	const sizeBodyTemplate   = (rowData: ProjectAllProps) => {
 		return <div className={'sizes'}>
 			<span> {t('current')}:</span>
 			<span> {rowData.size?.formatBytes()}</span>
 			<span> {t('can be')}:</span>
 			<span> {rowData.compressedSize?.formatBytes()}</span>
-		</div>
+		</div>;
 	};
 
 
@@ -92,18 +93,22 @@ const BatchManagement = () => {
 		setGlobalFilterValue(value);
 	};
 	const renderHeader                              = () => {
+		const leftContents = (
+			<span className='p-buttonset'>
+				<Button className='p-button-info' type='button' icon={<FontAwesomeIcon icon={faPlus} />} label={t('add folder').ucfirst()} onClick={() => console.log('test')}></Button>
+				<Button className='p-button-info' type='button' icon={<FontAwesomeIcon icon={faBroom} />} label={t('clear temps').ucfirst()} onClick={() => console.log('test')}></Button>
+				<Button className='p-button-danger' type='button' icon={<FontAwesomeIcon icon={faTrash} />} label={t('delete').ucfirst()} onClick={() => console.log('test')}></Button>
+			</span>
+		);
+
+		const rightContents = (
+			<span className='p-input-icon-left'>
+				<i className='pi pi-search' />
+				<InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder='Keyword Search' />
+			</span>
+		);
 		return (
-			<div className='tableHeader flex justify-content-between align-items-center'>
-				<span className='p-buttonset'>
-					<Button className='p-button-info' type='button' icon={<FontAwesomeIcon icon={faPlus} />} label={t('add folder').ucfirst()} onClick={() => console.log('test')}></Button>
-					<Button className='p-button-info' type='button' icon={<FontAwesomeIcon icon={faBroom} />} label={t('clear temps').ucfirst()} onClick={() => console.log('test')}></Button>
-					<Button className='p-button-danger' type='button' icon={<FontAwesomeIcon icon={faTrash} />} label={t('delete').ucfirst()} onClick={() => console.log('test')}></Button>
-				</span>
-				<span className='p-input-icon-left'>
-					<i className='pi pi-search' />
-					<InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder='Keyword Search' />
-				</span>
-			</div>
+			<Toolbar left={leftContents} right={rightContents} />
 		);
 	};
 	const header                                    = renderHeader();
