@@ -12,6 +12,8 @@ declare global {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		electron: typeof bridge;
+		$: typeof $;
+		JQuery: typeof $;
 		i18n: typeof i18n;
 		Notifications: typeof Notifications;
 		LanguagesExtensions: typeof LanguagesExtensions;

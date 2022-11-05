@@ -112,9 +112,14 @@ export class Programs {
 			} else {
 				program = this.getById(data.programId);
 			}
+
 			if (project && program) {
-				program.setProject(project);
-				program.run();
+				try {
+					program.setProject(project);
+					program.run();
+				} catch (e) {
+					console.log(e);
+				}
 			}
 			// event.returnValue = Program.fromId(data.projectId).setProject()
 		});
@@ -157,6 +162,38 @@ export class Programs {
 			setTimeout(() => {
 				APP.sendRenderEvent(BackgroundEvents.ProgramUpdate);
 			}, 200);
+		});
+		ipcMain.on(BackgroundEvents.ProgramCommandDebug, async (_event, data: { programId: number | string, projectId: number | string }) => {
+			const returnVal:{errors: string[],commands:string[]} = {
+				errors:[],
+				commands:[]
+			}
+			let project;
+			let program;
+			if (typeof data.projectId === 'string') {
+				project = Projects.getById(parseInt(data.projectId, 10));
+			} else {
+				project = Projects.getById(data.projectId);
+			}
+			if (typeof data.programId === 'string') {
+				program = this.getById(parseInt(data.programId, 10));
+			} else {
+				program = this.getById(data.programId);
+			}
+			if (project && program) {
+				try {
+					program.setProject(project);
+					returnVal.commands = program.execParse();
+				} catch (e:any) {
+					if (e?.message) {
+						returnVal.errors.push(e?.message);
+					} else {
+						returnVal.errors.push('Unknown error');
+					}
+				}
+			}
+
+			return _event.returnValue = returnVal
 		});
 	}
 

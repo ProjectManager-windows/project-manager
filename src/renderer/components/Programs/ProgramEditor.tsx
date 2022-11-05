@@ -3,14 +3,20 @@ import { useTranslation }               from 'react-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { InputText }                    from 'primereact/inputtext';
 import { Button }                       from 'primereact/button';
-import { ListBox }                      from 'primereact/listbox';
 import useCommit                        from '../hooks/useCommit';
 import { ProgramFields }                from '../../../types/project';
 import { MyAceEditor }                  from '../ui/MyAceEditor';
-import { Help }                         from '../ui/Help';
 import 'ace-builds/src-noconflict/theme-monokai';
 import 'ace-builds/src-noconflict/mode-ejs';
 import 'ace-builds/src-noconflict/snippets/ejs';
+import { Dialog }                       from 'primereact/dialog';
+import { ListBox }                      from 'primereact/listbox';
+import { Help }                         from '../ui/Help';
+import { Ace }                          from 'ace-builds';
+import { Splitter, SplitterPanel }      from 'primereact/splitter';
+import { Dropdown }                     from 'primereact/dropdown';
+import { FontAwesomeIcon }              from '@fortawesome/react-fontawesome';
+import { faBug }                        from '@fortawesome/free-solid-svg-icons';
 
 const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program: ProgramFields) => void }) => {
 	const { t }                                 = useTranslation();
@@ -46,7 +52,8 @@ const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program:
 		});
 		return keys;
 	}, [Program.id, t]);
-
+	const [displayMaximizable, setDisplayMaximizable]                                        = useState(false);
+	const [ace, setAce]                                                                      = useState<Ace.Editor | null>(null);
 
 	useEffect(() => {
 		const def = parseInt(window.electron.settings.get<string>(`default.${Program.type}`), 10);
@@ -56,6 +63,52 @@ const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program:
 			setDefaultProgram(false);
 		}
 	}, [Program]);
+	const editor = <MyAceEditor
+		mode='ejs'
+		onLoad={(e) => setAce(e)}
+		theme='monokai'
+		name='command-editor'
+		height=''
+		width='10000px'
+		onChange={newValue => setExecuteCommand(newValue)}
+		onBlur={(_e, editor) => commitExecuteCommand(editor?.getValue() || '')}
+		value={executeCommand || ''}
+	/>;
+	const header = <>
+		{t('execute command').ucfirst()} <i className={`pi ${isChangedExecuteCommand ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+	</>;
+	const footer = <>
+		<Help label='?'>
+			<ListBox
+				options={commandVars} onChange={(e) => {
+				if (ace) {
+					const pos = ace.selection.getCursor();
+					const end = ace.session.insert(pos, `<%-${e.value}%>`);
+					// @ts-ignore
+					ace.selection.setRange({ start: pos, end: end });
+				} else {
+					setExecuteCommand(`${executeCommand}<%-${e.value}%>`);
+				}
+			}}
+			/>
+		</Help>
+	</>;
+
+	//DEBUGGER
+	const [projects]                      = useState(Object.values(window.electron.projects.getAll()));
+	const [debugProject, setDebugProject] = useState<number>(0);
+	const [debugResult, setDebugResult]   = useState<{ errors: string[], commands: string[] }>({ commands: [], errors: [] });
+
+	async function Debug() {
+		console.log(debugProject);
+		if (debugProject) {
+			const resp: { errors: string[], commands: string[] } = await window.electron.programs.CommandDebug(Program.id, debugProject);
+			console.log(resp);
+			setDebugResult(resp);
+		} else {
+			setDebugResult({ commands: [], errors: [t('Error not project')] });
+		}
+	}
 
 	return (
 		<div className={`ProgramEditor ${Program.name}`}>
@@ -91,28 +144,14 @@ const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program:
 					{t('execute command').ucfirst()}
 				</div>
 				<div className='value-column'>
-					<div className='p-inputgroup'>
-						<MyAceEditor
-							mode='ejs'
-							theme='monokai'
-							name='command-editor'
-							height='100px'
-							onChange={newValue => setExecuteCommand(newValue)}
-							onBlur={(_e, editor) => commitExecuteCommand(editor?.getValue() || '')}
-							value={executeCommand || ''}
-						/>
+					<div className='p-inputgroup' style={{ height: '100px' }}>
+						{editor}
 						<span className='p-inputgroup-addon'>
-								<Help label='?'>
-									<ListBox
-										options={commandVars} onChange={(e) => {
-										setExecuteCommand(`${executeCommand}<%-${e.value}%>`);
-									}}
-									/>
-								</Help>
-							</span>
+							<Button icon='pi pi-pencil' onClick={() => setDisplayMaximizable(true)} />
+						</span>
 						<span className='p-inputgroup-addon'>
-								<i className={`pi ${isChangedExecuteCommand ? 'pi-spin pi-spinner' : 'pi-check'}`} />
-							</span>
+							<i className={`pi ${isChangedExecuteCommand ? 'pi-spin pi-spinner' : 'pi-check'}`} />
+						</span>
 					</div>
 				</div>
 				<div className='name-column'>
@@ -138,7 +177,30 @@ const ProgramEditor = (props: { Program: ProgramFields, deleteProgram: (Program:
 					/>
 				</div>
 			</div>
-
+			<Dialog header={header} footer={footer} visible={displayMaximizable} maximizable modal style={{ width: '50vw', height: '50vw' }} onHide={() => setDisplayMaximizable(false)}>
+				<Splitter style={{ height: '100%' }} layout='vertical'>
+					<SplitterPanel size={70} minSize={20}>
+						<div style={{ display: 'flex', height: '100%' }}>
+							{editor}
+						</div>
+					</SplitterPanel>
+					<SplitterPanel size={30} minSize={20}>
+						<div className='p-inputgroup'>
+							<Dropdown
+								value={debugProject} filter showClear filterBy='name' placeholder={t('debug with ...').ucfirst()} optionValue='id' options={projects}
+								onChange={(e) => setDebugProject(e.value)} optionLabel='name'
+							/>
+							<span className='p-inputgroup-addon'>
+								<Button icon={<FontAwesomeIcon icon={faBug} />} onClick={Debug} />
+							</span>
+						</div>
+						<div>
+							{debugResult?.errors?.map((cmd) => <div key={cmd} className='err alert alert-danger'>{cmd}</div>)}
+							{debugResult?.commands?.map((cmd) => <div key={cmd} className='cmd alert alert-success'>{cmd}</div>)}
+						</div>
+					</SplitterPanel>
+				</Splitter>
+			</Dialog>
 		</div>
 	);
 

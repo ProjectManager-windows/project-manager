@@ -15,6 +15,7 @@ import LanguagesExtensions               from '../../assets/Programming_Language
 import languagesColors                   from '../../assets/Programming_Languages_colors.json';
 import AppTray                           from './AppTray';
 import icons                             from './icons/icons';
+import $                                 from 'jquery';
 
 PrimeReact.ripple     = true;
 PrimeReact.inputStyle = 'filled';
@@ -36,6 +37,8 @@ Number.prototype.formatBytes = function(decimals = 2, sizes = ['Bytes', 'KB', 'M
 	return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 };
 window.i18n                  = i18n;
+window.$                     = $;
+window.JQuery                = $;
 window.Notifications         = Notifications;
 window.LanguagesExtensions   = LanguagesExtensions;
 window.languagesColors       = languagesColors;

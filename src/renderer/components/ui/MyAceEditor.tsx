@@ -6,9 +6,9 @@ import 'ace-builds/src-noconflict/ext-spellcheck';
 import { IAceOptions }     from 'react-ace/src/types';
 
 export const MyAceEditor = (props: IAceEditorProps) => {
-	const { mode, theme, value, name, height, onChange, onBlur, setOptions } = props;
+	const { mode, theme, value, name, height,width,onLoad, onChange, onBlur, setOptions } = props;
 
-	const options:IAceOptions = Object.assign(setOptions ?? {}, {
+	const options: IAceOptions = Object.assign(setOptions ?? {}, {
 		fontFamily               : 'Fira Code',
 		enableBasicAutocompletion: true,
 		enableLiveAutocompletion : true,
@@ -21,21 +21,21 @@ export const MyAceEditor = (props: IAceEditorProps) => {
 	} as IAceOptions);
 
 	return (
-		<>
-			<AceEditor
-				mode={mode}
-				theme={theme}
-				value={value || ''}
-				name={name}
-				height={height}
-				onChange={onChange}
-				onBlur={onBlur}
-				fontSize={14}
-				showPrintMargin
-				showGutter
-				highlightActiveLine
-				setOptions={options}
-			/>
-		</>
+		<AceEditor
+			mode={mode}
+			theme={theme}
+			value={value || ''}
+			name={name}
+			height={height}
+			width={width}
+			onLoad={onLoad}
+			onChange={onChange}
+			onBlur={onBlur}
+			fontSize={14}
+			showPrintMargin
+			showGutter
+			highlightActiveLine
+			setOptions={options}
+		/>
 	);
 };

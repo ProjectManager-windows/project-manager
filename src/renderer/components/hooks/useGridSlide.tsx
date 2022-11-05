@@ -1,12 +1,12 @@
 import { DragEvent, useState } from 'react';
 
-export function useGridSlide(): [JSX.Element, number,()=>void] {
+export function useGridSlide(): [JSX.Element, number, () => void] {
 	const [deltaX, setDeltaX] = useState(0);
 	let posX                  = 0;
 
 	function start(e: DragEvent<HTMLDivElement>) {
 		posX = e.pageX;
-		e.currentTarget.setAttribute('draggable','true');
+		e.currentTarget.setAttribute('draggable', 'true');
 	}
 
 	function drag(e: DragEvent<HTMLDivElement>) {
@@ -28,10 +28,13 @@ export function useGridSlide(): [JSX.Element, number,()=>void] {
 		}
 	}
 
-	function reset(){
-		setDeltaX(0)
+	function reset() {
+		setDeltaX(0);
 	}
 
-	const html = <div className='grid-slide' onDragStart={start} onDrag={drag} onDragEnd={stop} />;
-	return [html, deltaX,reset];
+	const html = <div className='grid-slide' onDragStart={start} onDrag={drag} onDragEnd={stop}>
+			  <div className='grid-slide-handel'></div>
+		  </div>
+	;
+	return [html, deltaX, reset];
 }

@@ -39,6 +39,7 @@ export enum BackgroundEvents {
 	ProgramDelete         = 'electron-program-delete',
 	test                  = 'electron-test',
 	ProgramScan           = 'electron-program-scan',
+	ProgramCommandDebug   = 'electron-program-command-debug',
 	FoldersGetAll         = 'electron-folders-get-all',
 	FolderAdd             = 'electron-folder-add',
 	FoldersDelete         = 'electron-folders-delete',

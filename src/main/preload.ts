@@ -102,27 +102,31 @@ export const bridge = {
 		getAll(type?: ProgramType): { [key: string]: ProgramFields } {
 			return ipcRenderer.sendSync(BackgroundEvents.ProgramsGetAll, type);
 		},
-		scan() {
+		async scan() {
 			ipcRenderer.send(BackgroundEvents.ProgramScan);
 		},
 		onUpdate(callback: () => void): () => void {
 			ipcRenderer.on(BackgroundEvents.ProgramUpdate, callback);
 			return () => ipcRenderer.removeListener(BackgroundEvents.ProgramUpdate, callback);
 		},
-		create(property: { path: string, type: ProgramType }) {
+		async create(property: { path: string, type: ProgramType }) {
 			ipcRenderer.send(BackgroundEvents.ProgramCreate, property);
 		},
-		edit(id: number, key: ProgramFieldsKeys, value: any) {
+		async edit(id: number, key: ProgramFieldsKeys, value: any) {
 			ipcRenderer.send(BackgroundEvents.ProgramEdit, { id, key, value });
 		},
-		delete(id: number) {
+		async delete(id: number) {
 			ipcRenderer.send(BackgroundEvents.ProgramDelete, id);
 		},
 		getCommandVars(programId: number, projectId?: number): ProgramCommandVars {
 			return ipcRenderer.sendSync(BackgroundEvents.ProgramGetCommandVars, { programId, projectId });
 		},
-		runWithProject(programId: number, projectId: number) {
-			return ipcRenderer.sendSync(BackgroundEvents.ProgramRunWithProject, { programId, projectId });
+		async runWithProject(programId: number, projectId: number) {
+			ipcRenderer.send(BackgroundEvents.ProgramRunWithProject, { programId, projectId });
+		},
+		async CommandDebug(programId: number, projectId: number): Promise<{ errors: string[]; commands: string[] }> {
+
+			return ipcRenderer.sendSync(BackgroundEvents.ProgramCommandDebug, { programId, projectId }) as { errors: string[], commands: string[] };
 		}
 	},
 	folders    : {

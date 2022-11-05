@@ -29,24 +29,38 @@
 		}
 
 		.grid-slide {
-			$color           : #a7a9aa;
+			$color           : #323A45;
 			background-color : $color;
 			cursor           : e-resize;
 			width            : 3px;
 			height           : 100%;
-			z-index: 999;
+			z-index          : 999;
+
+			display          : flex;
+			justify-content  : center;
+			flex-direction   : column;
+			flex-wrap        : nowrap;
+			align-items      : stretch;
+			align-content    : center;
+
+			.grid-slide-handel {
+				height           : 10%;
+				background-color : #3F4B5B;
+			}
 
 			&:hover {
-				box-shadow : 0 0 1px 1px $color !important;
+				background-color : #3F4B5B
+
 			}
+
 			&[draggable=true] {
-				cursor: move;
+				cursor : move;
 			}
 
 		}
 
 		.projects {
-			user-select: none;
+			user-select      : none;
 			min-width        : 60px;
 			height           : calc(100vh - 86px);
 			padding          : 5px;
@@ -57,7 +71,7 @@
 
 		.technologies {
 			height           : calc(100vh - 86px);
-			user-select: none;
+			user-select      : none;
 			overflow         : auto;
 			padding          : 5px;
 			grid-area        : technologies;
