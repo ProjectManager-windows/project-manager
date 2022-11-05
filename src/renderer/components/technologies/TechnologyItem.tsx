@@ -1,4 +1,4 @@
-import '../../styles/TechnologyItem.scss';
+import '../../styles/technologies/TechnologyItem.scss';
 import { Ripple } from 'primereact/ripple';
 import useLogo    from '../hooks/useLogo';
 

@@ -5,7 +5,7 @@ import { Column }                                              from 'primereact/
 import { FolderFields, ProjectAllProps, ProjectType }          from '../../../types/project';
 import { ContextMenu }                                         from 'primereact/contextmenu';
 import useLogo                                                 from '../hooks/useLogo';
-import '../../styles/batchManagement.scss';
+import '../../styles/plugins/batchManagement.scss';
 import { Button }                                              from 'primereact/button';
 import { FontAwesomeIcon }                                     from '@fortawesome/react-fontawesome';
 import { faBroom, faGear, faPlus, faTrash }                    from '@fortawesome/free-solid-svg-icons';

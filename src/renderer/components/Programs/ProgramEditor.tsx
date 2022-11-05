@@ -1,4 +1,4 @@
-import '../../styles/ProgramEditor.scss';
+import '../../styles/programs/ProgramEditor.scss';
 import { useTranslation }               from 'react-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { InputText }                    from 'primereact/inputtext';

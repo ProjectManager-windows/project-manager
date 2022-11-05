@@ -4,7 +4,7 @@ import { Sidebar }                                     from 'primereact/sidebar'
 import { Badge }                                       from 'primereact/badge';
 import Notification                                    from './ui/Notification';
 import { AppContext }                                  from './context/AppContext';
-import '../styles/notifications.scss';
+import '../styles/ui/notifications.scss';
 
 
 function Notifications(props: JSX.IntrinsicAttributes & ClassAttributes<HTMLDivElement> & HTMLAttributes<HTMLDivElement>) {

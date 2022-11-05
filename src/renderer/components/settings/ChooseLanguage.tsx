@@ -1,7 +1,7 @@
 import { Dropdown }       from 'primereact/dropdown';
 import { useLang }        from '../hooks/useLang';
 import { useTranslation } from 'react-i18next';
-import '../../styles/flags.scss';
+import '../../styles/ui/flags.scss';
 
 export const ChooseLanguage = () => {
 	const [language, setLanguage, languages] = useLang();

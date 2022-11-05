@@ -1,4 +1,4 @@
-import '../../styles/Config.scss';
+import '../../styles/plugins/Config.scss';
 import { useTranslation }           from 'react-i18next';
 import { ColorPicker }              from 'primereact/colorpicker';
 import { InputText }                from 'primereact/inputtext';

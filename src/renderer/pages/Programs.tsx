@@ -1,4 +1,4 @@
-import '../styles/programs.scss';
+import '../styles/programs/programs.scss';
 import { useNavigate }                             from 'react-router-dom';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Tooltip }                                 from 'primereact/tooltip';

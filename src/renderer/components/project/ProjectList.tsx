@@ -1,4 +1,4 @@
-import '../../styles/projectList.scss';
+import '../../styles/project/projectList.scss';
 import { useContext, useRef, useState }                 from 'react';
 import { ContextMenu }                                  from 'primereact/contextmenu';
 import { faBan, faCode, faFolder, faTerminal, faTrash } from '@fortawesome/free-solid-svg-icons';

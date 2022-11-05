@@ -5,7 +5,7 @@ import { FontAwesomeIcon }                                            from '@for
 import { faClose }                                                    from '@fortawesome/free-solid-svg-icons';
 import { ProgressBar as pb }                                          from '../../classes/ProgressBars';
 import Notifications, { NotificationItem, NotificationItemInterface } from '../../classes/Notifications';
-import '../../styles/notification.scss';
+import '../../styles/ui/notification.scss';
 
 
 function Notification(props: { item: NotificationItemInterface }) {

@@ -3,7 +3,7 @@ import { Ripple }                     from 'primereact/ripple';
 import { ProgramType, ProjectType }   from '../../../types/project';
 import LanguagesBar                   from './LanguagesBar';
 import useLogo                        from '../hooks/useLogo';
-import '../../styles/projectItem.scss';
+import '../../styles/project/projectItem.scss';
 import { ProjectContext }             from '../context/ProjectContext';
 
 

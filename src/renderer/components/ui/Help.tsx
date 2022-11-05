@@ -1,7 +1,7 @@
 import { Button }               from 'primereact/button';
 import React, { CSSProperties } from 'react';
 import { OverlayPanel }         from 'primereact/overlaypanel';
-import '../../styles/Help.scss';
+import '../../styles/ui/Help.scss';
 
 export const Help = (props: { children: React.ReactNode; label?: string, style?: CSSProperties, btn?: React.ReactNode }) => {
 	const op                              = React.useRef<OverlayPanel>(null);

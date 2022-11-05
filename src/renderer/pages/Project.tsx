@@ -1,4 +1,4 @@
-import '../styles/project.scss';
+import '../styles/project/project.scss';
 import { useEffect, useRef, useState } from 'react';
 import { Tooltip }                     from 'primereact/tooltip';
 import { InputText }                   from 'primereact/inputtext';

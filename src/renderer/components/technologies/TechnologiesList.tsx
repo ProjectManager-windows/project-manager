@@ -1,4 +1,4 @@
-import '../../styles/TechnologiesList.scss';
+import '../../styles/technologies/TechnologiesList.scss';
 import { useContext, useEffect, useMemo } from 'react';
 import TechnologyItem                     from './TechnologyItem';
 import Config                             from '../plugins/Config';

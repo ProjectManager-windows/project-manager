@@ -1,6 +1,6 @@
 import { Dropdown }                     from 'primereact/dropdown';
 import { useTranslation }               from 'react-i18next';
-import '../../styles/ProgramEditor.scss';
+import '../../styles/programs/ProgramEditor.scss';
 import { ReactNode, useMemo, useState } from 'react';
 import { Button }                       from 'react-bootstrap';
 import { ProgramType }                  from '../../../types/project';

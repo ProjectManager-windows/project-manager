@@ -1,5 +1,5 @@
 import { Dropdown }                         from 'primereact/dropdown';
-import '../../styles/SelectTerminal.scss';
+import '../../styles/ui/SelectTerminal.scss';
 import { useCallback, useEffect, useState } from 'react';
 import useLogo                              from '../hooks/useLogo';
 import { ProgramType }                      from '../../../types/project';

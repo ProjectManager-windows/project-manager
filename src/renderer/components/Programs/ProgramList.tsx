@@ -1,5 +1,5 @@
-import '../../styles/ProgramList.scss';
-import '../../styles/ProgramItem.scss';
+import '../../styles/programs/ProgramList.scss';
+import '../../styles/programs/ProgramItem.scss';
 import React              from 'react';
 import { Ripple }         from 'primereact/ripple';
 import ProgramItem        from './ProgramItem';
