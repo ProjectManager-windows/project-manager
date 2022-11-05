@@ -10,7 +10,7 @@ export function useLang() {
 		locale(lang);
 		try {
 			// @ts-ignore
-			addLocale(lang, window.lang.languages[lang]);
+			addLocale(lang, window.lang.languages[lang].translation);
 		} catch (e) {
 
 		}

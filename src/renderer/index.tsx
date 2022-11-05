@@ -15,13 +15,11 @@ import LanguagesExtensions                                      from '../../asse
 import languagesColors                                          from '../../assets/Programming_Languages_colors.json';
 import AppTray                                                  from './AppTray';
 import icons                                                    from './icons/icons';
+
 // import $                                 from 'jquery';
 
 PrimeReact.ripple     = true;
 PrimeReact.inputStyle = 'filled';
-addLocale('ru', {});
-addLocale('en', {});
-locale(window.electron.settings.get('locale'));
 String.prototype.ucfirst     = function() {
 	// @ts-ignore
 	return ucfirst(this);
@@ -49,6 +47,9 @@ window.languagesColors     = languagesColors;
 window.ImageCache          = {};
 window.icons               = icons;
 window.pixel               = icons.pixel;
+addLocale('ru', window.lang.languages.ru.translation);
+addLocale('en', window.lang.languages.en.translation);
+locale(window.lang.get());
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const container            = document.getElementById('root')!;
 const root                 = createRoot(container);
