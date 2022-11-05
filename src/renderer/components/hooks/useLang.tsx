@@ -12,7 +12,7 @@ export function useLang() {
 			// @ts-ignore
 			addLocale(lang, window.lang.languages[lang].translation);
 		} catch (e) {
-
+			console.warn(e);
 		}
 	}
 
