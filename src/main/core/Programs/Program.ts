@@ -50,6 +50,10 @@ export class Program implements ProgramFields {
 		this.executePath = value;
 		return this;
 	}
+	setExecuteCommand(value: string) {
+		this.executeCommand = value;
+		return this;
+	}
 
 	setLabel(value: string) {
 		this.label = value;

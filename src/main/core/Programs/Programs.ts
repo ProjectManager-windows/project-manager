@@ -241,6 +241,8 @@ export class Programs {
 		cmd.setName('cmd');
 		powerShell.setName('powerShell');
 		cmd.setExecutePath('C:/Windows/System32/cmd.exe');
+		cmd.setExecuteCommand('start /d "<%-PROJECT_PATH%>"');
+		powerShell.setExecuteCommand('start powershell -NoExit');
 		powerShell.setExecutePath('C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe');
 		await powerShell.save();
 		await cmd.save();
