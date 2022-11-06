@@ -164,10 +164,10 @@ export class Programs {
 			}, 200);
 		});
 		ipcMain.on(BackgroundEvents.ProgramCommandDebug, async (_event, data: { programId: number | string, projectId: number | string }) => {
-			const returnVal:{errors: string[],commands:string[]} = {
-				errors:[],
-				commands:[]
-			}
+			const returnVal: { errors: string[], commands: string[] } = {
+				errors  : [],
+				commands: []
+			};
 			let project;
 			let program;
 			if (typeof data.projectId === 'string') {
@@ -184,7 +184,7 @@ export class Programs {
 				try {
 					program.setProject(project);
 					returnVal.commands = program.execParse();
-				} catch (e:any) {
+				} catch (e: any) {
 					if (e?.message) {
 						returnVal.errors.push(e?.message);
 					} else {
@@ -193,7 +193,7 @@ export class Programs {
 				}
 			}
 
-			return _event.returnValue = returnVal
+			return _event.returnValue = returnVal;
 		});
 	}
 
@@ -235,7 +235,15 @@ export class Programs {
 		const data        = await getInstalledPrograms();
 		const DisplayName = new Set();
 		bar.setTotal(data.ArrayOfItem.Item.length);
-		let i = 0;
+		let i     = 0;
+		const cmd = new Program(ProgramType.terminal);
+		const powerShell = new Program(ProgramType.terminal);
+		cmd.setName('cmd');
+		powerShell.setName('powerShell');
+		cmd.setExecutePath('C:/Windows/System32/cmd.exe');
+		powerShell.setExecutePath('C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe');
+		await powerShell.save();
+		await cmd.save();
 		await Promise.all(data.ArrayOfItem.Item.map(async (item) => {
 			i++;
 			if (DisplayName.has(item._attributes.DisplayName)) {
