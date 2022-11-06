@@ -11,6 +11,7 @@ import { BackgroundEvents }                                                     
 import Programs                                                                                            from './core/Programs/Programs';
 import Folders                                                                                             from './core/Folders/Folders';
 import plugins                                                                                             from './components/plugins';
+import Interceptor                                                                                         from './cli/Interceptor';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -33,6 +34,13 @@ export class PM_App {
 		this.app = app;
 	}
 
+	getAssetPath(...paths: string[]): string {
+		const RESOURCES_PATH = app.isPackaged
+							   ? path.join(process.resourcesPath, 'assets')
+							   : path.join(__dirname, '../../assets');
+		return path.join(RESOURCES_PATH, ...paths);
+	};
+
 	static getInstance() {
 		if (!this.instance) {
 			this.instance = new PM_App();
@@ -40,7 +48,7 @@ export class PM_App {
 		return this.instance;
 	}
 
-	run() {
+	public run() {
 		this.beforeRun();
 		this.app
 			.whenReady()
@@ -75,6 +83,7 @@ export class PM_App {
 			}
 		});
 		this.app.on('before-quit', () => {
+			Interceptor.close()
 			if (this.tray) this.tray.destroy();
 			if (this.mainWindow) this.mainWindow.close();
 			if (this.windowTray) this.windowTray.close();
@@ -84,7 +93,7 @@ export class PM_App {
 		});
 	}
 
-	afterRun() {
+	private afterRun() {
 		if (this.mainWindow) {
 			const changeWindowState = () => {
 				if (this.mainWindow) {
@@ -106,9 +115,10 @@ export class PM_App {
 			this.mainWindow.on('minimize', changeWindowState);
 			this.mainWindow.on('unmaximize', changeWindowState);
 		}
+		Interceptor.init();
 	}
 
-	appEvents() {
+	private appEvents() {
 		ipcMain.on(BackgroundEvents.AppClose, async () => {
 			this.app.quit();
 		});
@@ -174,9 +184,8 @@ export class PM_App {
 		});
 	}
 
-	beforeRun() {
+	private beforeRun() {
 		this.appEvents();
-
 		// (new Store).clear();
 		events.run();
 		Projects.init().then(console.info).catch(console.error);
@@ -187,13 +196,6 @@ export class PM_App {
 			return plugin.init();
 		})).then(console.info).catch(console.error);
 	}
-
-	public getAssetPath(...paths: string[]): string {
-		const RESOURCES_PATH = app.isPackaged
-							   ? path.join(process.resourcesPath, 'assets')
-							   : path.join(__dirname, '../../assets');
-		return path.join(RESOURCES_PATH, ...paths);
-	};
 
 	async sendRenderEvent(channel: BackgroundEvents, ...args: any[]) {
 		return Promise.all([
@@ -244,7 +246,7 @@ export class PM_App {
 						   ]);
 	}
 
-	public async createWindow() {
+	private async createWindow() {
 		if (this.isDebug) {
 			// await this.installExtensions();
 		}
@@ -324,7 +326,7 @@ export class PM_App {
 		return autoUpdater.checkForUpdatesAndNotify();
 	}
 
-	public async createTray() {
+	private async createTray() {
 		const screenBounds = screen.getPrimaryDisplay();
 		this.tray          = new Tray(this.getAssetPath('icon.ico'));
 		const contextMenu  = Menu.buildFromTemplate(
