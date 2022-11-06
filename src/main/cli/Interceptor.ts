@@ -1,5 +1,7 @@
 import express, { Express } from 'express';
 
+export type arguments =[cmd:string, arg1?:string, arg2?:string, arg3?:string, arg4?:string, arg5?:string, arg6?:string, arg7?:string, arg8?:string]
+
 class Interceptor {
 	private static instance: Interceptor;
 	private server: Express;
@@ -21,13 +23,13 @@ class Interceptor {
 		});
 		this.server.all('/', (req, res) => {
 			console.log(req.body);
-			res.send(this.cli(req.body));
+			res.send(this.cli(req.body.split("\n")));
 		});
 	}
 
 
-	cli(args: string): string {
-		return args;
+	cli(args: arguments): string {
+		return args.join(" ");
 	}
 
 	static getInstance() {
