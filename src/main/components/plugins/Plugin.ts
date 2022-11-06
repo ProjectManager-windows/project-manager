@@ -10,6 +10,10 @@ export abstract class PluginType {
 		this.Project = Project;
 	}
 
+	static async init(){
+
+	}
+
 	static async isProject(path: PathLike) {
 		const dirs = await readdir(path);
 		return dirs.includes('.idea')||

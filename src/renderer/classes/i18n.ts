@@ -23,12 +23,14 @@ i18n
 				  escapeValue: false // react already safes from xss
 			  }
 		  });
-export const languages= Object.keys(resources) as Array<keyof typeof resources>;
+export const languages = Object.keys(resources) as Array<keyof typeof resources>;
 
 export function setLanguage(language: string) {
 	window.electron.store.set('settings.locale', language);
 	i18n.changeLanguage(language);
+	window.dayjs.locale(language);
 }
+
 export function getLanguage() {
 	return window.electron.store.get('settings.locale');
 }

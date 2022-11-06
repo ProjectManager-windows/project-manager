@@ -45,4 +45,5 @@ export enum BackgroundEvents {
 	FoldersDelete         = 'electron-folders-delete',
 	FolderToggle          = 'electron-folder-toggle',
 	FolderUpdate          = 'main-folder-update',
+	NpmSearch             = 'Npm-search',
 }

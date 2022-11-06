@@ -1,0 +1,8 @@
+.NpmManager {
+	.hasTypes {
+		height: 20px;
+		&.hasTypes-no{
+			filter: grayscale(1)
+		}
+	}
+}

@@ -27,8 +27,8 @@ const Project = () => {
 	const projectList               = useSearch({ projects, searchString });
 
 
-	const [s1, d1, reset1] = useGridSlide('t1');
-	const [s2, d2, reset2] = useGridSlide('t2');
+	const [s1, d1, reset1] = useGridSlide();
+	const [s2, d2, reset2] = useGridSlide();
 	const grid             = useRef<HTMLDivElement>(null);
 	const p                = useRef<HTMLDivElement>(null);
 	const t                = useRef<HTMLDivElement>(null);

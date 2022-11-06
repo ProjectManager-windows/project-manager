@@ -10,6 +10,7 @@ import events                                                                   
 import { BackgroundEvents }                                                                                from '../types/Events';
 import Programs                                                                                            from './core/Programs/Programs';
 import Folders                                                                                             from './core/Folders/Folders';
+import plugins                                                                                             from './components/plugins';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -181,6 +182,10 @@ export class PM_App {
 		Projects.init().then(console.info).catch(console.error);
 		Programs.init().then(console.info).catch(console.error);
 		Folders.init().then(console.info).catch(console.error);
+		//init Plugins
+		Promise.all(plugins.map(async (plugin) => {
+			return plugin.init();
+		})).then(console.info).catch(console.error);
 	}
 
 	public getAssetPath(...paths: string[]): string {

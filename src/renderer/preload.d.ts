@@ -3,6 +3,8 @@ import i18n, { getLanguage, languages, resources, setLanguage } from './classes/
 import Notifications                                            from './classes/Notifications';
 import LanguagesExtensions                                      from '../../assets/Programming_Languages_Extensions.json';
 import { Icons }                                                from './icons/icons';
+import dayjs                                                    from 'dayjs';
+import MarkdownIt                                               from 'markdown-it';
 
 type sizes = [string, string, string, string, string, string, string, string, string]
 declare global {
@@ -24,6 +26,8 @@ declare global {
 		JQuery: typeof $;
 		i18n: typeof i18n;
 		Notifications: typeof Notifications;
+		dayjs: typeof dayjs;
+		md: MarkdownIt;
 		LanguagesExtensions: typeof LanguagesExtensions;
 		languagesColors: { [key: string]: string };
 		ImageCache: { [key: string]: any };

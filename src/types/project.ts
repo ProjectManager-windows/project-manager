@@ -10,6 +10,7 @@ export interface IDEType {
 	isInstalled: () => Promise<boolean>;
 	cmd: string;
 }
+
 export interface TerminalType {
 	color: string;
 	id: number;
@@ -20,6 +21,7 @@ export interface TerminalType {
 	isInstalled: () => Promise<boolean>;
 	cmd: string;
 }
+
 export interface TechnologyType {
 	id: number;
 	name: string;
@@ -27,9 +29,11 @@ export interface TechnologyType {
 	data: any;
 	root: string;
 }
+
 export interface PublisherType extends TechnologyType {
 	publish: (Project: ProjectType) => void;
 }
+
 export type ProjectType = ProjectAllProps & {
 	logo?: string;
 	color?: string;
@@ -53,6 +57,7 @@ export enum ProgramType {
 	explorer   = 'explorer',
 	other      = 'other',
 }
+
 export interface FolderFields {
 	id: number;
 	name: string;
@@ -95,4 +100,4 @@ export interface ProjectExternalProps {
 	env: string;
 }
 
-export type ProjectAllProps = ProjectProps & ProjectExternalProps
+export type ProjectAllProps = ProjectProps & ProjectExternalProps;

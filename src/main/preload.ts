@@ -1,8 +1,11 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent }                                                 from 'electron';
 import log                                                                                              from 'electron-log';
+import search                                                                                           from 'libnpmsearch';
 import path                                                                                             from 'path';
 import { BackgroundEvents }                                                                             from '../types/Events';
 import { FolderFields, ProgramCommandVars, ProgramFields, ProgramFieldsKeys, ProgramType, ProjectType } from '../types/project';
+import npmFetch                                                                                         from 'npm-registry-fetch';
+import { PackageJson }                                                                                  from '../types/PackageJson';
 
 export type Channels = 'ipc-example' | 'electron-progressbar-update' | 'electron-notification-update' | 'test';
 
@@ -175,7 +178,15 @@ export const bridge = {
 			return () => ipcRenderer.removeListener('change-window-state', subscription);
 		}
 	},
-	log        : log
+	log        : log,
+	npm        : {
+		search: async (query: string | ReadonlyArray<string>, opts?: search.Options): Promise<PackageJson[]> => {
+			return ipcRenderer.sendSync(BackgroundEvents.NpmSearch, {query, opts}) as unknown as PackageJson[]
+		},
+		fetch : npmFetch,
+		json  : npmFetch.json
+	}
+
 };
 Object.assign(console, log.functions);
 contextBridge.exposeInMainWorld('electron', bridge);

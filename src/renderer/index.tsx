@@ -15,11 +15,15 @@ import LanguagesExtensions                                      from '../../asse
 import languagesColors                                          from '../../assets/Programming_Languages_colors.json';
 import AppTray                                                  from './AppTray';
 import icons                                                    from './icons/icons';
-
+import dayjs                                                    from 'dayjs';
+import relativeTime                                             from 'dayjs/plugin/relativeTime';
 // import $                                 from 'jquery';
+import 'dayjs/locale/es';
+import 'dayjs/locale/ru';
 
-PrimeReact.ripple     = true;
-PrimeReact.inputStyle = 'filled';
+dayjs.extend(relativeTime);
+PrimeReact.ripple            = true;
+PrimeReact.inputStyle        = 'filled';
 String.prototype.ucfirst     = function() {
 	// @ts-ignore
 	return ucfirst(this);
@@ -41,7 +45,9 @@ window.lang                  = {
 };
 // window.$                     = $;
 // window.JQuery                = $;
-window.Notifications       = Notifications;
+window.Notifications = Notifications;
+dayjs.locale(window.lang.get());
+window.dayjs               = dayjs;
 window.LanguagesExtensions = LanguagesExtensions;
 window.languagesColors     = languagesColors;
 window.ImageCache          = {};
@@ -50,12 +56,12 @@ window.pixel               = icons.pixel;
 addLocale('ru', window.lang.languages.ru.translation);
 addLocale('en', window.lang.languages.en.translation);
 locale(window.lang.get());
-const container            = document.getElementById('root')!;
-const root                 = createRoot(container);
-const TrayWindowWidth      = window.electron.store.get('engine.TrayWindowWidth');
-window.document.addEventListener('mousemove',(e)=>{
-	window.mouse =e
-})
+const container       = document.getElementById('root')!;
+const root            = createRoot(container);
+const TrayWindowWidth = window.electron.store.get('engine.TrayWindowWidth');
+window.document.addEventListener('mousemove', (e) => {
+	window.mouse = e;
+});
 
 Object.assign(console, window.electron.log.functions);
 if (window.innerWidth <= TrayWindowWidth + 5) {
