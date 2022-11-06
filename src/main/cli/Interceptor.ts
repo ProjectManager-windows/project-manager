@@ -20,14 +20,13 @@ class Interceptor {
 			});
 		});
 		this.server.all('/', (req, res) => {
+			console.log(req.body);
 			res.send(this.cli(req.body));
 		});
 	}
 
 
 	cli(args: string): string {
-		console.log(args);
-
 		return args;
 	}
 
