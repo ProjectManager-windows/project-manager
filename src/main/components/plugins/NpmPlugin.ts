@@ -1,6 +1,5 @@
 import { readdir }               from 'fs/promises';
-import { PluginType }            from './Plugin';
-import { ProjectType }           from '../../../types/project';
+import { Plugin }                from './Plugin';
 import { ipcMain }               from 'electron';
 import { BackgroundEvents }      from '../../../types/Events';
 import libnpmsearch              from 'libnpmsearch';
@@ -8,20 +7,18 @@ import search                    from 'libnpmsearch';
 import npmFetch                  from 'npm-registry-fetch';
 import { hasTypes, PackageJson } from '../../../types/PackageJson';
 
-export class NpmPlugin extends PluginType {
+export class NpmPlugin extends Plugin {
 
-	static PluginName: string = 'git';
+	private static instance: NpmPlugin;
 
-	public constructor(Project: ProjectType) {
-		super(Project);
+	static getInstance() {
+		if (!this.instance) {
+			this.instance = new NpmPlugin();
+		}
+		return this.instance;
 	}
 
-	static async isProject(path: string) {
-		const dirs = await readdir(path);
-		return dirs.includes('.package.json');
-	}
-
-	static async hasTypes(pack: PackageJson): Promise<hasTypes> {
+	async hasTypes(pack: PackageJson): Promise<hasTypes> {
 		if (pack.types) {
 			return hasTypes.ts;
 		}
@@ -46,7 +43,7 @@ export class NpmPlugin extends PluginType {
 		return hasTypes.no;
 	}
 
-	static async init() {
+	async init() {
 		ipcMain.on(BackgroundEvents.NpmSearch, async (event, data: { query: string | ReadonlyArray<string>, opts?: search.Options }) => {
 			const packages    = await libnpmsearch(data.query, data?.opts);
 			event.returnValue = await Promise.all(packages.map(async (pack: search.Result) => {
@@ -63,12 +60,15 @@ export class NpmPlugin extends PluginType {
 				}
 			}));
 		});
-
+		return this;
 	}
 
-	static isTechnologies(path: string) {
-		return NpmPlugin.isProject(path);
+	async isAvailable(): Promise<boolean> {
+		return true;
+	}
+
+	async isProject(path: string): Promise<boolean> {
+		const dirs = await readdir(path);
+		return dirs.includes('.package.json');
 	}
 }
-
-export default NpmPlugin;

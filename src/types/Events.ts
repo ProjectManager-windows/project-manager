@@ -46,4 +46,6 @@ export enum BackgroundEvents {
 	FolderToggle          = 'electron-folder-toggle',
 	FolderUpdate          = 'main-folder-update',
 	NpmSearch             = 'Npm-search',
+	checkProject          = 'plugin-checkProject',
+	checkAvailable        = 'plugin-checkAvailable',
 }

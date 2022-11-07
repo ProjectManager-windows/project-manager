@@ -181,10 +181,18 @@ export const bridge = {
 	log        : log,
 	npm        : {
 		search: async (query: string | ReadonlyArray<string>, opts?: search.Options): Promise<PackageJson[]> => {
-			return ipcRenderer.sendSync(BackgroundEvents.NpmSearch, {query, opts}) as unknown as PackageJson[]
+			return ipcRenderer.sendSync(BackgroundEvents.NpmSearch, { query, opts }) as unknown as PackageJson[];
 		},
 		fetch : npmFetch,
 		json  : npmFetch.json
+	},
+	plugins    : {
+		async isAvailable(name: string) {
+			return ipcRenderer.sendSync(BackgroundEvents.checkProject, { name });
+		},
+		async isProject(name: string, projectId: number) {
+			return ipcRenderer.sendSync(BackgroundEvents.checkAvailable, { name, projectId });
+		}
 	}
 
 };

@@ -12,6 +12,7 @@ import Programs                                                                 
 import Folders                                                                                             from './core/Folders/Folders';
 import plugins                                                                                             from './components/plugins';
 import Interceptor                                                                                         from './cli/Interceptor';
+import { checkAvailable, checkProject }                                                                    from './components/plugins/Plugin';
 
 export class PM_App {
 	private static instance: PM_App;
@@ -83,7 +84,7 @@ export class PM_App {
 			}
 		});
 		this.app.on('before-quit', () => {
-			Interceptor.close()
+			Interceptor.close();
 			if (this.tray) this.tray.destroy();
 			if (this.mainWindow) this.mainWindow.close();
 			if (this.windowTray) this.windowTray.close();
@@ -193,8 +194,23 @@ export class PM_App {
 		Folders.init().then(console.info).catch(console.error);
 		//init Plugins
 		Promise.all(plugins.map(async (plugin) => {
-			return plugin.init();
+			return plugin.getInstance().init();
 		})).then(console.info).catch(console.error);
+		ipcMain.on(BackgroundEvents.checkProject, async (event, data: { name: string, projectId: number }) => {
+			try {
+				event.returnValue = await checkProject(data.name, data.projectId);
+			}catch (e){
+				console.error(e);
+			}
+		});
+		ipcMain.on(BackgroundEvents.checkAvailable, async (event, data: { name: string }) => {
+			try {
+				event.returnValue = await checkAvailable(data.name);
+			}catch (e){
+				console.error(e);
+			}
+		});
+
 	}
 
 	async sendRenderEvent(channel: BackgroundEvents, ...args: any[]) {

@@ -8,7 +8,7 @@ import Path                                      from 'path';
 import plugins                                   from '../../components/plugins';
 import { getIcon }                               from '../../components/exe/iconExtractor';
 import { asyncExec }                             from './Promisses';
-import { PluginType }                            from '../../components/plugins/Plugin';
+import { isProject }                             from '../../components/plugins/Plugin';
 
 export type file = {
 	path: string,
@@ -151,7 +151,7 @@ class PM_FileSystem {
 			return false;
 		}
 
-		if (await PluginType.isProject(item)) {
+		if (await isProject(item)) {
 			return true;
 		}
 		// eslint-disable-next-line guard-for-in
@@ -235,11 +235,11 @@ class PM_FileSystem {
 	}
 
 	static async hide(path: string) {
-		return asyncExec('attrib +H +I "'+path+'"');
+		return asyncExec('attrib +H +I "' + path + '"');
 	}
 
 	static async show(path: string) {
-		return asyncExec('attrib  -H -I "'+path+'"');
+		return asyncExec('attrib  -H -I "' + path + '"');
 	}
 
 }

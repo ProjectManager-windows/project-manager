@@ -87,6 +87,7 @@ export interface ProjectProps {
 	size?: number;
 	compressedSize?: number;
 	stats?: { [key: string]: number };
+	plugins?: { [key: string]:boolean}
 }
 
 export interface ProjectExternalProps {

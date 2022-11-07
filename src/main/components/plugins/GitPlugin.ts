@@ -1,23 +1,26 @@
-import { readdir }     from 'fs/promises';
-import { PluginType }  from './Plugin';
-import { ProjectType } from '../../../types/project';
+import { readdir } from 'fs/promises';
+import { Plugin }  from './Plugin';
 
-export class GitPlugin extends PluginType {
+export class GitPlugin extends Plugin {
+	private static instance: GitPlugin;
 
-	static PluginName: string = 'git';
-
-	public constructor(Project: ProjectType) {
-		super(Project);
+	async init(): Promise<this> {
+		return this;
 	}
 
-	static async isProject(path: string) {
+	static getInstance() {
+		if (!this.instance) {
+			this.instance = new GitPlugin();
+		}
+		return this.instance;
+	}
+
+	async isAvailable(): Promise<boolean> {
+		return true;
+	}
+
+	async isProject(path: string): Promise<boolean> {
 		const dirs = await readdir(path);
 		return dirs.includes('.git');
 	}
-
-	static isTechnologies(path: string) {
-		return GitPlugin.isProject(path);
-	}
 }
-
-export default GitPlugin;

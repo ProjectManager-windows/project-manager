@@ -1,10 +1,10 @@
-import GitPlugin      from './GitPlugin';
-import NpmPlugin      from './NpmPlugin';
-import { PluginType } from './Plugin';
+import { NpmPlugin } from './NpmPlugin';
+import { GitPlugin } from './GitPlugin';
 
-export const plugins:Array<typeof PluginType> = [
+
+export const plugins = [
 	GitPlugin,
-	NpmPlugin
+	NpmPlugin,
 ];
 
 export default plugins;
