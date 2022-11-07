@@ -188,10 +188,10 @@ export const bridge = {
 	},
 	plugins    : {
 		async isAvailable(name: string) {
-			return ipcRenderer.sendSync(BackgroundEvents.checkProject, { name });
+			return ipcRenderer.sendSync(BackgroundEvents.checkAvailable, { name });
 		},
 		async isProject(name: string, projectId: number) {
-			return ipcRenderer.sendSync(BackgroundEvents.checkAvailable, { name, projectId });
+			return ipcRenderer.sendSync(BackgroundEvents.checkProject, { name, projectId });
 		}
 	}
 

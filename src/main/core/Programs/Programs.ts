@@ -11,6 +11,7 @@ import ProgressBar                                       from '../Notifications/
 import { getInstalledPrograms, windowsProgramType }      from '../../components/exe/getInstalledPrograms';
 import path                                              from 'path';
 import { Notification }                                  from '../Notifications/Notification';
+import { cmdExist }                                      from '../Utils/Promisses';
 
 export class Programs {
 	private static instance: Programs;
@@ -235,17 +236,24 @@ export class Programs {
 		const data        = await getInstalledPrograms();
 		const DisplayName = new Set();
 		bar.setTotal(data.ArrayOfItem.Item.length);
-		let i     = 0;
-		const cmd = new Program(ProgramType.terminal);
+		let i            = 0;
+		const cmd        = new Program(ProgramType.terminal);
 		const powerShell = new Program(ProgramType.terminal);
+		if (await cmdExist('wt')) {
+			const wt = new Program(ProgramType.terminal);
+			wt.setName('WindowsTerminal');
+			wt.setExecutePath(APP.getAssetPath('icons', 'terminal.ico'));
+			wt.setLogo(APP.getAssetPath('icons', 'terminal.ico'));
+			wt.setExecuteCommand('wt /d "<%-PROJECT_PATH%>"');
+			wt.save().catch(console.warn);
+		}
 		cmd.setName('cmd');
 		powerShell.setName('powerShell');
 		cmd.setExecutePath('C:/Windows/System32/cmd.exe');
 		cmd.setExecuteCommand('start /d "<%-PROJECT_PATH%>"');
 		powerShell.setExecuteCommand('start powershell -NoExit');
 		powerShell.setExecutePath('C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe');
-		await powerShell.save();
-		await cmd.save();
+		await Promise.all([powerShell.save(), cmd.save()]).catch(console.warn);
 		await Promise.all(data.ArrayOfItem.Item.map(async (item) => {
 			i++;
 			if (DisplayName.has(item._attributes.DisplayName)) {

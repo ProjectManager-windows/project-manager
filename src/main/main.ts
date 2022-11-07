@@ -39,7 +39,7 @@ export class PM_App {
 		const RESOURCES_PATH = app.isPackaged
 							   ? path.join(process.resourcesPath, 'assets')
 							   : path.join(__dirname, '../../assets');
-		return path.join(RESOURCES_PATH, ...paths);
+		return path.join(RESOURCES_PATH, ...paths).replaceAll('\\', '/');
 	};
 
 	static getInstance() {
@@ -199,14 +199,16 @@ export class PM_App {
 		ipcMain.on(BackgroundEvents.checkProject, async (event, data: { name: string, projectId: number }) => {
 			try {
 				event.returnValue = await checkProject(data.name, data.projectId);
-			}catch (e){
+			} catch (e) {
+				event.returnValue = false;
 				console.error(e);
 			}
 		});
 		ipcMain.on(BackgroundEvents.checkAvailable, async (event, data: { name: string }) => {
 			try {
 				event.returnValue = await checkAvailable(data.name);
-			}catch (e){
+			} catch (e) {
+				event.returnValue = false;
 				console.error(e);
 			}
 		});

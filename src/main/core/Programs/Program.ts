@@ -239,7 +239,7 @@ export class Program implements ProgramFields {
 			this.color = 'transparent';
 		}
 		if (!this.logo) {
-			let logoPath = path.join(app.getPath('userData'), 'programIcons', `${this.hash}.ico`).replaceAll('\\', '/');
+			let logoPath = path.join(app.getPath('userData'), 'programIcons', `${this.hash}.ico`);
 			if (!await PM_FileSystem.exists(logoPath)) {
 				const data = await PM_FileSystem.getIconByFile(this.executePath);
 				let ext    = '.ico';
