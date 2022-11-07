@@ -1,6 +1,7 @@
 import express, { Express } from 'express';
+import { portExist }        from '../core/Utils/Promisses';
 
-export type arguments =[cmd:string, arg1?:string, arg2?:string, arg3?:string, arg4?:string, arg5?:string, arg6?:string, arg7?:string, arg8?:string]
+export type arguments = [cmd: string, arg1?: string, arg2?: string, arg3?: string, arg4?: string, arg5?: string, arg6?: string, arg7?: string, arg8?: string]
 
 class Interceptor {
 	private static instance: Interceptor;
@@ -23,13 +24,13 @@ class Interceptor {
 		});
 		this.server.all('/', (req, res) => {
 			console.log(req.body);
-			res.send(this.cli(req.body.split("\n")));
+			res.send(this.cli(req.body.split('\n')));
 		});
 	}
 
 
 	cli(args: arguments): string {
-		return args.join(" ");
+		return args.join(' ');
 	}
 
 	static getInstance() {
@@ -39,9 +40,15 @@ class Interceptor {
 		return this.instance;
 	}
 
-	init(port ?: number) {
-		if (!port) port = 8001;
-		this.server.listen(port);
+	async init(port ?: number) {
+		try {
+			if (!port) port = 8001;
+			if (await portExist(port)) {
+				this.server.listen(port);
+			}
+		} catch (e) {
+			console.error(e);
+		}
 	}
 
 	close() {

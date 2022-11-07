@@ -58,7 +58,7 @@ const NpmManager = () => {
 			case hasTypes.dt:
 				return <img className={`hasTypes hasTypes-${rowData.hasTypes}`} src={window.icons.dt} alt={rowData.hasTypes} />;
 			case hasTypes.no:
-				return <img className={`hasTypes hasTypes-${rowData.hasTypes}`} src={window.icons.ts} alt={rowData.hasTypes} />;
+				return <img className={`hasTypes hasTypes-${rowData.hasTypes}`} src={window.icons.js} alt={rowData.hasTypes} />;
 		}
 	};
 	const header               = (
