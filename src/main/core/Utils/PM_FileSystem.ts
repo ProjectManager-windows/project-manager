@@ -154,16 +154,9 @@ class PM_FileSystem {
 		if (await isProject(item)) {
 			return true;
 		}
-		// eslint-disable-next-line guard-for-in
-		for (const plugin in plugins) {
-			try {
-				if (await plugins[plugin].isProject(item)) {
-					return true;
-				}
-			} catch (e) {
-
-			}
-		}
+		plugins.map(async (plugin) => {
+			await plugin.getInstance().isProject(item);
+		});
 		return false;
 	}
 

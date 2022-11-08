@@ -17,7 +17,7 @@ import AppTray                                                  from './AppTray'
 import icons                                                    from './icons/icons';
 import dayjs                                                    from 'dayjs';
 import relativeTime                                             from 'dayjs/plugin/relativeTime';
-// import $                                 from 'jquery';
+import $                                 from 'jquery';
 import 'dayjs/locale/es';
 import 'dayjs/locale/ru';
 
@@ -43,8 +43,8 @@ window.lang                  = {
 	list     : languages,
 	languages: resources
 };
-// window.$                     = $;
-// window.JQuery                = $;
+window.$                     = $;
+window.JQuery                = $;
 window.Notifications = Notifications;
 dayjs.locale(window.lang.get());
 window.dayjs               = dayjs;

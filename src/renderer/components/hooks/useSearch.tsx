@@ -7,9 +7,18 @@ export const useSearch = (props: { projects: { [key: string]: ProjectType }, sea
 	const projectList                = useMemo(() => {
 		return Object.values(projects).map(e => {
 			if (e.stats) {
+				const g   = Object.entries(e.stats);
+				let total = 0;
+				g.forEach(([_, v]) => {
+					total += v;
+				});
+				g.forEach(([k, v]) => {
+					if (e.stats) e.stats[k] = (v / total) * 1000;
+				});
 				// @ts-ignore
-				e._stats = Object.keys(e.stats).map((l) => {
+				e._stats = Object.entries(e.stats).map(([l, r]) => {
 					return window.LanguagesExtensions.find((el) => {
+						if (r < 5) return false;
 						return el?.extensions?.includes(l);
 					})?.name.toLowerCase();
 				}).filter((v) => !!v);
@@ -31,9 +40,9 @@ export const useSearch = (props: { projects: { [key: string]: ProjectType }, sea
 
 	return useMemo(() => {
 		if (searchString) {
-			const a =search.search(searchString) as ProjectType[];
+			const a = search.search(searchString) as ProjectType[];
 			console.log(a);
-			return a
+			return a;
 		}
 		return projectList;
 	}, [projectList, search, searchString]);

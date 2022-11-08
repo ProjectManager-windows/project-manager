@@ -83,7 +83,7 @@ const Project = () => {
 						<TechnologiesList />
 					</div>
 					{s2}
-					<div className='view'>
+					<div id='test3' className='view'>
 						{view}
 					</div>
 				</div>

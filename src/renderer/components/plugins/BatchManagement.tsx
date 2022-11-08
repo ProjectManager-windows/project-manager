@@ -11,17 +11,13 @@ import { FontAwesomeIcon }                                     from '@fortawesom
 import { faBroom, faGear, faPlus, faTrash }                    from '@fortawesome/free-solid-svg-icons';
 import { ProjectContext }                                      from '../context/ProjectContext';
 import { InputText }                                           from 'primereact/inputtext';
-import { FilterMatchMode, FilterOperator }                     from 'primereact/api';
 import { Toolbar }                                             from 'primereact/toolbar';
+import useSearch                                               from '../hooks/useSearch';
 
 const BatchManagement = () => {
 	const { setTechnology, selectProject } = useContext(ProjectContext);
 	const { t }                            = useTranslation();
 	const cm                               = useRef<ContextMenu | null>(null);
-
-	function getAll() {
-		return Object.values(window.electron.projects.getAll());
-	}
 
 	const [_selectedProject, set_selectedProject] = useState<FolderFields[]>([]);
 	const [, forceUpdate]                         = useReducer(x => x + 1, 0);
@@ -31,11 +27,13 @@ const BatchManagement = () => {
 		forceUpdate();
 	}
 
+	const [globalFilterValue, setGlobalFilterValue] = useState('');
 
-	const [projects, setProjects] = useState(getAll());
+	const [projects, setProjects] = useState(window.electron.projects.getAll());
+	const projectList             = useSearch({ projects, searchString: globalFilterValue });
 	useEffect(() => {
 		return window.electron.projects.onUpdate(() => {
-			setProjects(getAll());
+			setProjects(window.electron.projects.getAll());
 		});
 	}, []);
 
@@ -73,26 +71,11 @@ const BatchManagement = () => {
 		/>;
 	};
 
-	const menuModel                                 = [
-		{ label: t('delete').ucfirst(), icon: 'pi pi-fw pi-times', command: () => console.log('test') },
-		{ label: t('scan').ucfirst(), icon: 'pi pi-fw pi-search', command: () => console.log('test') }
-	];
-	const [filters, setFilters]                     = useState({
-																   'global'     : { value: null, matchMode: FilterMatchMode.CONTAINS },
-																   'name'       : { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-																   'path'       : { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-																   'description': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] }
-
-															   });
-	const [globalFilterValue, setGlobalFilterValue] = useState('');
-	const onGlobalFilterChange                      = (e: { target: { value: any; }; }) => {
-		const value              = e.target.value;
-		let _filters             = { ...filters };
-		_filters['global'].value = value;
-		setFilters(_filters);
-		setGlobalFilterValue(value);
-	};
-	const renderHeader                              = () => {
+	// const menuModel                                 = [
+	// 	{ label: t('delete').ucfirst(), icon: 'pi pi-fw pi-times', command: () => console.log('test') },
+	// 	{ label: t('scan').ucfirst(), icon: 'pi pi-fw pi-search', command: () => console.log('test') }
+	// ];
+	const renderHeader = () => {
 		const leftContents = (
 			<span className='p-buttonset'>
 				<Button hidden className='p-button-info' type='button' icon={<FontAwesomeIcon icon={faPlus} />} label={t('add folder').ucfirst()} onClick={() => console.log('test')}></Button>
@@ -104,28 +87,27 @@ const BatchManagement = () => {
 		const rightContents = (
 			<span className='p-input-icon-left'>
 				<i className='pi pi-search' />
-				<InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder='Keyword Search' />
+				<InputText value={globalFilterValue} onChange={e => setGlobalFilterValue(e.target.value)} placeholder='Keyword Search' />
 			</span>
 		);
 		return (
 			<Toolbar left={leftContents} right={rightContents} />
 		);
 	};
-	const header                                    = renderHeader();
+	const header       = renderHeader();
 	return (
 		<div className='batchManagement'>
 			<div className='header'>
 				<div className='name'>{t('batch management').ucfirst()}</div>
 				<hr />
 			</div>
-			<ContextMenu model={menuModel} ref={cm} onHide={(e) => console.log(e)} />
+			{/* <ContextMenu model={menuModel} ref={cm} onHide={(e) => console.log(e)} /> */}
 			<div className={'content'}>
 				<DataTable
-					filters={filters}
 					style={{ height: '100%', width: '100%' }}
 					header={header}
 					scrollable scrollHeight='100%'
-					value={projects} dataKey='id' rowHover
+					value={projectList} dataKey='id' rowHover
 					selection={_selectedProject} onSelectionChange={e => set_selectedProject(e.value)}
 					contextMenuSelection={_selectedProject}
 					onContextMenu={e => (cm ? cm?.current?.show(e.originalEvent) : '')}

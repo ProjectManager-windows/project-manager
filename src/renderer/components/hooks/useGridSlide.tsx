@@ -30,7 +30,19 @@ export function useGridSlide(): [JSX.Element, number, () => void] {
 		setDeltaX(0);
 	}
 
-	const html = <div className='grid-slide' onDragStart={start} onDrag={drag} onDragEnd={stop}>
+	function lock(lock: boolean) {
+		if(lock) {
+			window.$('#test1').attr("style","pointer-events:none")
+			window.$('#test2').attr("style","pointer-events:none")
+			window.$('#test3').attr("style","pointer-events:none")
+		}else{
+			window.$('#test1').removeAttr('style')
+			window.$('#test2').removeAttr('style')
+			window.$('#test3').removeAttr('style')
+		}
+	}
+
+	const html = <div className='grid-slide' onMouseEnter={()=>{lock(true)}} onMouseOver={()=>{lock(false)}} onDragStart={start} onDrag={drag} onDragEnd={stop}>
 			  <div className='grid-slide-handel'></div>
 		  </div>
 	;

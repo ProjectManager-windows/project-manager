@@ -46,12 +46,12 @@ export const Folders = () => {
 			</div>
 		);
 	};
-	const actionBodyTemplate = (rowData: FolderFields) => {
-		return rowData.activeWatcher ?
-			   <Button className='p-button-success' type='button' icon='pi pi-check' onClick={() => window.electron.folders.toggle(rowData.id, !rowData.activeWatcher)}></Button>
-									 :
-			   <Button className='p-button-danger' type='button' icon='pi pi-times' onClick={() => window.electron.folders.toggle(rowData.id, !rowData.activeWatcher)}></Button>;
-	};
+	// const actionBodyTemplate = (rowData: FolderFields) => {
+	// 	return rowData.activeWatcher ?
+	// 		   <Button className='p-button-success' type='button' icon='pi pi-check' onClick={() => window.electron.folders.toggle(rowData.id, !rowData.activeWatcher)}></Button>
+	// 								 :
+	// 		   <Button className='p-button-danger' type='button' icon='pi pi-times' onClick={() => window.electron.folders.toggle(rowData.id, !rowData.activeWatcher)}></Button>;
+	// };
 	const header             = renderHeader();
 
 	const menuModel = [
@@ -72,7 +72,7 @@ export const Folders = () => {
 				<Column selectionMode='multiple' headerStyle={{ width: '3em' }}></Column>
 				<Column field='name' header={t('name').ucfirst()} sortable filter filterPlaceholder='Search by name' style={{ minWidth: '14rem' }} />
 				<Column field='path' header={t('path').ucfirst()} sortable filter filterPlaceholder='Search by path' style={{ minWidth: '14rem' }} />
-				<Column header={t('activeWatcher').ucfirst()} headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
+				{/* <Column header={t('activeWatcher').ucfirst()} headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} /> */}
 			</DataTable>
 		</div>
 	);
