@@ -38,6 +38,23 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.M
 				  color: project.terminal && terminals && terminals[project.terminal] ? terminals[project.terminal]?.color : '',
 				  logo : project.terminal && terminals && terminals[project.terminal] ? terminals[project.terminal]?.logo : ''
 			  });
+
+		  function onDoubleClick() {
+			  if (minimal) {
+
+			  } else {
+				  defaultAction(project.id);
+			  }
+		  }
+
+		  function onClick() {
+			  if (minimal) {
+				  defaultAction(project.id);
+			  } else {
+				  if (selectProject) selectProject(project);
+			  }
+		  }
+
 		  return (
 			  <div className='projectItem ' id={`project-item-${project.id}`}>
 				  <li
@@ -48,10 +65,8 @@ const ProjectItem = (props: { active: boolean, project: ProjectType, cm: React.M
 						  contextProject(project);
 						  cm.current.show(e);
 					  }}
-					  onDoubleClick={() => defaultAction(project.id)}
-					  onClick={() => {
-						  if (selectProject) selectProject(project);
-					  }}
+					  onDoubleClick={() => onDoubleClick()}
+					  onClick={() => onClick()}
 				  >
 					  <Ripple />
 					  <div>

@@ -65,15 +65,9 @@ export class PM_App {
 				}
 				store.set('engine.TrayWindowWidth', this.TrayWindowWidth);
 				store.set('engine.TrayWindowHeight', this.TrayWindowHeight);
-				// eslint-disable-next-line no-console
-				this.createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
-				// eslint-disable-next-line no-console
-				this.createTray().then(() => console.log('ok')).catch((err) => console.log(err));
+				this.runWindows();
 				app.on('activate', () => {
-					if (this.mainWindow === null) {
-						this.createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
-						this.createTray().then(() => console.log('ok')).catch((err) => console.log(err));
-					}
+					this.runWindows();
 				});
 			})
 			// eslint-disable-next-line no-console
@@ -92,6 +86,15 @@ export class PM_App {
 		this.app.on('quit', () => {
 
 		});
+	}
+
+	runWindows() {
+		if (this.mainWindow === null) {
+			this.createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
+		}
+		if (this.windowTray === null) {
+			this.createTray().then(() => console.log('ok')).catch((err) => console.log(err));
+		}
 	}
 
 	private afterRun() {
@@ -400,7 +403,7 @@ export class PM_App {
 				this.windowTray.on('blur', () => {
 					if (!this.windowTray) return;
 					if (!this.windowTray.webContents.isDevToolsOpened()) {
-						// this.windowTray.hide();
+						this.windowTray.hide();
 					}
 				});
 				this.windowTray.on('close', (event) => {

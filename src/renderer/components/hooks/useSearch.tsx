@@ -29,7 +29,9 @@ export const useSearch = (props: { projects: { [key: string]: ProjectType }, sea
 
 
 	const search = useMemo(() => {
-		const search = new JsSearch.Search('id');
+		const search         = new JsSearch.Search('id');
+		search.searchIndex   = new JsSearch.UnorderedSearchIndex();
+		search.indexStrategy = new JsSearch.AllSubstringsIndexStrategy();
 		search.addIndex('name');
 		search.addIndex('path');
 		search.addIndex('description');
