@@ -1,18 +1,147 @@
-import { app, BrowserWindow, BrowserWindowConstructorOptions, dialog, ipcMain, Menu, screen, shell, Tray } from 'electron';
-import Store                                                                                               from 'electron-store';
-import path                                                                                                from 'path';
-import { autoUpdater }                                                                                     from 'electron-updater';
-import log                                                                                                 from 'electron-log';
-import MenuBuilder                                                                                         from './menu';
-import { resolveHtmlPath }                                                                                 from './util';
-import Projects                                                                                            from './core/Projects/Projects';
-import events                                                                                              from './ipcMain';
-import { BackgroundEvents }                                                                                from '../types/Events';
-import Programs                                                                                            from './core/Programs/Programs';
-import Folders                                                                                             from './core/Folders/Folders';
-import plugins                                                                                             from './components/plugins';
-import Interceptor                                                                                         from './cli/Interceptor';
-import { checkAvailable, checkProject }                                                                    from './components/plugins/Plugin';
+import { app, BrowserWindow, BrowserWindowConstructorOptions, dialog, ipcMain, KeyboardEvent, Menu, screen, shell, Tray } from 'electron';
+import Store                                                                                                              from 'electron-store';
+import path                                                                                                               from 'path';
+import { autoUpdater }                                                                                                    from 'electron-updater';
+import log                                                                                                                from 'electron-log';
+import MenuBuilder                                                                                                        from './menu';
+import { resolveHtmlPath }                                                                                                from './util';
+import Projects                                                                                                           from './core/Projects/Projects';
+import events                                                                                                             from './ipcMain';
+import { BackgroundEvents }                                                                                               from '../types/Events';
+import Programs                                                                                                           from './core/Programs/Programs';
+import Folders                                                                                                            from './core/Folders/Folders';
+import plugins                                                                                                            from './components/plugins';
+import Interceptor                                                                                                        from './cli/Interceptor';
+import { checkAvailable, checkProject }                                                                                   from './components/plugins/Plugin';
+
+
+export class TrayEventManager {
+	private static instance: TrayEventManager;
+	private scope: PM_App;
+	private readonly tray: Tray;
+	private readonly windowTray: BrowserWindow;
+
+	private blur: boolean        = false;
+	private close: boolean       = false;
+	private click: boolean       = false;
+	private doubleClick: boolean = false;
+	private hide: boolean        = false;
+	private runing: boolean      = false;
+
+	static getInstance(scope: PM_App, tray: Tray, windowTray: BrowserWindow) {
+		if (!this.instance) {
+			this.instance = new TrayEventManager(scope, tray, windowTray);
+		}
+		return this.instance;
+	}
+
+	private constructor(scope: PM_App, tray: Tray, windowTray: BrowserWindow) {
+		this.scope      = scope;
+		this.tray       = tray;
+		this.windowTray = windowTray;
+		this.windowTray.on('blur', async (event: any) => {
+			this.blur = true;
+			await this.run(event);
+		});
+		this.windowTray.on('close', async (event) => {
+			this.close = true;
+			await this.run(event);
+		});
+		this.tray.on('click', async (event) => {
+			this.click = true;
+			await this.run(event);
+		});
+		this.tray.on('double-click', async (event) => {
+			this.doubleClick = true;
+			await this.run(event);
+		});
+		ipcMain.on(BackgroundEvents.CloseTray, async (event) => {
+			this.hide = true;
+			await this.run(event);
+		});
+	}
+
+	async getEvent() {
+		return new Promise<'blur' | 'close' | 'show' | 'doubleClick' | 'hide' | false>((resolve) => {
+			setTimeout(() => {
+				if (this.hide) {
+					resolve('hide');
+					return;
+				}
+				if (this.doubleClick) {
+					resolve('doubleClick');
+					return;
+				}
+				if (this.blur && !this.click) {
+					resolve('hide');
+					return;
+				}
+				if (this.blur && this.click && !this.doubleClick) {
+					if (this.windowTray.isVisible()) {
+						resolve('hide');
+					} else {
+						resolve('show');
+					}
+					return;
+				}
+				if (this.click && !this.doubleClick) {
+					if (this.windowTray.isVisible()) {
+						resolve('hide');
+					} else {
+						resolve('show');
+					}
+					return;
+				}
+				if (this.close) {
+					resolve('close');
+					return;
+				}
+				resolve(false);
+			}, 200);
+		});
+	}
+
+	async run(event: Event | KeyboardEvent) {
+		if (this.runing) {
+			return;
+		}
+		this.runing      = true;
+		const type       = await this.getEvent();
+		this.runing      = false;
+		this.blur        = false;
+		this.close       = false;
+		this.click       = false;
+		this.hide        = false;
+		this.doubleClick = false;
+		// eslint-disable-next-line default-case
+		switch (type) {
+			case'doubleClick':
+				if (this.scope.mainWindow && !this.scope.mainWindow.isVisible()) this.scope.mainWindow.show();
+				return;
+			case'show':
+				this.windowTray.setOpacity(0);
+				this.windowTray.show();
+				setTimeout(() => {
+					this.windowTray.setOpacity(1);
+				}, 10);
+				return;
+			case'hide':
+				this.windowTray.setOpacity(0);
+				setTimeout(() => {
+					this.windowTray.hide();
+				}, 10);
+				return;
+			case'close':
+				if (!this.windowTray) return;
+				if ('preventDefault' in event) {
+					event.preventDefault();
+				}
+				this.windowTray.hide();
+
+		}
+	}
+}
+
 
 export class PM_App {
 	private static instance: PM_App;
@@ -24,6 +153,7 @@ export class PM_App {
 	public app: typeof app;
 	private TrayWindowWidth: number         = 440;
 	private TrayWindowHeight: number        = 700;
+	public TrayEventManager?: TrayEventManager;
 
 	private constructor() {
 		this.isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
@@ -88,7 +218,7 @@ export class PM_App {
 		});
 	}
 
-	runWindows() {
+	private runWindows() {
 		if (this.mainWindow === null) {
 			this.createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
 		}
@@ -195,7 +325,7 @@ export class PM_App {
 		Projects.init().then(console.info).catch(console.error);
 		Programs.init().then(console.info).catch(console.error);
 		Folders.init().then(console.info).catch(console.error);
-		//init Plugins
+		// init Plugins
 		Promise.all(plugins.map(async (plugin) => {
 			return plugin.getInstance().init();
 		})).then(console.info).catch(console.error);
@@ -364,9 +494,6 @@ export class PM_App {
 				}
 			]
 		);
-		ipcMain.on(BackgroundEvents.CloseTray, async () => {
-			this.windowTray?.close();
-		});
 		if (this.tray) {
 			this.tray.setToolTip(this.app.getName());
 			this.tray.setContextMenu(contextMenu);
@@ -400,30 +527,8 @@ export class PM_App {
 				if (this.isDebug) {
 					this.windowTray.webContents.openDevTools();
 				}
-				this.windowTray.on('blur', () => {
-					if (!this.windowTray) return;
-					if (!this.windowTray.webContents.isDevToolsOpened()) {
-						this.windowTray.hide();
-					}
-				});
-				this.windowTray.on('close', (event) => {
-					if (!this.windowTray) return;
-					event.preventDefault();
-					this.windowTray.hide();
-				});
-				this.tray.on('click', () => {
-					if (!this.windowTray || !this.tray) return;
-					if (this.windowTray) {
-						if (!this.windowTray.isVisible()) {
-							this.windowTray.show();
-						} else {
-							this.windowTray.hide();
-						}
-					}
-				});
-				this.tray.on('double-click', () => {
-					if (this.mainWindow && !this.mainWindow.isVisible()) this.mainWindow.show();
-				});
+				this.TrayEventManager = TrayEventManager.getInstance(this, this.tray, this.windowTray);
+
 			}
 		}
 	}
