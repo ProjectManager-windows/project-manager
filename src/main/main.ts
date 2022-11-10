@@ -15,7 +15,7 @@ import Interceptor                                                              
 import { checkAvailable, checkProject }                                                                                   from './components/plugins/Plugin';
 
 
-export class TrayEventManager {
+class TrayEventManager {
 	private static instance: TrayEventManager;
 	private scope: PM_App;
 	private readonly tray: Tray;
