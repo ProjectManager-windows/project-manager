@@ -62,88 +62,75 @@ export class TrayEventManager {
 	}
 
 	async getEvent() {
-		return new Promise<'blur' | 'close' | 'show' | 'doubleClick' | 'hide' | false>(
-			(resolve) => {
-				setTimeout(() => {
-					if (this.close) return resolve('close');
-					if (this.hide) return resolve('hide');
-					if (this.doubleClick) return resolve('doubleClick');
-					if (this.blur && !this.click) return resolve('hide');
+		return new Promise<'blur' | 'close' | 'show' | 'doubleClick' | 'hide' | false>((resolve) => {
+			setTimeout(() => {
+				if (this.close) return resolve('close');
+				if (this.hide) return resolve('hide');
+				if (this.doubleClick) return resolve('doubleClick');
+				if (this.blur && !this.click) return resolve('hide');
 
-					if (this.blur && this.click && !this.doubleClick) {
-						if (this.windowTray.isVisible()) {
-							resolve('hide');
-						} else {
-							resolve('show');
-						}
-						return;
+				if (this.blur && this.click && !this.doubleClick) {
+					if (this.windowTray.isVisible()) {
+						resolve('hide');
+					} else {
+						resolve('show');
 					}
-					if (this.click && !this.doubleClick) {
-						if (this.windowTray.isVisible()) {
-							resolve('hide');
-						} else {
-							resolve('show');
-						}
-						return;
+					return;
+				}
+				if (this.click && !this.doubleClick) {
+					if (this.windowTray.isVisible()) {
+						resolve('hide');
+					} else {
+						resolve('show');
 					}
-					resolve(false);
-				}, 200);
-			}
-		);
+					return;
+				}
+				resolve(false);
+			}, 200);
+		});
 	}
 
-	async;
-
-	run(event
-			:
-			Event | KeyboardEvent;
-
-) {
-	if(this
-
-.
-	running;
-) {
-	return;
-}
-
-this.running     = true;
-const type       = await this.getEvent();
-this.running     = false;
-this.blur        = false;
-this.close       = false;
-this.click       = false;
-this.hide        = false;
-this.doubleClick = false;
-// eslint-disable-next-line default-case
-switch (type) {
-	case'doubleClick':
-		if (this.scope.mainWindow && !this.scope.mainWindow.isVisible()) {
-			this.scope.mainWindow.show();
+	async run(event: Event | KeyboardEvent) {
+		if (this.running) {
+			return;
 		}
-		return;
-	case'show':
-		this.windowTray.setOpacity(0);
-		this.windowTray.show();
-		setTimeout(() => {
-			this.windowTray.setOpacity(1);
-		}, 10);
-		return;
-	case'hide':
-		this.windowTray.setOpacity(0);
-		setTimeout(() => {
-			this.windowTray.hide();
-		}, 10);
-		return;
-	case'close':
-		if (!this.windowTray) return;
-		if ('preventDefault' in event) {
-			event.preventDefault();
-		}
-		this.windowTray.hide();
+		this.running     = true;
+		const type       = await this.getEvent();
+		this.running     = false;
+		this.blur        = false;
+		this.close       = false;
+		this.click       = false;
+		this.hide        = false;
+		this.doubleClick = false;
+		// eslint-disable-next-line default-case
+		switch (type) {
+			case'doubleClick':
+				if (this.scope.mainWindow && !this.scope.mainWindow.isVisible()) {
+					this.scope.mainWindow.show();
+				}
+				return;
+			case'show':
+				this.windowTray.setOpacity(0);
+				this.windowTray.show();
+				setTimeout(() => {
+					this.windowTray.setOpacity(1);
+				}, 10);
+				return;
+			case'hide':
+				this.windowTray.setOpacity(0);
+				setTimeout(() => {
+					this.windowTray.hide();
+				}, 10);
+				return;
+			case'close':
+				if (!this.windowTray) return;
+				if ('preventDefault' in event) {
+					event.preventDefault();
+				}
+				this.windowTray.hide();
 
-}
-}
+		}
+	}
 }
 
 
