@@ -26,7 +26,7 @@ export class TrayEventManager {
 	private click: boolean       = false;
 	private doubleClick: boolean = false;
 	private hide: boolean        = false;
-	private runing: boolean      = false;
+	private running: boolean     = false;
 
 	static getInstance(scope: PM_App, tray: Tray, windowTray: BrowserWindow) {
 		if (!this.instance) {
@@ -64,6 +64,10 @@ export class TrayEventManager {
 	async getEvent() {
 		return new Promise<'blur' | 'close' | 'show' | 'doubleClick' | 'hide' | false>((resolve) => {
 			setTimeout(() => {
+				if (this.close) {
+					resolve('close');
+					return;
+				}
 				if (this.hide) {
 					resolve('hide');
 					return;
@@ -92,22 +96,19 @@ export class TrayEventManager {
 					}
 					return;
 				}
-				if (this.close) {
-					resolve('close');
-					return;
-				}
+
 				resolve(false);
 			}, 200);
 		});
 	}
 
 	async run(event: Event | KeyboardEvent) {
-		if (this.runing) {
+		if (this.running) {
 			return;
 		}
-		this.runing      = true;
+		this.running     = true;
 		const type       = await this.getEvent();
-		this.runing      = false;
+		this.running     = false;
 		this.blur        = false;
 		this.close       = false;
 		this.click       = false;
@@ -116,7 +117,9 @@ export class TrayEventManager {
 		// eslint-disable-next-line default-case
 		switch (type) {
 			case'doubleClick':
-				if (this.scope.mainWindow && !this.scope.mainWindow.isVisible()) this.scope.mainWindow.show();
+				if (this.scope.mainWindow && !this.scope.mainWindow.isVisible()) {
+					this.scope.mainWindow.show();
+				}
 				return;
 			case'show':
 				this.windowTray.setOpacity(0);
