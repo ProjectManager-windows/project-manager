@@ -33,7 +33,8 @@ export class Project extends Item {
 		'logoBaseName',// string
 		'color',// string
 		'description',// string
-		'env'// object
+		'env',// object
+		'runCount'// object
 	];
 
 	init() {
@@ -89,7 +90,7 @@ export class Project extends Item {
 				const confPath = path.join(this.getVal('path'), '.project-manager', 'config.json');
 				const config   = JSON5.parse(fsSync.readFileSync(confPath).toString()) || {};
 				config[key]    = value;
-				fsSync.writeFileSync(confPath, JSON.stringify(config));
+				fsSync.writeFileSync(confPath, JSON.stringify(config,null, 2));
 			} catch (e) {
 			} finally {
 				super.setVal(key, value);
@@ -144,7 +145,7 @@ export class Project extends Item {
 			results[dataKey] = this.getVal(dataKey as keyof ProjectAllProps);
 		}
 		results.logo = this.getVal('logo');
-		results.env = this.getVal('env');
+		results.env  = this.getVal('env');
 		return results;
 	}
 
@@ -325,5 +326,16 @@ export class Project extends Item {
 		super.delete();
 		await PM_FileSystem.removeFolder(confPath);
 		await APP.sendRenderEvent(BackgroundEvents.ProjectUpdate);
+	}
+
+	public incrementRun() {
+		try {
+			let cur = parseInt(this.getVal('runCount'));
+			if (isNaN(cur)) cur = 0;
+			cur++;
+			this.setVal('runCount', cur);
+		} catch (e) {
+
+		}
 	}
 }

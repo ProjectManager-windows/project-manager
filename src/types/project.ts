@@ -99,6 +99,7 @@ export interface ProjectExternalProps {
 	color: string;
 	description: string;
 	env: string;
+	runCount: number;
 }
 
 export type ProjectAllProps = ProjectProps & ProjectExternalProps;
