@@ -117,7 +117,7 @@ export class Programs {
 			if (project && program) {
 				try {
 					program.setProject(project);
-					project.incrementRun()
+					project.incrementRun();
 					program.run();
 				} catch (e) {
 					console.log(e);
