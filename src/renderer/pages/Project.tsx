@@ -65,7 +65,7 @@ const Project = () => {
 		}
 	}, [dd1, dd2]);
 	return (
-		<ProjectContext.Provider value={{ projects: projectList, setProjects, selectedProject, selectProject, view, setView, technology, setTechnology }}>
+		<ProjectContext.Provider value={{ projects: projectList,searchString, setProjects, selectedProject, selectProject, view, setView, technology, setTechnology }}>
 			<div className='project'>
 				<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
 				<div className='grid' ref={grid}>

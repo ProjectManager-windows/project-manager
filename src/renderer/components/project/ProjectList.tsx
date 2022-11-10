@@ -12,7 +12,7 @@ import { AppContext }                                   from '../context/AppCont
 const ProjectList = (props: { minimal: boolean }) => {
 		  let { minimal } = props;
 		  if (!minimal) minimal = false;
-		  const { projects, selectedProject }       = useContext(ProjectContext);
+		  const { projects, selectedProject,searchString }       = useContext(ProjectContext);
 		  const { toast }                           = useContext(AppContext);
 		  const { t }                               = useTranslation();
 		  const cm                                  = useRef(null);
@@ -81,9 +81,12 @@ const ProjectList = (props: { minimal: boolean }) => {
 			  const project = projects[projectsKey];
 			  forSort.push(project);
 		  }
-		  forSort = forSort.sort((a, b) => {
-			  return a?.name?.localeCompare(b?.name);
-		  });
+		  if(!searchString) {
+			  console.log(searchString)
+			  forSort = forSort.sort((a, b) => {
+				  return a?.name?.localeCompare(b?.name);
+			  });
+		  }
 		  if (forSort.length > 0) {
 			  return (
 				  <div className='ProjectList'>

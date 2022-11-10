@@ -29,7 +29,7 @@ export default function AppTray() {
 	return (
 		<div className='App-tray'>
 			<Tooltip target='.tp' position='top' mouseTrack mouseTrackTop={10} />
-			<ProjectContext.Provider value={{ projects: projectList, setProjects, selectedProject, selectProject, view, setView, technology, setTechnology }}>
+			<ProjectContext.Provider value={{searchString, projects: projectList, setProjects, selectedProject, selectProject, view, setView, technology, setTechnology }}>
 				<FontAwesomeIcon className='close' icon={faClose} onClick={() => closeTray()} />
 				<div className='header tray-header'>
 					<div className='search'>

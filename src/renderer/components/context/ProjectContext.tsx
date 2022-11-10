@@ -10,9 +10,9 @@ export type projectContext = {
 	setView?: (value: any) => void,
 	technology?: string,
 	setTechnology?: (value: string) => void,
+	searchString: string,
 	// ides?: { [key: string]: any },
 	// terminals?: { [key: string]: any },
 }
-export const ProjectContext = createContext<projectContext>({ projects: [] }
-
+export const ProjectContext = createContext<projectContext>({ projects: [], searchString: '' }
 );

@@ -18,7 +18,7 @@ export const useSearch = (props: { projects: { [key: string]: ProjectType }, sea
 				// @ts-ignore
 				e._stats = Object.entries(e.stats).map(([l, r]) => {
 					return window.LanguagesExtensions.find((el) => {
-						if (r < 5) return false;
+						if (r < 30) return false;
 						return el?.extensions?.includes(l);
 					})?.name.toLowerCase();
 				}).filter((v) => !!v);
@@ -27,12 +27,22 @@ export const useSearch = (props: { projects: { [key: string]: ProjectType }, sea
 		});
 	}, [projects]);
 
-
-	const search = useMemo(() => {
+	function getSearchEngine() {
 		const search         = new JsSearch.Search('id');
 		search.searchIndex   = new JsSearch.UnorderedSearchIndex();
 		search.indexStrategy = new JsSearch.AllSubstringsIndexStrategy();
+		return search;
+	}
+
+	const search = useMemo(() => {
+		const search = getSearchEngine();
 		search.addIndex('name');
+		search.addDocuments(projectList);
+		return search;
+	}, [projectList]);
+
+	const search2 = useMemo(() => {
+		const search = getSearchEngine();
 		search.addIndex('path');
 		search.addIndex('description');
 		search.addIndex('_stats');
@@ -43,8 +53,9 @@ export const useSearch = (props: { projects: { [key: string]: ProjectType }, sea
 	return useMemo(() => {
 		if (searchString) {
 			const a = search.search(searchString) as ProjectType[];
-			console.log(a);
-			return a;
+			const a2 = search2.search(searchString) as ProjectType[];
+			const set = new Set([...a,...a2])
+			return [...set];
 		}
 		return projectList;
 	}, [projectList, search, searchString]);
