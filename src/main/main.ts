@@ -172,7 +172,6 @@ export class PM_App {
 
 	public run() {
 		this.beforeRun();
-		this.appUpdate();
 		this.app
 			.whenReady()
 			.then(() => {
@@ -208,16 +207,6 @@ export class PM_App {
 		this.app.on('quit', () => {
 
 		});
-	}
-
-	appUpdate() {
-		autoUpdater.setFeedURL(
-			{
-				provider: 'github',
-				owner   : 'project-manager-windows',
-				repo    : 'project-manager'
-			}
-		);
 	}
 
 	private runWindows() {
@@ -328,7 +317,7 @@ export class PM_App {
 			event.returnValue = returnValue;
 		});
 		ipcMain.on(BackgroundEvents.AppUpdate, async () => {
-			await autoUpdater.checkForUpdates();
+			await autoUpdater.checkForUpdatesAndNotify().then(r => console.log(r));
 		});
 	}
 
@@ -465,7 +454,6 @@ export class PM_App {
 		});
 
 		// Remove this if your app does not use auto updates
-		// eslint-disable-next-line
 		this.AppUpdater().then(r => console.log(r));
 		return true;
 	}
@@ -486,8 +474,8 @@ export class PM_App {
 	}
 
 	private async AppUpdater() {
-		log.transports.file.level = 'info';
 		autoUpdater.logger        = log;
+		//TODO
 		return autoUpdater.checkForUpdatesAndNotify();
 	}
 
