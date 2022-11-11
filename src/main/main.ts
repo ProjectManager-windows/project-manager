@@ -172,6 +172,7 @@ export class PM_App {
 
 	public run() {
 		this.beforeRun();
+		this.appUpdate();
 		this.app
 			.whenReady()
 			.then(() => {
@@ -209,6 +210,16 @@ export class PM_App {
 		});
 	}
 
+	appUpdate() {
+		autoUpdater.setFeedURL(
+			{
+				provider: 'github',
+				owner   : 'project-manager-windows',
+				repo    : 'project-manager'
+			}
+		);
+	}
+
 	private runWindows() {
 		if (this.mainWindow === null) {
 			this.createWindow().then(() => console.log('ok')).catch((err) => console.log(err));
@@ -240,6 +251,15 @@ export class PM_App {
 			this.mainWindow.on('minimize', changeWindowState);
 			this.mainWindow.on('unmaximize', changeWindowState);
 		}
+		// globalShortcut.register('CommandOrControl+m', () => {
+		// 	if (!this.windowTray) return;
+		// 	this.windowTray.setOpacity(0);
+		// 	this.windowTray.show();
+		// 	setTimeout(() => {
+		// 		if (!this.windowTray) return;
+		// 		this.windowTray.setOpacity(1);
+		// 	}, 10);
+		// });
 		Interceptor.init();
 	}
 
@@ -276,7 +296,7 @@ export class PM_App {
 			}
 			event.returnValue = this.mainWindow.isVisible();
 		});
-		ipcMain.on(BackgroundEvents.appIsHide, async (event) => {
+		ipcMain.on(BackgroundEvents.AppIsHide, async (event) => {
 			if (!this.mainWindow) {
 				event.returnValue = false;
 				return;
@@ -306,6 +326,9 @@ export class PM_App {
 				[returnValue] = file.filePaths;
 			}
 			event.returnValue = returnValue;
+		});
+		ipcMain.on(BackgroundEvents.AppUpdate, async () => {
+			await autoUpdater.checkForUpdates();
 		});
 	}
 
