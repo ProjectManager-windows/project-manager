@@ -35,7 +35,7 @@ export default function AppTray() {
 					<div className='search'>
 						 <span className='p-input-icon-left'>
 							<i className='pi pi-search' />
-							<InputText className='search-input' value={searchString} onChange={(e) => setSearch(e.target.value)} placeholder='Search' />
+							<InputText className='search-input' value={searchString} onChange={(e) => setSearch(e.target.value)} placeholder='Search'/>
 						</span>
 					</div>
 				</div>
