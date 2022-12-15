@@ -85,7 +85,6 @@ const ProjectList = (props: { minimal: boolean }) => {
 			  forSort.push(project);
 		  }
 		  if (!searchString) {
-			  console.log(searchString);
 			  forSort = forSort.sort((a, b) => {
 				  return a?.name?.localeCompare(b?.name);
 			  });
@@ -105,7 +104,7 @@ const ProjectList = (props: { minimal: boolean }) => {
 				  action   : 'keydown'
 			  },
 			  MOVE_DOWN: {
-				  name     : 'select up',
+				  name     : 'select down',
 				  sequence : '',
 				  sequences: ['down', 'num_2'],
 				  action   : 'keydown'
@@ -140,7 +139,8 @@ const ProjectList = (props: { minimal: boolean }) => {
 			  }
 		  };
 		  configure({
-						ignoreRepeatedEventsWhenKeyHeldDown: false
+						ignoreRepeatedEventsWhenKeyHeldDown: false,
+						ignoreTags                         : ['select', 'textarea']
 					});
 
 		  useEffect(() => {
