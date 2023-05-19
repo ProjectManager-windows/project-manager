@@ -474,8 +474,8 @@ export class PM_App {
 	}
 
 	private async AppUpdater() {
-		autoUpdater.logger        = log;
-		//TODO
+		autoUpdater.logger = log;
+		// TODO
 		return autoUpdater.checkForUpdatesAndNotify();
 	}
 
@@ -534,6 +534,11 @@ export class PM_App {
 			}
 		}
 	}
+
+	public async gitHubAuth() {
+
+	}
+
 
 }
 

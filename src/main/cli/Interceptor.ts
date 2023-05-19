@@ -9,16 +9,16 @@ class Interceptor {
 
 	private constructor() {
 		this.server = express();
-		this.server.use(function(req, res, next) {
+		this.server.use((req, res, next) =>{
 			res.set('Content-Type', 'text/plain');
 			req.body = '';
 			req.setEncoding('utf8');
 
-			req.on('data', function(chunk) {
+			req.on('data', (chunk) => {
 				req.body += chunk;
 			});
 
-			req.on('end', function() {
+			req.on('end', () => {
 				next();
 			});
 		});

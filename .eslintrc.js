@@ -37,6 +37,10 @@ module.exports = {
 		'promise/always-return'                          : 0,
 		'promise/no-nesting'                             : 0,
 		'react/require-default-props'                    : 0,
+		'consistent-return'                              : 0,
+		'no-console'                                     : 0,
+		'no-param-reassign'                              : 0,
+		'promise/catch-or-return'                        : 0,
 		'react/react-in-jsx-scope'                       : 0
 
 	},
